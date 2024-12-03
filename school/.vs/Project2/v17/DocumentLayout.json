@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\vs\\school\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{56B60312-C7BD-4A1A-8BDA-16FED505E686}|Project2\\Project2.vcxproj|D:\\vs\\school\\Project2\\assignment.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{56B60312-C7BD-4A1A-8BDA-16FED505E686}|Project2\\Project2.vcxproj|solutionrelative:Project2\\assignment.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "assignment.c",
+              "DocumentMoniker": "D:\\vs\\school\\Project2\\assignment.c",
+              "RelativeDocumentMoniker": "Project2\\assignment.c",
+              "ToolTip": "D:\\vs\\school\\Project2\\assignment.c",
+              "RelativeToolTip": "Project2\\assignment.c",
+              "ViewState": "AgIAAGkEAAAAAAAAAAAAAHkEAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-10-21T02:51:04.168Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
