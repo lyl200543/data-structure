@@ -249,7 +249,7 @@
 //1.enum(枚举类型）：本质上是一组数值（整数）的集合，使代码易于管理和阅读
 // 
 //#include<iostream>
-//enum example: unsigned char  //可以指定底层类型（必须是整型家族），默认是int -->节约空间，满足特定需求
+//enum example: unsigned char  //可以指定底层类型（必须是整型家族，默认是int） -->节约空间，满足特定需求
 //{
 //    A,  //如果不初始化，默认值为0，并依次递增
 //    B,
@@ -322,3 +322,77 @@
 //	std::cin.get();
 //}
 
+
+//12.4
+//1.构造函数：
+// 一种类中的特殊的方法，只有在创建了类的实例时才运行，主要用途是初始化类
+//当类中没有显式定义构造函数时，编译器会自动生成一个默认构造函数，使得类能够被实例化
+//如果显式地删除（= delete）构造函数，就无法通过默认构造实例化对象
+//构造函数可以有多个
+
+//#include<iostream>
+//#include<iomanip>  //std::fixed  -->将浮点数的输出格式设置为固定的小数点格式
+//                  //std::setprecision(2)：设置输出的浮点数精度为 2，即保留 2 位小数         
+//class Entity
+//{
+//public:
+//    float X, Y;
+//
+//    //显式定义构造函数，函数名是类名，没有返回值类型
+//    Entity()
+//    {
+//        X = 0.0f;
+//        Y = 0.0f;
+//    }
+//
+//    //函数重载：即多个函数名相同，但参数类型，顺序，数量不同（返回值类型不能区分函数重载）
+//    Entity(float x, float y)
+//    {
+//        X = x;
+//        Y = y;
+//    }
+//
+//    void print()
+//    {
+//     /*   std::cout << X << " " << Y << std::endl;*/  //std::cout默认以int格式输出
+//        std::cout << std::fixed << std::setprecision(2) << X << " " << Y << std::endl;
+//    }
+//};
+//int main()
+//{
+//    //Entity e;
+//    //std::cout << e.X << std::endl;  //e.X没有初始化，会报错
+//
+//    //使用Entity()构造函数
+//    Entity e;
+//    e.print();
+//    //使用Entity(float x, float y)构造函数
+//    Entity e1(10.0f, 5.0f);
+//    e1.print();
+//}
+
+
+//如果想要只能通过Log::print()调用函数，有两种方法
+//#include<iostream>
+//class Log
+//{
+////1>将构造函数设为private,类不能实例化
+////private:
+////    Log();
+//
+////2>删除默认构造函数，无法实例化
+////    Log() = delete;
+//
+//public:
+//    static void print()
+//    {
+//        std::cout << "hello" << std::endl;
+//    }
+//};
+//
+//int main()
+//{
+//    Log l;
+//    l.print();
+//}
+//

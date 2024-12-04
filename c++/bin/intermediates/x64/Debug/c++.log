@@ -1,2 +1,7 @@
 ﻿  main.cpp
-  c++.vcxproj -> D:\vs\c++\bin\x64\Debug\c++.exe
+D:\vs\c++\c++\src\main.cpp(390,9): error C2248: “Log::Log”: 无法访问 private 成员(在“Log”类中声明)
+      D:\vs\c++\c++\src\main.cpp(380,5):
+      参见“Log::Log”的声明
+      D:\vs\c++\c++\src\main.cpp(377,7):
+      参见“Log”的声明
+  
