@@ -39,5 +39,8 @@
     <ClCompile Include="tree.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="graph.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -461,153 +461,154 @@ typedef struct CSNode
 
 //采用顺序存储结构-->一维结构数组
 //结点类型定义：
-typedef struct
-{
-	int weight;  //权重
-	int parent, lch, rch;  //该结点的双亲和孩子在数组中的下标
-}HTnode,*HuffmanTree;
-
-//求权重最小的两个值
-void select(HuffmanTree HT, int n, int* s1, int* s2)
-{
-	int min1 = INT_MAX, min2 = INT_MAX; 
-	int i;
-	for (i = 1; i <= n; i++)
-	{
-		if (HT[i].parent == 0)
-		{
-			if (HT[i].weight < min1)
-			{
-				min2 = min1;
-				min1 = HT[i].weight;
-				*s2 = *s1;
-				*s1 = i;
-			}
-			else if (HT[i].weight < min2)
-			{
-				min2 = HT[i].weight;
-				*s2 = i;
-			}
-		}
-	}
-	
-}
-
-void CreatHuffmanTree(HuffmanTree* HT, int n)  //HT返回数组的首地址，n表示有多少个结点要构造成哈夫曼树
-{
-	if (n <= 1)
-	{
-		return;
-	}
-	int m = 2 * n - 1;  //n个结点+ n-1个构造的新结点
-	*HT = (HuffmanTree)calloc(m + 1, sizeof(HTnode));  //数组下标为0的空间不用，根结点为(*HT)[m]
-	if (*HT == NULL)
-	{
-		perror("CreatHuffmanTree:");
-		exit(1);
-	}
-	//创建n个根结点 --》给数组前n个元素加上权重
-	int i;
-	for (i = 1; i <= n; i++)
-	{
-		scanf("%d", &(*HT)[i].weight);
-	}
-	//构造哈夫曼树--》找到两个没有构造（parent==0）的权重最小的结点然后合并，直到最后只有一个结点的parent==0(根结点)
-	int s1 = 0, s2 = 0;   //权重最小的结点在数组中的下标
-	for (i = n + 1; i <= m; i++)
-	{
-		select(*HT, i - 1, &s1, &s2);
-		//删掉两个权重最小的结点--》将parent赋值
-		(*HT)[s1].parent = i;  
-		(*HT)[s2].parent = i;
-		//对新结点操作
-		(*HT)[i].lch = s1;
-		(*HT)[i].rch = s2;
-		(*HT)[i].weight = (*HT)[s1].weight + (*HT)[s2].weight;
-	}
-}
-
-
-//哈夫曼树的应用：哈夫曼编码
-//在远程通讯中，要将待传字符转换为二进制字符
-//可以使用等长的二进制编码，但空间浪费大，传输效率低
-//  --》考虑不等长的编码，并且出现次数越多的字符的编码位数越小 --》哈夫曼编码
-//      （注意：不等长的编码不能出现一个字符的编码是另一个字符编码的前缀--》否则无法将二进制编码复原为字符）
-// 一个字符的编码一定【不是】另一个字符编码的前缀--》叫作【前缀编码】
+//typedef struct
+//{
+//	int weight;  //权重
+//	int parent, lch, rch;  //该结点的双亲和孩子在数组中的下标
+//}HTnode,*HuffmanTree;
 //
-// 方法：
-// 1>统计字符集中字符出现的概率（次数）
-// 2>概率越小的字符，路径越长
-// 3>将哈夫曼树上的每个左分支标为0，右分支标为1
-// 
-
-//· 性质1：哈夫曼编码是前缀码
-//         因为没有一片树叶是另一片树叶的祖先, 所以每个叶子结点的编码就不可能是其它叶子结点编码的前缀
+////求权重最小的两个值
+//void select(HuffmanTree HT, int n, int* s1, int* s2)
+//{
+//	int min1 = INT_MAX, min2 = INT_MAX; 
+//	int i;
+//	for (i = 1; i <= n; i++)
+//	{
+//		if (HT[i].parent == 0)
+//		{
+//			if (HT[i].weight < min1)
+//			{
+//				min2 = min1;
+//				min1 = HT[i].weight;
+//				*s2 = *s1;
+//				*s1 = i;
+//			}
+//			else if (HT[i].weight < min2)
+//			{
+//				min2 = HT[i].weight;
+//				*s2 = i;
+//			}
+//		}
+//	}
+//	
+//}
 //
-//2.· 性质2：哈夫曼编码是最优前缀码
-//          因为哈夫曼树的带权路径长度最短, 故字符编码的总长最短
+//void CreatHuffmanTree(HuffmanTree* HT, int n)  //HT返回数组的首地址，n表示有多少个结点要构造成哈夫曼树
+//{
+//	if (n <= 1)
+//	{
+//		return;
+//	}
+//	int m = 2 * n - 1;  //n个结点+ n-1个构造的新结点
+//	*HT = (HuffmanTree)calloc(m + 1, sizeof(HTnode));  //数组下标为0的空间不用，根结点为(*HT)[m]
+//	if (*HT == NULL)
+//	{
+//		perror("CreatHuffmanTree:");
+//		exit(1);
+//	}
+//	//创建n个根结点 --》给数组前n个元素加上权重
+//	int i;
+//	for (i = 1; i <= n; i++)
+//	{
+//		scanf("%d", &(*HT)[i].weight);
+//	}
+//	//构造哈夫曼树--》找到两个没有构造（parent==0）的权重最小的结点然后合并，直到最后只有一个结点的parent==0(根结点)
+//	int s1 = 0, s2 = 0;   //权重最小的结点在数组中的下标
+//	for (i = n + 1; i <= m; i++)
+//	{
+//		select(*HT, i - 1, &s1, &s2);
+//		//删掉两个权重最小的结点--》将parent赋值
+//		(*HT)[s1].parent = i;  
+//		(*HT)[s2].parent = i;
+//		//对新结点操作
+//		(*HT)[i].lch = s1;
+//		(*HT)[i].rch = s2;
+//		(*HT)[i].weight = (*HT)[s1].weight + (*HT)[s2].weight;
+//	}
+//}
 //
+//
+////哈夫曼树的应用：哈夫曼编码
+////在远程通讯中，要将待传字符转换为二进制字符
+////可以使用等长的二进制编码，但空间浪费大，传输效率低
+////  --》考虑不等长的编码，并且出现次数越多的字符的编码位数越小 --》哈夫曼编码
+////      （注意：不等长的编码不能出现一个字符的编码是另一个字符编码的前缀--》否则无法将二进制编码复原为字符）
+//// 一个字符的编码一定【不是】另一个字符编码的前缀--》叫作【前缀编码】
+////
+//// 方法：
+//// 1>统计字符集中字符出现的概率（次数）
+//// 2>概率越小的字符，路径越长
+//// 3>将哈夫曼树上的每个左分支标为0，右分支标为1
+//// 
+//
+////· 性质1：哈夫曼编码是前缀码
+////         因为没有一片树叶是另一片树叶的祖先, 所以每个叶子结点的编码就不可能是其它叶子结点编码的前缀
+////
+////2.· 性质2：哈夫曼编码是最优前缀码
+////          因为哈夫曼树的带权路径长度最短, 故字符编码的总长最短
+////
+//
+////哈夫曼编码实现：
+////创造一个字符串数组，数组中的每一个元素是一个字符串数组，用来存放某个叶子结点的哈夫曼编码
+////创建一个临时数组，从叶子结点到根结点（通过parent回溯），倒着存进临时数组，然后复制给字符串数组
+//
+//#include<string.h>
+//#define HuffmanCode char**
+//void CreatHuffmanCode(HuffmanTree HT, HuffmanCode* HC, int n)
+//{
+//	//字符串数组（存储每个叶子结点的哈夫曼编码）
+//	(*HC) = (char**)malloc((n + 1) * sizeof(char*));
+//	/*if ((*HC) == NULL)
+//	{
+//		perror("CreatHuffmanCode：");
+//		exit(1);
+//	}*/
+//
+//
+//	//临时数组（临时存放编码）
+//	char* cd = (char*)malloc(n * sizeof(char));  //n个叶子结点最多有n-1个分支（编码位数），加上一位放 '\0'-->为了使用strcpy
+//	/*if (cd == NULL)
+//	{
+//		perror("CreatHuffmanCode：");
+//		exit(1);
+//	}*/
+//	cd[n - 1] = '\0';
+//
+//
+//	//**********从叶子结点到根结点依次编码***********
+//	int i;
+//	for (i = 1; i <= n; i++)
+//	{
+//		int start = n - 1;  //编码结束符的位置
+//		int c = i;  //当前结点
+//		int f = HT[i].parent;  //当前结点的双亲节点
+//		while (f != 0)  //双亲结点为0的结点是根结点
+//		{
+//			--start;
+//			if (HT[f].lch == c)
+//			{
+//				cd[start] = 0;
+//			}
+//			else
+//			{
+//				cd[start] = 1;
+//			}
+//			c = f;
+//			f = HT[c].parent;
+//		}
+//
+//
+//		//把临时数组中的编码存放到HC中
+//		(*HC)[i] = (char*)malloc((n - start) * sizeof(char));
+//		/*if ((*HC)[i] == NULL)
+//		{
+//			perror("CreatHuffmanCode：");
+//			exit(1);
+//		}*/
+//		strcpy((*HC)[i], &cd[start]);
+//	}
+//	free(cd);
+//	cd = NULL;
+//}
 
-//哈夫曼编码实现：
-//创造一个字符串数组，数组中的每一个元素是一个字符串数组，用来存放某个叶子结点的哈夫曼编码
-//创建一个临时数组，从叶子结点到根结点（通过parent回溯），倒着存进临时数组，然后复制给字符串数组
-
-#include<string.h>
-#define HuffmanCode char**
-void CreatHuffmanCode(HuffmanTree HT, HuffmanCode* HC, int n)
-{
-	//字符串数组（存储每个叶子结点的哈夫曼编码）
-	(*HC) = (char**)malloc((n + 1) * sizeof(char*));
-	/*if ((*HC) == NULL)
-	{
-		perror("CreatHuffmanCode：");
-		exit(1);
-	}*/
-
-
-	//临时数组（临时存放编码）
-	char* cd = (char*)malloc(n * sizeof(char));  //n个叶子结点最多有n-1个分支（编码位数），加上一位放 '\0'-->为了使用strcpy
-	/*if (cd == NULL)
-	{
-		perror("CreatHuffmanCode：");
-		exit(1);
-	}*/
-	cd[n - 1] = '\0';
-
-
-	//**********从叶子结点到根结点依次编码***********
-	int i;
-	for (i = 1; i <= n; i++)
-	{
-		int start = n - 1;  //编码结束符的位置
-		int c = i;  //当前结点
-		int f = HT[i].parent;  //当前结点的双亲节点
-		while (f != 0)  //双亲结点为0的结点是根结点
-		{
-			--start;
-			if (HT[f].lch == c)
-			{
-				cd[start] = 0;
-			}
-			else
-			{
-				cd[start] = 1;
-			}
-			c = f;
-			f = HT[c].parent;
-		}
-
-
-		//把临时数组中的编码存放到HC中
-		(*HC)[i] = (char*)malloc((n - start) * sizeof(char));
-		/*if ((*HC)[i] == NULL)
-		{
-			perror("CreatHuffmanCode：");
-			exit(1);
-		}*/
-		strcpy((*HC)[i], &cd[start]);
-	}
-	free(cd);
-	cd = NULL;
-}
 
