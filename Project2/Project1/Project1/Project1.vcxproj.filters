@@ -15,7 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
+    <ClInclude Include="..\..\..\..\Project1\Project1\add.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Project1\Project1\add.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
