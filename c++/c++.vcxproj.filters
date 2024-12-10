@@ -15,31 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sqList.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="LinkList.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="stack.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="queue.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="string.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="array.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SL.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="tree.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="graph.c">
+    <ClCompile Include="src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
