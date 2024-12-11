@@ -237,4 +237,90 @@ void CreatUDG(ALGraph* G)
 //2.DFS(非递归)：
 
 
+
 //3.BFS（非递归）；
+int visited[MVNum];
+//typedef struct
+//{
+//    VerTexType vexs[MVNum];  //顶点表
+//    ArcsType arcs[MVNum][MVNum];  //邻接矩阵
+//    int vexnum, arcnum;  //顶点数和边数
+//}AMGraph;  //无向网
+#define QElemType int 
+typedef struct Qnode
+{
+    QElemType data;
+    struct Qnode* next;
+}Qnode,*QueuePtr;
+
+typedef struct
+{
+    QueuePtr front;//头指针
+    QueuePtr rear;//尾指针
+}LinkQueue;
+
+int FirstNeighbor(AMGraph G, int r)
+{
+    int i;
+    for (i = 0; i < G.vexnum; i++)
+    {
+        if (G.arcs[r][i]==1)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int NextNeighbor(AMGraph G, int r, int w)
+{
+    int i;
+    for (i = w + 1; i < G.vexnum; i++)
+    {
+        if (G.arcs[r][i] == 1)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+//所有连通分量
+void BFSTraverse(AMGraph G)
+{
+    int i;
+    for (i = 0; i < G.vexnum; i++)
+    {
+        if (!visited[i])
+        {
+            BFS(&G, i);
+        }
+    }
+}
+
+//单个连通分量
+void BFS(AMGraph* G, int v)
+{
+    LinkQueue q;
+    InitQueue(&q);
+    visit(v);
+    visited[v] = 1;
+    EnQueue(&q, v);
+    while (!IsEmpty(q))
+    {
+        int r;
+        DeQueue(&q, &r);
+        for(int w = FirstNeighbor(*G, r); w >= 0; w = NextNeighbor(*G, r, w))
+        {
+            if (!visited[w])
+            {
+                visit(w);
+                visited[w] = 1;
+                EnQueue(&q, w);
+            }
+        }
+    }
+}
+
+
+//四.图的应用：
