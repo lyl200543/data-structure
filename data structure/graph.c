@@ -234,8 +234,123 @@ void CreatUDG(ALGraph* G)
 //总结：1》适用于单个连通分量，要遍历非联通分量时要使用for循环
 //      2》递归深度有限：当顶点数过多时，可能导致栈溢出
 
-//2.DFS(非递归)：
+//2.DFS(非递归)：显式使用栈
+#define SElemType int
+typedef struct StackNode
+{
+    SElemType data;
+    struct StackNode* next;
+}StackNode,*LinkStack;
 
+//链栈的初始化
+int InitStack(LinkStack* s)
+{
+    *s = NULL;
+    return OK;
+}
+
+//判断链栈是否为空
+int StackEmpty(LinkStack s)
+{
+    if (s == NULL)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+//入栈
+int Push(LinkStack* s, SElemType e)
+{
+    StackNode* p = (StackNode*)malloc(sizeof(StackNode));
+    if (p == NULL)
+    {
+        perror("Push:");
+        return 0;
+    }
+    p->data = e;
+    p->next = *s;
+    *s = p;
+    return 1;
+}
+
+//出栈
+int Pop(LinkStack* s, SElemType* e)
+{
+    if (*s == NULL)
+    {
+        printf("空栈无法出栈");
+        return ERROR;
+    }
+    StackNode* p = *s;
+    *e = (*s)->data;
+    (*s) = (*s)->next;
+    free(p);
+    p = NULL;
+    return OK;
+}
+
+int  GetTop(LinkStack s, int* u)
+{
+    if (StackEmpty(s))
+    {
+        return ERROR;
+    }
+    *u = s->data;
+    return OK;
+}
+
+void DFSTraverse(AMGraph* G)
+{
+    int i;
+    //初始化visited
+    for (i = 0; i < G->vexnum; i++)
+    {
+        visited[i] = 0;
+    }
+    //遍历每个顶点
+    for (i = 0; i < G->vexnum; i++)
+    {
+        if (!visited[i])
+        {
+            DFS(&G, i);
+        }
+    }
+}
+
+void DFS(AMGraph* G, int v)
+{
+    LinkStack s;
+    InitStack(&s);
+    Push(&s, v);
+    while (!StackEmpt(s))
+    {
+        int u;
+        GetTop(s, &u);
+        if (visited[u] == 0)
+        {
+            visit(u);
+            visited[u] = 1;
+        }
+        int w = FirstNeighbor(*G, u);
+        while (w != -1)
+        {
+            if (visited[w] == 0)
+            {
+                Push(&s, w);
+                break;
+            }
+            w = NextNeighbor(*G, u, w);
+        }
+        if (w == -1)
+        {
+            Pop(&s, &u);
+        }
+    }
+}
 
 
 //3.BFS（非递归）；
@@ -291,6 +406,10 @@ void BFSTraverse(AMGraph G)
     int i;
     for (i = 0; i < G.vexnum; i++)
     {
+        visited[i] = 0;
+    }
+    for (i = 0; i < G.vexnum; i++)
+    {
         if (!visited[i])
         {
             BFS(&G, i);
@@ -324,3 +443,25 @@ void BFS(AMGraph* G, int v)
 
 
 //四.图的应用：
+//*********1.最短路径：
+// 1>单源的（有向）无向图；
+
+
+
+// 2>单源的（有向）无向网：
+// 3>多源最短路：
+// 
+//*********2.最小生成树：
+//生成树: 包含无向图（网）G所有顶点的极小连通子图(由DFS遍历或DFS遍历得到)
+//有n个顶点和n-1条边
+//最小生成树：无向网中各个边的权值之和最小的生成树
+
+//构造最小生成树：
+//MST(Minimum Spanning Tree)性质：
+// 
+//1>切分性质： --》普利姆（Prim）算法
+    //设N = (V, E)是一个连通网, U是顶点集V的一个非空子集，
+    //若边(u, v)是一条具有最小权值的边, 其中u属于U, V属于V - U, 
+    //则必存在一棵包含边(u, v)的最小生成树
+
+//2>
