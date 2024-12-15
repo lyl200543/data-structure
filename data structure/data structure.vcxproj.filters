@@ -42,5 +42,8 @@
     <ClCompile Include="graph.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="data structure.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
