@@ -135,6 +135,65 @@
 
 //3.求最大子列和
 //1>分而治之：时间复杂度：O(nlog n)
+//思路：先找到数列左半边的最大子列和和右半边的最大子列和，然后再找到跨越中间的最大子列和，最后递归求解
+
+//#include<limits.h>
+//
+//int MaxSubMidSum(int arr[], int left, int mid, int right)
+//{
+//	//求左边部分
+//	int sum = 0;
+//	int leftsum = INT_MIN;
+//	int i;
+//	for (i = mid; i >= left; i--)
+//	{
+//		sum += arr[i];
+//		if (sum > leftsum)
+//		{
+//			leftsum = sum;
+//		}
+//	}
+//	//求右边部分
+//	sum = 0;
+//	int rightsum = INT_MIN;
+//	for (i = mid + 1; i <= right; i++)
+//	{
+//		sum += arr[i];
+//		if (sum > rightsum)
+//		{
+//			rightsum = sum;
+//		}
+//	}
+//
+//	return leftsum + rightsum;
+//}
+//
+//int MaxSubSum(int arr[], int left, int right)
+//{
+//	//递归出口
+//	if (left == right)
+//	{
+//		return arr[left];
+//	}
+//	//分而治之
+//	int mid = (left + right) / 2;
+//	int leftsum = MaxSubSum(arr, left, mid);
+//	int rightsum = MaxSubSum(arr, mid + 1, right);
+//	int midsum = MaxSubMidSum(arr, left, mid, right);
+//	//比较
+//	if (leftsum >= rightsum && leftsum >= midsum)
+//	{
+//		return leftsum;
+//	}
+//	else if (rightsum >= leftsum && rightsum >= midsum)
+//	{
+//		return rightsum;
+//	}
+//	else
+//	{
+//		return midsum;
+//	}
+//}
 
 //2>在线处理：时间复杂度：O(n)
 //int MaxSub2(int a[], int n)
@@ -156,3 +215,4 @@
 //	}
 //    return MaxNum;
 //}
+

@@ -1,8 +1,7 @@
 #define  _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<stdlib.h>
-// 
-//11.18
+
 //线性表的顺序表示和实现：（顺序表）
 //#include<stdlib.h>
 //#define MAXSIZE 100
