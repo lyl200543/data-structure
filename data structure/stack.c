@@ -107,6 +107,67 @@
 //    return OK;
 //}
 
+
+//----补充：（慕课）
+//用一个数组表示两个栈：两个栈往中间增长
+// 
+//#define ElemType int
+//#define MAXSIZE 100
+//typedef struct DStack
+//{
+//    ElemType data[MAXSIZE];
+//    int top1;
+//    int top2;
+//}*DStack;
+//
+//void Push(DStack s, ElemType e, int tag)
+//{
+//    if (s->top2 - s->top1 == 1)
+//    {
+//        printf("栈满\n");
+//        return;
+//    }
+//    if (tag == 1)
+//    {
+//        s->data[++(s->top1)] = e;
+//    }
+//    else
+//    {
+//        s->data[--(s->top2)] = e;
+//    }
+//}
+//
+//ElemType Pop(DStack s, int tag)
+//{
+//    if (tag == 1)
+//    {
+//        if (s->top1 == -1)
+//        {
+//            printf("栈1空\n");
+//            return NULL;
+//        }
+//        else
+//        {
+//            return s->data[(s->top1)--];
+//        }
+//    }
+//    else
+//    {
+//        if (s->top2 == MAXSIZE)
+//        {
+//            printf("栈2空\n");
+//            return NULL;
+//        }
+//        else
+//        {
+//            return s->data[(s->top2)++];
+//        }
+//    }
+//}
+
+//应用：表达式求值/中缀表达式转化为后缀表达式
+
+
 //--------------------------------------------------链栈----------------------------------------------------
 
 //链栈的表示
