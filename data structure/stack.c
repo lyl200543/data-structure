@@ -165,8 +165,143 @@
 //    }
 //}
 
-//应用：表达式求值/中缀表达式转化为后缀表达式
+//应用：
+//1.表达式求值：
+// 从头到尾读取【后缀】表达式的每个对象，
+// 如果是操作数，压入堆栈，
+// 如果是操作符，将栈顶一定数量的操作数出栈进行运算
+// 再将结果压入堆栈
+// 
+//2.中缀表达式转化为后缀表达式:
+//>> 从头到尾读取中缀表达式的每个对象, 对不同对象按不同的情况处理
+//1> 运算数:直接输出;
+//2>左括号:压入堆栈(压入堆栈前优先级最高，压入堆栈后优先级最低)
+//3>右括号:将栈顶的运算符弹出并输出, 直到遇到左括号(出栈, 不输出);
+//4>运算符:
+//· 若优先级大于栈顶运算符时, 则把它压栈;
+//· 若优先级小于【等于】栈顶运算符时, 将栈顶运算符弹出并输出   
+//   再比较新的栈顶运算符, 直到该运算符大于栈顶运算符优先级为止, 然后将该运算符压栈;
+//5>若各对象处理完毕, 则把堆栈中存留的运算符一并输出。
 
+#define MAXSIZE 50
+#define ElemType char
+typedef struct Stack
+{
+    ElemType data[MAXSIZE];
+    int top;
+}Stack;
+
+void InitStack(Stack* s)
+{
+    s->top = -1;
+}
+
+int IsEmpty(Stack s)
+{
+    return s.top == -1;
+}
+
+void Push(Stack* s, ElemType e)
+{
+    if (s->top == MAXSIZE - 1)
+    {
+        printf("栈满\n");
+        return;
+    }
+    s->data[++s->top] = e;
+}
+
+void Pop(Stack* s, ElemType* e)
+{
+    if (IsEmpty(*s))
+    {
+        printf("栈空\n");
+        return;
+    }
+    *e = s->data[s->top--];
+}
+
+ElemType Peek(Stack s)
+{
+    if (IsEmpty(s))
+    {
+        printf("栈空\n");
+        return'\0';
+    }
+    return  s.data[s.top];
+}
+
+//判断是否是操作符
+int IsOperator(char ch)
+{
+    return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+}
+
+//******判断操作符的优先级
+int Prior(char ch)
+{
+    switch (ch)
+    {
+    case'+':
+    case'-':
+        return 1;
+    case'*':
+    case'/':
+        return 2;
+    default:
+        return 0;
+    }
+}
+void trans(char mid[], char behind[])
+{
+    Stack s;
+    InitStack(&s);
+    int i = 0, j = 0;
+    while (mid[i])
+    {
+        char ch = mid[i];
+        if (ch >= '0' && ch <= '9')
+        {
+            behind[j++] = ch;
+        }
+        else if (ch == '(')
+        {
+            Push(&s, ch);
+        }
+        else if (ch == ')')
+        {
+            ElemType e;
+            while (Peek(s) != '(')
+            {
+                Pop(&s, &e);
+                behind[j++] = e;
+            }
+            Pop(&s, &e);
+        }
+        else if (IsOperator(ch))
+        {
+            ElemType e;
+            while(!IsEmpty(s) && Prior(Peek(s)) >= Prior(ch))
+            {
+                Pop(&s, &e);
+                behind[j++] = e;
+            }
+            Push(&s, ch);
+        }
+        i++;
+    }
+    behind[j] = '\0';
+}
+
+int main()
+{
+    char mid[MAXSIZE];
+    char behind[MAXSIZE];
+    scanf("%s", mid);
+    trans(mid, behind);
+    printf("%s\n",behind);
+    return 0;
+}
 
 //--------------------------------------------------链栈----------------------------------------------------
 
