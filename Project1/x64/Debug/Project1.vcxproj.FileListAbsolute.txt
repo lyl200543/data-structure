@@ -1,0 +1,2 @@
+D:\vs\Project1\Project1\x64\Debug\Project1.exe
+D:\vs\c\Project1\x64\Debug\Project1.exe
