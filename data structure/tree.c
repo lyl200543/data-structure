@@ -36,7 +36,7 @@
 //      深度为k时【至少】有k个结点
 // 
 //性质3:对任何一棵二叉树 T,如果其叶子数(度为0的结点数)为 n0,度为2的结点数为 n2, 
-//       则n0 = n2 + 1。
+//       则【n0 = n2 + 1】。
 //
 //总边数为B,总结点数为n
 //从下往上看：每一个结点（除根结点外）与自己的双亲之间都有一条边 --> B = n - 1
@@ -57,17 +57,23 @@
 //     对于一棵完全二叉树来说，任意一个结点（除根结点以外）的编号为【i】
 //     则该结点的双亲的编号为【i/2】，
 //     左孩子的编号为【2*i】,右孩子的编号为【2*i+1】
-//
 
-//二叉树的的顺序存储结构：
+
+
+
+//二叉树的的【顺序】存储结构：
 //按满二叉树的结点层次编号，依次存放二叉树中的数据元素
-//当二叉树不为完全二叉树时，要空出位置来使编号与满二叉树一一对应
+//当二叉树不为完全二叉树时，要空出位置来使编号与满二叉树一一对应 --》浪费空间
+//性质:1>某个结点（i）的父节点的下标为i/2;
+//     2>某个结点（i）的左孩子的下标为2*i，右孩子的下标为2*i+1
 
 //#define MAXSIZE 100
 //#define TElemType int
 //TElemType SqBiTree[MAXSIZE];
 
-//二叉树的链式存储结构：
+
+
+//二叉树的【链式】存储结构：
 //1.二叉链表：左，右孩子
 #define TElemType int
 typedef struct BiNode
@@ -149,7 +155,8 @@ typedef struct TriNode
 //		InOrderTraverse(T->rchild);
 //	}
 //}
-//
+
+
 ////【后序】
 //void PostOrderTraverse(BiTree T)
 //{
@@ -165,7 +172,82 @@ typedef struct TriNode
 //	}
 //}
 
+
+////【非递归】算法：（使用堆栈）
+#define MAXSIZE 20
+#define ElemType BiTree
+typedef struct Stack
+{
+	ElemType ch[MAXSIZE];
+	int top;
+}Stack;
+
+void InitStack(Stack* S)
+{
+	S->top = -1;
+}
+
+int IsEmpty(Stack S)
+{
+	if (S.top == -1)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+void Push(Stack* S, ElemType e)
+{
+	if (S->top == MAXSIZE - 1)
+	{
+		printf("the stack is full.\n");
+		return;
+	}
+	S->ch[++S->top] = e;
+}
+
+ElemType Pop(Stack* S)
+{
+	if (S->top == -1)
+	{
+		printf("the stack is empty.\n");
+		return NULL;
+	}
+	return S->ch[S->top--];
+}
+void InOrderTraverse(BiTree T)
+{
+	BiTree BT = T;
+	Stack S;
+	InitStack(&S);
+	while (BT || !IsEmpty(S))
+	{
+		while (BT)
+		{
+			Push(&S, BT);  //第一次碰到结点
+			//printf("%d\n", BT->data);  //访问在此处为先序
+			BT = BT->lchild;
+		}
+		if (!IsEmpty(S))
+		{
+			BT = Pop(&S);  //第二次碰到结点
+			printf("%d\n", BT->data);  //访问在此处为中序
+			BT = BT->rchild;
+		}
+	}
+}
+
+
+//后序访问：1》双栈  2》单栈+标志位
+
+
+
+
 ////【层次】(广度优先遍历)：利用队列
+// 
 //typedef struct BiNode
 //{
 //	char data;
