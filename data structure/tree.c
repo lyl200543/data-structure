@@ -172,77 +172,147 @@ typedef struct TriNode
 //	}
 //}
 
-
-////【非递归】算法：（使用堆栈）
-#define MAXSIZE 20
-#define ElemType BiTree
-typedef struct Stack
-{
-	ElemType ch[MAXSIZE];
-	int top;
-}Stack;
-
-void InitStack(Stack* S)
-{
-	S->top = -1;
-}
-
-int IsEmpty(Stack S)
-{
-	if (S.top == -1)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-void Push(Stack* S, ElemType e)
-{
-	if (S->top == MAXSIZE - 1)
-	{
-		printf("the stack is full.\n");
-		return;
-	}
-	S->ch[++S->top] = e;
-}
-
-ElemType Pop(Stack* S)
-{
-	if (S->top == -1)
-	{
-		printf("the stack is empty.\n");
-		return NULL;
-	}
-	return S->ch[S->top--];
-}
-void InOrderTraverse(BiTree T)
-{
-	BiTree BT = T;
-	Stack S;
-	InitStack(&S);
-	while (BT || !IsEmpty(S))
-	{
-		while (BT)
-		{
-			Push(&S, BT);  //第一次碰到结点
-			//printf("%d\n", BT->data);  //访问在此处为先序
-			BT = BT->lchild;
-		}
-		if (!IsEmpty(S))
-		{
-			BT = Pop(&S);  //第二次碰到结点
-			printf("%d\n", BT->data);  //访问在此处为中序
-			BT = BT->rchild;
-		}
-	}
-}
+//总结：如果去掉输出语句,从递归的角度看,三种算法是完全相同的, 
+//      或说这三种算法的访问路径是相同的, 只是访问结点的时机不同。
+//
+//从出发点（根结点）到终点（根结点）的路径上, 每个结点经过3次。
+//
+//第1次经过时访问 = 先序遍历
+//第2次经过时访问 = 中序遍历
+//第3次经过时访问 = 后序遍历
+//
+//时间效率:O(n) //每个结点只访问一次
+//空间效率:O(h) //栈占用（存函数调用的信息，如参数，返回地址等）的最大辅助空间, h为树的深度
 
 
-//后序访问：1》双栈  2》单栈+标志位
+////【非递归】算法：（使用堆栈） 深度优先遍历
 
+//#define MAXSIZE 20
+//#define ElemType BiTree
+//typedef struct Stack
+//{
+//	ElemType ch[MAXSIZE];
+//	int top;
+//}Stack;
+//
+//void InitStack(Stack* S)
+//{
+//	S->top = -1;
+//}
+//
+//int IsEmpty(Stack S)
+//{
+//	if (S.top == -1)
+//	{
+//		return 1;
+//	}
+//	else
+//	{
+//		return 0;
+//	}
+//}
+//
+//void Push(Stack* S, ElemType e)
+//{
+//	if (S->top == MAXSIZE - 1)
+//	{
+//		printf("the stack is full.\n");
+//		return;
+//	}
+//	S->ch[++S->top] = e;
+//}
+//
+//ElemType Pop(Stack* S)
+//{
+//	if (S->top == -1)
+//	{
+//		printf("the stack is empty.\n");
+//		return NULL;
+//	}
+//	return S->ch[S->top--];
+//}
+//
+////中序：
+//void InOrderTraverse(BiTree T)
+//{
+//	BiTree BT = T;
+//	Stack S;
+//	InitStack(&S);
+//	while (BT || !IsEmpty(S))
+//	{
+//		while (BT)
+//		{
+//			Push(&S, BT);  //第一次碰到结点
+//			//printf("%d\n", BT->data);  //访问在此处为先序
+//			BT = BT->lchild;
+//		}
+//		if (!IsEmpty(S))
+//		{
+//			BT = Pop(&S);  //第二次碰到结点
+//			printf("%d ", BT->data);  //访问在此处为中序
+//			BT = BT->rchild;
+//		}
+//	}
+//}
+//
+////前序：根左右
+//void PreOrderTraverse(BiTree T)
+//{
+//	if (!T)
+//	{
+//		return;
+//	}
+//	Stack S;
+//	InitStack(&S);
+//	Push(&S, T);
+//	while (!IsEmpty(S))
+//	{
+//		BiTree tmp = Pop(&S);
+//		printf("%d ", tmp->data);
+//
+//		//存放时先右后左，弹出时才是先左后右
+//		if (tmp->rchild)
+//		{
+//			Push(&S, tmp->rchild);
+//		}
+//		if (tmp->lchild)
+//		{
+//			Push(&S, tmp->lchild);
+//		}
+//	}
+//}
+//
+////后序：左右根（两个栈）
+//void PostOrderTraverse(BiTree T)
+//{
+//	if (!T)
+//	{
+//		return;
+//	}
+//	Stack S1, S2;
+//	InitStack(&S1);
+//	InitStack(&S2);
+//	Push(&S1, T);
+//	//栈1记录遍历的结点，将结点以根右左的顺序放入栈2，出栈时就是左右根的顺序
+//	while (!IsEmpty(S1))
+//	{
+//		BiTree tmp = Pop(&S1);
+//		Push(&S2, tmp);
+//		if (tmp->lchild)
+//		{
+//			Push(&S1, tmp->lchild);
+//		}
+//		if (tmp->rchild)
+//		{
+//			Push(&S1, tmp->rchild);
+//		}
+//	}
+//	while (!IsEmpty(S2))
+//	{
+//		BiTree node = Pop(&S2);
+//		printf("%d ", node->data);
+//	}
+//}
 
 
 
@@ -286,18 +356,6 @@ void InOrderTraverse(BiTree T)
 //		}
 //	}
 //}
-
-//总结：如果去掉输出语句,从递归的角度看,三种算法是完全相同的, 
-//      或说这三种算法的访问路径是相同的, 只是访问结点的时机不同。
-//
-//从出发点（根结点）到终点（根结点）的路径上, 每个结点经过3次。
-//
-//第1次经过时访问 = 先序遍历
-//第2次经过时访问 = 中序遍历
-//第3次经过时访问 = 后序遍历
-//
-//时间效率:O(n) //每个结点只访问一次
-//空间效率:O(h) //栈占用（存函数调用的信息，如参数，返回地址等）的最大辅助空间, h为树的深度
 
 
 //1.复制二叉树：
