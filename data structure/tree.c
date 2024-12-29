@@ -75,21 +75,21 @@
 
 //二叉树的【链式】存储结构：
 //1.二叉链表：左，右孩子
-#define TElemType int
-typedef struct BiNode
-{
-	TElemType data;
-	struct BiNode* lchild, * rchild;
-}BiNode,*BiTree;
+//#define TElemType int
+//typedef struct BiNode
+//{
+//	TElemType data;
+//	struct BiNode* lchild, * rchild;
+//}BiNode,*BiTree;
 
 //2.三叉链表：左，右孩子，双亲
-typedef struct TriNode
-{
-	TElemType data;
-	struct TriNode* lchild, * rchild, * parent;
-}TriNode,*TriTree;
+//typedef struct TriNode
+//{
+//	TElemType data;
+//	struct TriNode* lchild, * rchild, * parent;
+//}TriNode,*TriTree;
 
-//遍历二叉树：
+//**********遍历二叉树：
 //二叉树有根结点，左子树，右子树构成，依次遍历这三个组成就是遍历了整个二叉树
 //每个子树又由根结点和左右子树构成 --> 遍历是【递归】进行的
 //L：左子树 ，R:右子树 ，D:根结点
@@ -359,74 +359,108 @@ typedef struct TriNode
 
 
 //1.复制二叉树：
-void Copy(BiTree T, BiTree* NewT)
-{
-	if (T = NULL)
-	{
-		*NewT = NULL;
-		return;
-	}
-	else
-	{
-		*NewT = (BiNode*)malloc(sizeof(BiNode));
-		if (*NewT == NULL)
-		{
-			printf("开辟内存不成功\n");
-			exit(1);
-		}
-		(*NewT)->data = T->data;
-		Copy(T->lchild, (*NewT)->lchild);
-		Copy(T->rchild, (*NewT)->rchild);
-	}
-}
+//void Copy(BiTree T, BiTree* NewT)
+//{
+//	if (T = NULL)
+//	{
+//		*NewT = NULL;
+//		return;
+//	}
+//	else
+//	{
+//		*NewT = (BiNode*)malloc(sizeof(BiNode));
+//		if (*NewT == NULL)
+//		{
+//			printf("开辟内存不成功\n");
+//			exit(1);
+//		}
+//		(*NewT)->data = T->data;
+//		Copy(T->lchild, (*NewT)->lchild);
+//		Copy(T->rchild, (*NewT)->rchild);
+//	}
+//}
 
 //2.计算树的深度：
-int Depth(BiTree T)
-{
-	if (T == NULL)
-	{
-		return 0;
-	}
-	else
-	{
-		int m = Depth(T->lchild);
-		int n = Depth(T->rchild);
-		return m > n ? m + 1 : n + 1;
-	}
-}
+//int Depth(BiTree T)
+//{
+//	if (T == NULL)
+//	{
+//		return 0;
+//	}
+//	else
+//	{
+//		int m = Depth(T->lchild);
+//		int n = Depth(T->rchild);
+//		return m > n ? m + 1 : n + 1;
+//	}
+//}
 
-//3.计算树的结点数：
-int NodeCount(BiTree T)
-{
-	if (T = NULL)
-	{
-		return 0;
-	}
-	else
-	{
-		return NodeCount(T->lchild) + NodeCount(T->lchild) + 1;
-	}
-}
+
+////3.计算树的结点数：
+//int NodeCount(BiTree T)
+//{
+//	if (T = NULL)
+//	{
+//		return 0;
+//	}
+//	else
+//	{
+//		return NodeCount(T->lchild) + NodeCount(T->lchild) + 1;
+//	}
+//}
 
 //4.计算叶子结点数：
-int LeafNode(BiTree T)
-{
-	if (T = NULL)
-	{
-		return 0;
-	}
-	if (T->lchild == NULL && T->rchild == NULL)
-	{
-		return 1;
-	}
-	else
-	{
-		return LeafNode(T->lchild) + LeafNode(T->rchild);
-	}
-}
+//int LeafNode(BiTree T)
+//{
+//	if (T = NULL)
+//	{
+//		return 0;
+//	}
+//	if (T->lchild == NULL && T->rchild == NULL)
+//	{
+//		return 1;
+//	}
+//	else
+//	{
+//		return LeafNode(T->lchild) + LeafNode(T->rchild);
+//	}
+//}
 
-//线索二叉树：
-//为了找到特定遍历顺序（先序，中序，后序）下的二叉树中某个结点的前驱和后继
+
+//应用：判断两棵树是否同构（通过左右孩子互换后相同的两棵树）
+//typedef struct BiTree
+//{
+//	int val;
+//	struct BiTree* left, * right;
+//}BiTree;
+//
+//int Isomorphic(BiTree* T1, BiTree* T2)
+//{
+//	if (T1 == NULL && T2 == NULL)
+//	{
+//		return 1;
+//	}
+//	if (T1 == NULL || T2 == NULL)
+//	{
+//		return 0;
+//	}
+//	if (T1->val != T2->val)
+//	{
+//		return 0;
+//	}
+//	//使用递归
+//	return (Isomorphic(T1->left, T2->left) && Isomorphic(T1->right, T2->right) || Isomorphic(T1->left, T2->right) && Isomorphic(T1->right, T2->left));
+//}
+
+
+//*********二叉搜索树：--》动态查找
+//非空左子树的所有结点的值【小于】根结点的值，非空右子树的所有结点的值【大于】根结点的值
+
+
+
+
+//********线索二叉树：
+//为了找到特定遍历顺序（先序，中序，后序）下的二叉树中某个结点的【前驱和后继】
 //-->使用二叉链表的空指针域
      //（假设某个二叉树有n个结点，则有2n个指针域，有n-1个孩子（除根结点以外），需要n-1个指针域，故有n+1个空指针域）
 
@@ -436,12 +470,12 @@ int LeafNode(BiTree T)
 //ltag=0 表示指向左孩子，ltag=1 表示指向前驱 
 //rtag=0 表示指向右孩子，rtag=1 表示指向后继 
 
-typedef struct BiThrNode
-{
-	int data;
-	int ltag, rtag;
-	struct BiThrNode* lchild, * rchild;
-}BiThrNode,*BiThrTree;
+//typedef struct BiThrNode
+//{
+//	int data;
+//	int ltag, rtag;
+//	struct BiThrNode* lchild, * rchild;
+//}BiThrNode,*BiThrTree;
 
 //因为有1个结点没有前驱，1个结点没有后继，
 //为了好表示，增设一个头结点，是BiThrTree类型
@@ -479,20 +513,20 @@ typedef struct BiThrNode
 //定义结构数组，存放树的结点，每个结点包括一个数据域和一个双亲域，
 //数据域存放结点本身信息，双亲域指示本结点的双亲结点在数组中的位置
 
-#define TELemType int 
-#define MAXSIZE 100
-
-typedef struct	
-{
-	TELemType data;
-	int parent;  //根结点的双亲域为-1
-}PTNode;
-
-typedef struct
-{
-	PTNode nodes[MAXSIZE];
-	int r, n;  //r 为根结点的位置（数组下标），n 为结点的总个数
-}PTree;
+//#define TELemType int 
+//#define MAXSIZE 100
+//
+//typedef struct	
+//{
+//	TELemType data;
+//	int parent;  //根结点的双亲域为-1
+//}PTNode;
+//
+//typedef struct
+//{
+//	PTNode nodes[MAXSIZE];
+//	int r, n;  //r 为根结点的位置（数组下标），n 为结点的总个数
+//}PTree;
 
 //2.——————孩子链表：容易找孩子，不容易找双亲
 // 
@@ -501,49 +535,49 @@ typedef struct
 //而n个头指针又组成一个线性表, 用顺序表(含n个元素的结构数组)存储
 
 //孩子结点结构：
-typedef struct CTNode
-{
-	int child; //某结点的孩子结点在数组中的下标
-	struct CTNode* next;  //指向下一个孩子结点
-}*ChildPtr;
+//typedef struct CTNode
+//{
+//	int child; //某结点的孩子结点在数组中的下标
+//	struct CTNode* next;  //指向下一个孩子结点
+//}*ChildPtr;
 
 //双亲结点结构：
-typedef struct
-{
-	TElemType data;
-	ChildPtr fisrtchild;
-}CTBox;
+//typedef struct
+//{
+//	TElemType data;
+//	ChildPtr fisrtchild;
+//}CTBox;
 
 //树的结构：
-typedef struct
-{
-	CTBox nodes[MAXSIZE];
-	int r, n;
-}CTree;
+//typedef struct
+//{
+//	CTBox nodes[MAXSIZE];
+//	int r, n;
+//}CTree;
 
 //改进：带双亲的孩子链表 --> 容易找双亲和孩子
      //在孩子链表的基础上，在数组中增加一个双亲域，存放结点的双亲结点的数组下标
 
 //改进双亲结点结构：
-typedef struct
-{
-	TElemType data;
-	int parent;
-	ChildPtr fristchild;
-}PCNode;
+//typedef struct
+//{
+//	TElemType data;
+//	int parent;
+//	ChildPtr fristchild;
+//}PCNode;
 
 
 //——————3.孩子兄弟表示法：
 	//实现:用二叉链表作树的存储结构, 链表中每个结点的两个指针域
 	//分别指向其第一个孩子结点和下一个兄弟结点
 
-#define ElemType int
-typedef struct CSNode
-{
-	ElemType data;
-	struct CSNode* firstchild;
-	struct CSNode* nextsibling;
-}CSNode,*CSTree;
+//#define ElemType int
+//typedef struct CSNode
+//{
+//	ElemType data;
+//	struct CSNode* firstchild;
+//	struct CSNode* nextsibling;
+//}CSNode,*CSTree;
 
 
 //要对树进行运算->较复杂，二叉树的运算->较简单
@@ -606,7 +640,7 @@ typedef struct CSNode
 // 
 
 
-//哈夫曼树：（最优树）
+//*********哈夫曼树：（最优树）
 //1.概念：
 //   1>路径：从树中一个结点到另一个结点之间的分支构成这两个结点间的路径
 //   2>结点的路径长度：两结点间路径上的分支数（连线数）
