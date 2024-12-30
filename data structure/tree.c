@@ -455,6 +455,135 @@
 
 //*********二叉搜索树：--》动态查找
 //非空左子树的所有结点的值【小于】根结点的值，非空右子树的所有结点的值【大于】根结点的值
+typedef struct BiTree
+{
+	int val;
+	struct BiTree* left, * right;
+}BiTree;
+
+//查找
+BiTree* Find(BiTree* T, int e)
+{
+	while (T)
+	{
+		if (e > T->val)
+		{
+			T = T->right;
+		}
+		else if (e < T->val)
+		{
+			T = T->left;
+		}
+		else
+		{
+			break;
+		}
+	}
+	return T;
+}
+
+int FindMax(BiTree* T)
+{
+	while (T->right )
+	{
+		T = T->right;
+	}
+	return T->val;
+}
+
+int FindMin(BiTree* T)
+{
+	while (T->left)
+	{
+		T = T->left;
+	}
+	return T->val;
+}
+
+//插入
+BiTree* Insert(BiTree* T, int e)
+{
+	if (!T)
+	{
+		T = (BiTree*)malloc(sizeof(BiTree));
+		T->val = e;
+		T->left = T->right = NULL;
+	}
+	else
+	{
+		if (e > T->val)
+		{
+			T->right = Insert(T->right, e);
+		}
+		else if(e < T->val)
+		{
+			T->left = Insert(T->left, e);
+		}
+		//else  e已经存在，什么都不做
+	}
+	return T;  //返回根结点
+}
+
+//删除
+//1.要删除的结点是【叶结点】时：直接free,再返回NULL给父节点对应的指针域
+//2.要删除的结点是结点【只有一个子树】时：将结点A的子节点B接到A的父节点C上
+//3.要删除的结点是结点【有两个子树】时：--》转化为1，2情况
+//   1》找到左子树中的最大值替换结点中的值，再将左子树中的最大值（最右边--》一定时1，2情况）删除
+//   2》找到右子树中的最小值
+
+BiTree* Delete(BiTree* T, int e)
+{
+	if (!T)
+	{
+		printf("没有该元素\n");
+	}
+
+	if (e > T->val)
+	{
+		T->right = Delete(T->right, e);
+	}
+	else if (e < T->left)
+	{
+		T->left = Delete(T->left, e);
+	}
+	else
+	{
+		if (T->left && T->right)
+		{
+			//找右子树的最小值
+			int min = FindMin(T->right);
+			T->val = min;
+			T->right = Delete(T->right, min);
+		}
+		else
+		{
+			BiTree* tmp = T;
+			if (!T->left)  //只有右子树或没有子树
+			{
+				T = T->right;
+				free(tmp);
+			}
+			else  //只有左子树
+			{
+				T = T->left;
+				free(tmp);
+			}
+		}
+	}
+	return T;
+}
+
+//总结：要想访问父节点的指针域--》可以通过递归返回地址
+
+
+//*******平衡二叉树：是一种特殊的搜索二叉树
+//平衡二叉树要求其每个结点的左右子树高度差（平衡因子）不能超过一个固定的阈值（通常为 1）
+//常见的平衡二叉树有：
+//1.AVL树：每个节点的左右子树高度差不能超过 1。
+//2.红黑树：一种特殊的二叉搜索树，具有一组额外的平衡规则，保证了树的平衡性
+
+//--》降低树的高度，提高查找的效率
+
 
 
 
