@@ -185,7 +185,8 @@
 //空间效率:O(h) //栈占用（存函数调用的信息，如参数，返回地址等）的最大辅助空间, h为树的深度
 
 
-////【非递归】算法：（使用堆栈） 深度优先遍历
+
+////**************【非递归】算法：（使用堆栈） 深度优先遍历
 
 //#define MAXSIZE 20
 //#define ElemType BiTree
@@ -453,125 +454,126 @@
 //}
 
 
+
 //*********二叉搜索树：--》动态查找
 //非空左子树的所有结点的值【小于】根结点的值，非空右子树的所有结点的值【大于】根结点的值
-typedef struct BiTree
-{
-	int val;
-	struct BiTree* left, * right;
-}BiTree;
+//typedef struct BiTree
+//{
+//	int val;
+//	struct BiTree* left, * right;
+//}BiTree;
 
 //查找
-BiTree* Find(BiTree* T, int e)
-{
-	while (T)
-	{
-		if (e > T->val)
-		{
-			T = T->right;
-		}
-		else if (e < T->val)
-		{
-			T = T->left;
-		}
-		else
-		{
-			break;
-		}
-	}
-	return T;
-}
+//BiTree* Find(BiTree* T, int e)
+//{
+//	while (T)
+//	{
+//		if (e > T->val)
+//		{
+//			T = T->right;
+//		}
+//		else if (e < T->val)
+//		{
+//			T = T->left;
+//		}
+//		else
+//		{
+//			break;
+//		}
+//	}
+//	return T;
+//}
+//
+//int FindMax(BiTree* T)
+//{
+//	while (T->right )
+//	{
+//		T = T->right;
+//	}
+//	return T->val;
+//}
+//
+//int FindMin(BiTree* T)
+//{
+//	while (T->left)
+//	{
+//		T = T->left;
+//	}
+//	return T->val;
+//}
 
-int FindMax(BiTree* T)
-{
-	while (T->right )
-	{
-		T = T->right;
-	}
-	return T->val;
-}
-
-int FindMin(BiTree* T)
-{
-	while (T->left)
-	{
-		T = T->left;
-	}
-	return T->val;
-}
-
-//插入
-BiTree* Insert(BiTree* T, int e)
-{
-	if (!T)
-	{
-		T = (BiTree*)malloc(sizeof(BiTree));
-		T->val = e;
-		T->left = T->right = NULL;
-	}
-	else
-	{
-		if (e > T->val)
-		{
-			T->right = Insert(T->right, e);
-		}
-		else if(e < T->val)
-		{
-			T->left = Insert(T->left, e);
-		}
-		//else  e已经存在，什么都不做
-	}
-	return T;  //返回根结点
-}
+//*******插入
+//BiTree* Insert(BiTree* T, int e)
+//{
+//	if (!T)
+//	{
+//		T = (BiTree*)malloc(sizeof(BiTree));
+//		T->val = e;
+//		T->left = T->right = NULL;
+//	}
+//	else
+//	{
+//		if (e > T->val)
+//		{
+//			T->right = Insert(T->right, e);
+//		}
+//		else if(e < T->val)
+//		{
+//			T->left = Insert(T->left, e);
+//		}
+//		//else  e已经存在，什么都不做
+//	}
+//	return T;  //返回根结点
+//}
 
 //删除
 //1.要删除的结点是【叶结点】时：直接free,再返回NULL给父节点对应的指针域
-//2.要删除的结点是结点【只有一个子树】时：将结点A的子节点B接到A的父节点C上
-//3.要删除的结点是结点【有两个子树】时：--》转化为1，2情况
-//   1》找到左子树中的最大值替换结点中的值，再将左子树中的最大值（最右边--》一定时1，2情况）删除
+//2.要删除的结点【只有一个子树】时：将结点A的子节点B接到A的父节点C上
+//3.要删除的结点【有两个子树】时：--》转化为1，2情况
+//   1》找到左子树中的最大值替换结点中的值，再将左子树中的最大值（最右边--》一定是1，2情况）删除
 //   2》找到右子树中的最小值
 
-BiTree* Delete(BiTree* T, int e)
-{
-	if (!T)
-	{
-		printf("没有该元素\n");
-	}
-
-	if (e > T->val)
-	{
-		T->right = Delete(T->right, e);
-	}
-	else if (e < T->left)
-	{
-		T->left = Delete(T->left, e);
-	}
-	else
-	{
-		if (T->left && T->right)
-		{
-			//找右子树的最小值
-			int min = FindMin(T->right);
-			T->val = min;
-			T->right = Delete(T->right, min);
-		}
-		else
-		{
-			BiTree* tmp = T;
-			if (!T->left)  //只有右子树或没有子树
-			{
-				T = T->right;
-				free(tmp);
-			}
-			else  //只有左子树
-			{
-				T = T->left;
-				free(tmp);
-			}
-		}
-	}
-	return T;
-}
+//BiTree* Delete(BiTree* T, int e)
+//{
+//	if (!T)
+//	{
+//		printf("没有该元素\n");
+//	}
+//
+//	if (e > T->val)
+//	{
+//		T->right = Delete(T->right, e);
+//	}
+//	else if (e < T->left)
+//	{
+//		T->left = Delete(T->left, e);
+//	}
+//	else
+//	{
+//		if (T->left && T->right)
+//		{
+//			//找右子树的最小值
+//			int min = FindMin(T->right);
+//			T->val = min;
+//			T->right = Delete(T->right, min);
+//		}
+//		else
+//		{
+//			BiTree* tmp = T;
+//			if (!T->left)  //只有右子树或没有子树
+//			{
+//				T = T->right;
+//				free(tmp);
+//			}
+//			else  //只有左子树
+//			{
+//				T = T->left;
+//				free(tmp);
+//			}
+//		}
+//	}
+//	return T;
+//}
 
 //总结：要想访问父节点的指针域--》可以通过递归返回地址
 
@@ -587,10 +589,187 @@ BiTree* Delete(BiTree* T, int e)
 
 //每个结点有一个平衡因子，n=左子树的高度-右子树的高度
 //一旦|n|>1,就需要进行二叉树的调整
-//1>RR旋转：
-//2>
-//3>
-//4>
+//|n|>1的结点为被破坏结点/发现结点，插入的结点为麻烦结点
+//1>RR旋转：插入结点为在发现结点A的右子树B的右子树C，B作为新子树的根结点
+//2>LL旋转：插入结点为在发现结点A的左子树B的左子树C，B作为新子树的根结点
+//3>RL旋转：插入结点为在发现结点A的右子树B的左子树C，C作为新子树的根结点
+//4>LR旋转：插入结点为在发现结点A的左子树B的右子树C，C作为新子树的根结点
+
+//总结：1》当有多个结点的|n|>1时，发现结点为最下面的结点
+//      2》从被发现者往下的子树做二叉树的调整，不一定是整棵树
+//      3》结点的旋转只涉及发现结点A,A的左/右孩子B,B的左/右孩子C，
+//         并且旋转大小为中间的结点为根结点
+
+
+//应用：是否同一棵二叉搜索树
+//1》按照序列分别建树然后比较
+//2》不建树：将序列第一个数作为根结点A，其他数按照原本的次序小于A的为左子树，大于A的为右子树
+//           子树又是新的树，一一比较数的大小和顺序
+//3》建一棵树为基树，其他树的序列与它一一比较
+
+//#include<stdio.h>
+//#include<stdlib.h>
+////树的表示：
+//typedef struct Node
+//{
+//	int val;
+//	struct Node* left, * right;
+//	int flag;   //1表示被访问过，0表示没被访问过
+//}Node,*Tree;
+//
+////基树的建立：
+//Tree MakeNode(Tree T, int V)
+//{
+//	T = (Tree)malloc(sizeof(Node));
+//	T->val = V;
+//	T->left = T->right = NULL;
+//	T->flag = 0;
+//	return T;
+//}
+//
+//Tree Insert(Tree T, int V)
+//{
+//	if (!T)
+//	{
+//		T = MakeNode(T, V);
+//	}
+//	else
+//	{
+//		if (V > T->val)
+//		{
+//			T->right = Insert(T->right, V);
+//		}
+//		else
+//		{
+//			T->left = Insert(T->left, V);
+//		}
+//		//忽略了数字重复的情况
+//	}
+//	return T;
+//}
+//
+//Tree MakeTree(Tree T, int N)
+//{
+//	int V;
+//	scanf("%d", &V);
+//	T = MakeNode(T, V);
+//	for (int i = 1; i < N; i++)
+//	{
+//		scanf("%d", &V);
+//		T = Insert(T, V);
+//	}
+//	return T;
+//}
+//
+////比较
+//int Check(Tree T, int V)  
+//{
+//	if (T->flag)
+//	{
+//		if (V > T->val)
+//		{
+//			return Check(T->right, V);
+//		}
+//		else if(V < T->val)
+//		{
+//			return Check(T->left, V);
+//		}
+//		else
+//		{
+//			return 0;
+//		}
+//	}
+//	else
+//	{
+//		if (T->val == V)
+//		{
+//			T->flag = 1;
+//			return 1;
+//		}
+//		else
+//		{
+//			return 0;
+//		}
+//	}
+//	
+//}
+//
+//int Judge(Tree T, int N)
+//{
+//	int V, flag = 0;
+//	scanf("%d", &V);
+//	if (T->val != V)
+//	{
+//		flag = 1;
+//	}
+//	else
+//	{
+//		T->flag = 1;
+//	}
+//	for (int i = 1; i < N; i++)
+//	{
+//		scanf("%d", &V);
+//		if (!Check(T, V))
+//		{
+//			flag = 1;
+//		}
+//	}
+//	if (flag)
+//	{
+//		return 0;
+//	}
+//	return 1;
+//}
+//
+////其他函数
+//void Reset(Tree T)
+//{
+//	if (T->left)
+//	{
+//		Reset(T->left);
+//	}
+//	if (T->right)
+//	{
+//		Reset(T->right);
+//	}
+//	T->flag = 0;
+//}
+//
+//void FreeTree(Tree T)
+//{
+//	if (T->left)
+//	{
+//		FreeTree(T->left);
+//	}
+//	if (T->right)
+//	{
+//		FreeTree(T->right);
+//	}
+//	free(T);
+//}
+//
+////主程序
+//int main()
+//{
+//	int N, L;  //N表示树的结点个数，L表示除了基树以外要比较的树的个数
+//	Tree T = NULL;
+//	scanf("%d %d", &N, &L);
+//	T = MakeTree(T, N);
+//	for (int i = 0; i < L; i++)
+//	{
+//		if (Judge(T, N))
+//		{
+//			printf("Yes\n");
+//		}
+//		else
+//		{
+//			printf("No\n");
+//		}
+//		Reset(T);
+//	}
+//	FreeTree(T);
+//	return 0;
+//}
 
 
 
@@ -614,7 +793,7 @@ BiTree* Delete(BiTree* T, int e)
 
 //因为有1个结点没有前驱，1个结点没有后继，
 //为了好表示，增设一个头结点，是BiThrTree类型
-//Itag = 0, Ichild指向根结点,
+//ltag = 0, Ichild指向根结点,
 //rtag = 1, rchild指向遍历序列中最后一个结点
 //遍历序列中第一个结点的lc域和最后一个结点的rc域都指向头结点
 
@@ -662,6 +841,113 @@ BiTree* Delete(BiTree* T, int e)
 //	PTNode nodes[MAXSIZE];
 //	int r, n;  //r 为根结点的位置（数组下标），n 为结点的总个数
 //}PTree;
+
+
+//***应用：集合的并，查运算
+//1和2，3和4，2和5连在一起，问1和5连在一起吗？
+//使用集合，在一个集合里的元素连在一起
+//1和2连在一起：查找1，2分别在哪个集合中，若集合相同，则不用操作，若集合不同，则合并集合--》对树根操作
+//--》主要需要找双亲--》双亲表示法
+
+
+//使用结构数组存储
+//#define ElemType int
+//typedef struct
+//{
+//	ElemType data;
+//	int parent;  
+//}SetType;
+//
+//int MaxSize = 10;  //数组的最大长度
+//
+////查找运算
+//int Find(SetType S[], ElemType e)  //返回根结点的下标
+//{
+//	int i;
+//	for (i = 0; i < MaxSize && S[i].data != e; i++);
+//	if (i >= MaxSize)
+//	{
+//		return -1;
+//	}
+//	for (; S[i].parent >=0; i = S[i].parent);
+//	return i;
+//}
+//
+////并运算
+//void Union(SetType S[], ElemType e1, ElemType e2)
+//{
+//	int root1 = Find(S, e1);
+//	int root2 = Find(S, e2);
+//	if (root1 != root2)
+//	{
+//		S[root2].parent = root1;
+//	}
+//}
+
+//并运算后集合的长度会改变，会影响查找的效率
+//为了减轻这种影响，可以采用将小的集合合并到大的集合里
+//修改根结点的parent的值，假设集合有n个元素，则parent=-n
+//合并时判断parent的值的大小即可
+
+
+
+//*********优化：
+//将结构数组转化为整型数组，通过数组下标代表不同的结点
+//#define MAXSIZE 10000
+//typedef int ElemType;
+//typedef int setname;  //用根结点下标表示集合名称
+//typedef ElemType SetType[MAXSIZE];  
+//定义了一个新的类型别名 SetType，它代表的实际类型是一个包含 MAXSIZE 个 ElemType 类型元素的数组
+
+//1>按秩归并：
+// #1 按长度归并：
+//假设root1 != root2
+//void Union(SetType S, ElemType root1, ElemType root2)
+//{
+//	if (S[root1] < S[root2])  //数组里放的是高度的负数
+//	{
+//		S[root2] = root1;
+//	}
+//	else
+//	{
+//		if (S[root1] == S[root2])
+//		{
+//			S[root2]--;
+//		}
+//		S[root1] = root2;
+//	}
+//}
+
+// #2 按规模归并：
+//void Union(SetType S, ElemType root1, ElemType root2)
+//{
+//	if (S[root1] < S[root2])
+//	{
+//		S[root1] += S[root2];
+//		S[root2] = root1;
+//	}
+//	else
+//	{
+//		S[root2] += S[root1];
+//		S[root1] = root2;
+//	}
+//}
+
+//2>******路径压缩：将1->2->3->4 变为1->2,1->3,1->4
+//setname Find(SetType S, ElemType x)
+//{
+//	if (S[x] < 0)
+//	{
+//		return x;
+//	}
+//	else
+//	{
+//		//return Find(S, S[x]);  -->最终返回根结点的下标
+//		return S[x] = Find(S, S[x]);  //-->不只返回根结点的下标，还将所有间接孩子变成直接孩子
+//	}
+//}
+
+
 
 //2.——————孩子链表：容易找孩子，不容易找双亲
 // 
@@ -775,6 +1061,7 @@ BiTree* Delete(BiTree* T, int e)
 // 
 
 
+
 //*********哈夫曼树：（最优树）
 //1.概念：
 //   1>路径：从树中一个结点到另一个结点之间的分支构成这两个结点间的路径
@@ -807,6 +1094,10 @@ BiTree* Delete(BiTree* T, int e)
 //    -->· 重复2、3剩单根
 //
 
+
+
+
+//方法1：
 //采用顺序存储结构-->一维结构数组
 //结点类型定义：
 //typedef struct
@@ -847,7 +1138,7 @@ BiTree* Delete(BiTree* T, int e)
 //	{
 //		return;
 //	}
-//	int m = 2 * n - 1;  //n个结点+ n-1个构造的新结点
+//	int m = 2 * n - 1;  //n0个结点+ n2=n0-1个构造的新结点
 //	*HT = (HuffmanTree)calloc(m + 1, sizeof(HTnode));  //数组下标为0的空间不用，根结点为(*HT)[m]
 //	if (*HT == NULL)
 //	{
@@ -874,8 +1165,44 @@ BiTree* Delete(BiTree* T, int e)
 //		(*HT)[i].weight = (*HT)[s1].weight + (*HT)[s2].weight;
 //	}
 //}
+
+
+//方法2：
+//使用链表和【最小堆】
+//typedef struct TreeNode* HuffmanTree;
+//struct TreeNode
+//{
+//	int weight;
+//	HuffmanTree left, right;
+//};
 //
+//#define ElemType HuffmanTree
+//typedef struct HeapStruct* MinHeap;
+//struct HeapStruct
+//{
+//	ElemType* elem;
+//	int size;
+//	int capcity;
+//};
 //
+//HuffmanTree Huffman(MinHeap H)
+//{
+//	HuffmanTree T;
+//	BuildMinHeap(H);
+//	for (int i = 1; i < H->size; i++)  //做H->size-1次合并
+//	{
+//		T = (HuffmanTree)malloc(sizeof(struct TreeNode));
+//		T->left = DeleteMin(H);
+//		T->right = DeleteMin(H);
+//		T->weight = T->left->weight + T->right->weight;
+//		Insert(H, T);
+//	}
+//	T = DeleteMin(H);
+//	return T;
+//}
+
+
+
 ////哈夫曼树的应用：哈夫曼编码
 ////在远程通讯中，要将待传字符转换为二进制字符
 ////可以使用等长的二进制编码，但空间浪费大，传输效率低
@@ -897,7 +1224,7 @@ BiTree* Delete(BiTree* T, int e)
 ////
 //
 ////哈夫曼编码实现：
-////创造一个字符串数组，数组中的每一个元素是一个字符串数组，用来存放某个叶子结点的哈夫曼编码
+////创造一个字符串数组，数组中的每一个元素是一个字符数组，用来存放某个叶子结点的哈夫曼编码
 ////创建一个临时数组，从叶子结点到根结点（通过parent回溯），倒着存进临时数组，然后复制给字符串数组
 //
 //#include<string.h>

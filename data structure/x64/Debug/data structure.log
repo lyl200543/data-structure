@@ -1,2 +1,4 @@
-﻿  tree.c
+﻿  practice.c
+D:\vs\data structure\data structure\practice.c(1089,3): warning C4033: “IsHuffmanTree”必须返回值
+D:\vs\data structure\data structure\practice.c(1106,1): warning C4715: “IsHuffmanTree”: 不是所有的控件路径都返回值
   data structure.vcxproj -> D:\vs\data structure\x64\Debug\data structure.exe

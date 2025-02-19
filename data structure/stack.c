@@ -183,125 +183,125 @@
 //   再比较新的栈顶运算符, 直到该运算符大于栈顶运算符优先级为止, 然后将该运算符压栈;
 //5>若各对象处理完毕, 则把堆栈中存留的运算符一并输出。
 
-#define MAXSIZE 50
-#define ElemType char
-typedef struct Stack
-{
-    ElemType data[MAXSIZE];
-    int top;
-}Stack;
-
-void InitStack(Stack* s)
-{
-    s->top = -1;
-}
-
-int IsEmpty(Stack s)
-{
-    return s.top == -1;
-}
-
-void Push(Stack* s, ElemType e)
-{
-    if (s->top == MAXSIZE - 1)
-    {
-        printf("栈满\n");
-        return;
-    }
-    s->data[++s->top] = e;
-}
-
-void Pop(Stack* s, ElemType* e)
-{
-    if (IsEmpty(*s))
-    {
-        printf("栈空\n");
-        return;
-    }
-    *e = s->data[s->top--];
-}
-
-ElemType Peek(Stack s)
-{
-    if (IsEmpty(s))
-    {
-        printf("栈空\n");
-        return'\0';
-    }
-    return  s.data[s.top];
-}
-
-//判断是否是操作符
-int IsOperator(char ch)
-{
-    return ch == '+' || ch == '-' || ch == '*' || ch == '/';
-}
-
-//******判断操作符的优先级
-int Prior(char ch)
-{
-    switch (ch)
-    {
-    case'+':
-    case'-':
-        return 1;
-    case'*':
-    case'/':
-        return 2;
-    default:
-        return 0;
-    }
-}
-void trans(char mid[], char behind[])
-{
-    Stack s;
-    InitStack(&s);
-    int i = 0, j = 0;
-    while (mid[i])
-    {
-        char ch = mid[i];
-        if (ch >= '0' && ch <= '9')
-        {
-            behind[j++] = ch;
-        }
-        else if (ch == '(')
-        {
-            Push(&s, ch);
-        }
-        else if (ch == ')')
-        {
-            ElemType e;
-            while (Peek(s) != '(')
-            {
-                Pop(&s, &e);
-                behind[j++] = e;
-            }
-            Pop(&s, &e);
-        }
-        else if (IsOperator(ch))
-        {
-            ElemType e;
-            while(!IsEmpty(s) && Prior(Peek(s)) >= Prior(ch))
-            {
-                Pop(&s, &e);
-                behind[j++] = e;
-            }
-            Push(&s, ch);
-        }
-        i++;
-    }
-    behind[j] = '\0';
-}
-
-int main()
-{
-    char mid[MAXSIZE];
-    char behind[MAXSIZE];
-    scanf("%s", mid);
-    trans(mid, behind);
-    printf("%s\n",behind);
-    return 0;
-}
+//#define MAXSIZE 50
+//#define ElemType char
+//typedef struct Stack
+//{
+//    ElemType data[MAXSIZE];
+//    int top;
+//}Stack;
+//
+//void InitStack(Stack* s)
+//{
+//    s->top = -1;
+//}
+//
+//int IsEmpty(Stack s)
+//{
+//    return s.top == -1;
+//}
+//
+//void Push(Stack* s, ElemType e)
+//{
+//    if (s->top == MAXSIZE - 1)
+//    {
+//        printf("栈满\n");
+//        return;
+//    }
+//    s->data[++s->top] = e;
+//}
+//
+//void Pop(Stack* s, ElemType* e)
+//{
+//    if (IsEmpty(*s))
+//    {
+//        printf("栈空\n");
+//        return;
+//    }
+//    *e = s->data[s->top--];
+//}
+//
+//ElemType Peek(Stack s)
+//{
+//    if (IsEmpty(s))
+//    {
+//        printf("栈空\n");
+//        return'\0';
+//    }
+//    return  s.data[s.top];
+//}
+//
+////判断是否是操作符
+//int IsOperator(char ch)
+//{
+//    return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+//}
+//
+////******判断操作符的优先级
+//int Prior(char ch)
+//{
+//    switch (ch)
+//    {
+//    case'+':
+//    case'-':
+//        return 1;
+//    case'*':
+//    case'/':
+//        return 2;
+//    default:
+//        return 0;
+//    }
+//}
+//void trans(char mid[], char behind[])
+//{
+//    Stack s;
+//    InitStack(&s);
+//    int i = 0, j = 0;
+//    while (mid[i])
+//    {
+//        char ch = mid[i];
+//        if (ch >= '0' && ch <= '9')
+//        {
+//            behind[j++] = ch;
+//        }
+//        else if (ch == '(')
+//        {
+//            Push(&s, ch);
+//        }
+//        else if (ch == ')')
+//        {
+//            ElemType e;
+//            while (Peek(s) != '(')
+//            {
+//                Pop(&s, &e);
+//                behind[j++] = e;
+//            }
+//            Pop(&s, &e);
+//        }
+//        else if (IsOperator(ch))
+//        {
+//            ElemType e;
+//            while(!IsEmpty(s) && Prior(Peek(s)) >= Prior(ch))
+//            {
+//                Pop(&s, &e);
+//                behind[j++] = e;
+//            }
+//            Push(&s, ch);
+//        }
+//        i++;
+//    }
+//    behind[j] = '\0';
+//}
+//
+//int main()
+//{
+//    char mid[MAXSIZE];
+//    char behind[MAXSIZE];
+//    scanf("%s", mid);
+//    trans(mid, behind);
+//    printf("%s\n",behind);
+//    return 0;
+//}
 
 //--------------------------------------------------链栈----------------------------------------------------
 

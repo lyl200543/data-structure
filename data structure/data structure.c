@@ -295,3 +295,31 @@
 //  动态查找（有插入\删除操作）：二叉搜索树
 
 
+//6.单链表的逆转：
+//输入一个有N个结点的链表，将前K个结点逆转顺序（K<N）
+//#define ElemType int
+//typedef struct node* ptr;
+//struct node
+//{
+//	ElemType data;
+//	ptr next;
+//};
+//
+//ptr Reserve(ptr head, int k)  //链表包含一个头结点
+//{
+//	int count = 1;
+//	ptr new, old, tmp;
+//	new = head->next;
+//	old = new->next;
+//	while (count < k)
+//	{
+//		tmp = old->next;
+//		old->next = new;
+//		old = tmp;
+//		new = old;
+//	}
+//	head->next->next = old;
+//	return new;
+//}
+
+
