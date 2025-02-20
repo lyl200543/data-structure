@@ -64,11 +64,13 @@
 //	int parent, child;
 //	for (parent = 1; parent * 2 <= H->size; parent = child)
 //	{
+//      //找到左右孩子中更大的那个
 //		child = parent * 2;  //先假设左孩子的值最大
 //		if (child != H->size && H->elem[child] < H->elem[child + 1])
 //		{
 //			child++;
 //		}
+//      //排序
 //		if (H->elem[child] > tmp)
 //		{
 //			H->elem[parent] = H->elem[child];

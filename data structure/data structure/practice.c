@@ -941,64 +941,183 @@
 
 
 //改进：使用数组表示树（完全二叉树），无需队列，直接顺序输出数组（层序遍历）
+//#include<stdio.h>
+//#include<stdlib.h>
+//#include<math.h>
+//int arr1[1000] = { 0 }, arr2[1000] = { 0 };
+//
+//int compare(const void* a, const void* b)
+//{
+//	return *(int*)a - *(int*)b;
+//}
+//
+//int GetLeftLength(int n)
+//{
+//	double h = log2((double)n + 1.0);
+//	int H = (int)floor(h);
+//	int x = n + 1 - (int)pow(2, H);
+//	if (x >= (int)pow(2, H - 1))
+//	{
+//		return (int)pow(2, H - 1) * 2 - 1;
+//	}
+//	else
+//	{
+//		return (int)pow(2, H - 1) + x - 1;
+//	}
+//}
+//
+//void solve(int ALeft, int ARight, int TRoot)
+//{
+//	int n = ARight - ALeft + 1;
+//	if (n == 0)
+//	{
+//		return;
+//	}
+//	int L = GetLeftLength(n);
+//	//漏加ALeft
+//	arr2[TRoot] = arr1[ALeft + L];
+//	int LeftRoot = TRoot * 2 + 1;
+//	int RightRoot = LeftRoot + 1;
+//	//漏加ALeft
+//	solve(ALeft, ALeft + L - 1, LeftRoot);
+//	solve(ALeft + L + 1, ARight, RightRoot);
+//}
+//
+//int main()
+//{
+//	int n;
+//	scanf("%d", &n);
+//	int i;
+//	for (i = 0; i < n; i++)
+//	{
+//		scanf("%d", &arr1[i]);
+//	}
+//	qsort(arr1, n, sizeof(int), compare);
+//	solve(0, n - 1, 0);
+//	printf("%d", arr2[0]);
+//	for (i = 1; i < n; i++)
+//	{
+//		printf(" %d", arr2[i]);
+//	}
+//	return 0;
+//}
+
+
+//6.Huffman Code：
+//1>判断是不是最优编码：WPL最小  --》通过建一颗哈夫曼树计算WPL
+// （哈夫曼树一定是最优编码，但最优编码不一定由哈夫曼算法实现）
+//2>前缀码：数据仅存在叶子结点  --》根据编码建树，并在建树过程中判断是不是前缀码
+// （经过的点没有存数据 并且 存数据的点没有子树）
 #include<stdio.h>
 #include<stdlib.h>
-#include<math.h>
-int arr1[1000] = { 0 }, arr2[1000] = { 0 };
-
-int compare(const void* a, const void* b)
+typedef struct TNode
 {
-	return *(int*)a - *(int*)b;
-}
+	int weight;
+	struct TNode* lch, * rch;
+}TNode,*Tree;
 
-int GetLeftLength(int n)
+void BuildNode(Tree T, char ch, char road[], int weight)
 {
-	double h = log2((double)n + 1.0);
-	int H = (int)floor(h);
-	int x = n + 1 - (int)pow(2, H);
-	if (x >= (int)pow(2, H - 1))
+	Tree Tr = T;
+	int i;
+	for (i = 0; road[i + 1] != '\0'; i++)
 	{
-		return (int)pow(2, H - 1) * 2 - 1;
+		if (road[i] == 0)
+		{
+			if (Tr->lch == NULL)
+			{
+				Tr->lch = (Tree)malloc(sizeof(TNode));
+				Tr->lch->lch = Tr->lch->rch = NULL;
+			}
+			Tr = Tr->lch;
+			Tr->index = '*';
+		}
+		else
+		{
+			if (Tr->rch == NULL)
+			{
+				Tr->rch = (Tree)malloc(sizeof(TNode));
+				Tr->rch->lch = Tr->rch->rch = NULL;
+			}
+			Tr = Tr->rch;
+			Tr->index = '*';
+		}
+	}
+	if (road[i] == 0)
+	{
+		if (Tr->lch == NULL)
+		{
+			Tr->lch = (Tree)malloc(sizeof(TNode));
+			Tr->lch->lch = Tr->lch->rch = NULL;
+		}
+		Tr = Tr->lch;
+		Tr->index = ch;
+		Tr->weight = weight;
 	}
 	else
 	{
-		return (int)pow(2, H - 1) + x - 1;
+		if (Tr->rch == NULL)
+		{
+			Tr->rch = (Tree)malloc(sizeof(TNode));
+			Tr->rch->lch = Tr->rch->rch = NULL;
+		}
+		Tr = Tr->rch;
+		Tr->index = ch;
+		Tr->weight = weight;
 	}
 }
 
-void solve(int ALeft, int ARight, int TRoot)
+Tree BuildTree(int arr[], int n)
 {
-	int n = ARight - ALeft + 1;
-	if (n == 0)
+	Tree T = (Tree)malloc(sizeof(TNode));
+	T->lch = T->rch = NULL;
+	char road[63];
+	char ch;
+	int i;
+	for (i = 0; i < n; i++)
 	{
-		return;
+		getchar();
+		scanf("%c %s", &ch, road);
+		BuildNode(T, ch, road, arr[i]);
 	}
-	int L = GetLeftLength(n);
-	//漏加ALeft
-	arr2[TRoot] = arr1[ALeft + L];
-	int LeftRoot = TRoot * 2 + 1;
-	int RightRoot = LeftRoot + 1;
-	//漏加ALeft
-	solve(ALeft, ALeft + L - 1, LeftRoot);
-	solve(ALeft + L + 1, ARight, RightRoot);
+
+	return T;
 }
+
+
 
 int main()
 {
 	int n;
 	scanf("%d", &n);
+	char ch[5];
+	int arr[63];
 	int i;
 	for (i = 0; i < n; i++)
 	{
-		scanf("%d", &arr1[i]);
+		scanf("%s%d", ch, &arr[i]);
 	}
-	qsort(arr1, n, sizeof(int), compare);
-	solve(0, n - 1, 0);
-	printf("%d", arr2[0]);
-	for (i = 1; i < n; i++)
+	Tree TH = BuildHuffmanTree(arr);
+	int count = MinCode(TH);
+	int m, j=0;
+	int tmp[1000];
+	scanf("%d", &m);
+	for (i = 0; i < m; i++)
 	{
-		printf(" %d", arr2[i]);
+		Tree T = BuildTree(arr, n);
+		int k = IsHuffmanTree(T, n);
+		tmp[j++] = k;
+	}
+	for (i = 0; i < m; i++)
+	{
+		if (tmp[i])
+		{
+			printf("Yes\n");
+		}
+		else
+		{
+			printf("No\n");
+		}
 	}
 	return 0;
 }
-
