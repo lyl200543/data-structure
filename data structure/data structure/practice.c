@@ -1008,6 +1008,7 @@
 // （哈夫曼树一定是最优编码，但最优编码不一定由哈夫曼算法实现）
 //2>前缀码：数据仅存在叶子结点  --》根据编码建树，并在建树过程中判断是不是前缀码
 // （经过的点没有存数据 并且 存数据的点没有子树）
+
 #include<stdio.h>
 #include<stdlib.h>
 typedef struct TNode
@@ -1084,6 +1085,105 @@ Tree BuildTree(int arr[], int n)
 	return T;
 }
 
+typedef struct Heap
+{
+	TNode* TH;
+	int size;
+	int capcity;
+}Heap, * PtrHeap;
+
+PtrHeap BuildHeap(int n, int arr[])
+{
+	PtrHeap H = (PtrHeap)malloc(sizeof(Heap));
+	H->TH = (TNode*)malloc((n + 1) * sizeof(TNode));
+	H->TH[0].weight = INT_MIN;
+	H->size = n;
+	H->capcity = n;
+
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		H->TH[i + 1].weight = arr[i];
+	}
+	return H;
+}
+
+void Insert(PtrHeap H, TNode T)
+{
+	if (H->capcity == H->size)
+	{
+		printf("heap is full");
+		exit(1);
+	}
+	int i = ++H->size;
+	for (; H->TH[i / 2].weight > T.weight; i= i/2)
+	{
+		H->TH[i] = H->TH[i / 2];
+	}
+	H->TH[i] = T;
+}
+
+TNode* Delete(PtrHeap H)
+{
+	if (H->size == 0)
+	{
+		printf("heap is empty");
+		exit(1);
+	}
+	TNode* T = &(H->TH[1]);
+	TNode W = H->TH[H->size--];
+	int w = W.weight;
+	int i = 1;
+	int child;
+	for (; i * 2 <= H->size; i=child)
+	{
+		//找出左右孩子中的较小的那一个
+		child = i * 2;
+		if (i * 2 < H->size && H->TH[i * 2 + 1].weight < H->TH[i * 2].weight)
+		{
+			child = i * 2 + 1;
+		}
+		
+		if (H->TH[child].weight < w)
+		{
+			H->TH[i] = H->TH[child];
+		}
+		else
+		{
+			break;
+		}
+	}
+	H->TH[child] = W;
+	return T;
+}
+
+Tree BuildHuffmanTree(int n, int arr[])
+{
+	TNode* T;
+	//建立最小堆
+	PtrHeap H = BuildHeap(n, arr);
+	for (int i = 0; i < n - 1; i++)
+	{
+		T = (TNode*)malloc(sizeof(TNode));
+		T->lch = Delete(H);
+		T->rch = Delete(H);
+		T->weight = T->lch->weight + T->rch->weight;
+		Insert(H, *T);
+	}
+	T = Delete(H);
+	return T;
+}
+
+//*********求WPL*********
+int MinCode(Tree TH, int depth)
+{
+	if (!TH->lch && !TH->rch)
+	{
+		return depth * TH->weight;
+	}
+	
+	return MinCode(TH->lch, depth + 1) + MinCode(TH->rch, depth + 1);
+}
 
 
 int main()
@@ -1097,8 +1197,8 @@ int main()
 	{
 		scanf("%s%d", ch, &arr[i]);
 	}
-	Tree TH = BuildHuffmanTree(arr);
-	int count = MinCode(TH);
+	Tree TH = BuildHuffmanTree(n, arr);
+	int count = MinCode(TH, 0);
 	int m, j=0;
 	int tmp[1000];
 	scanf("%d", &m);
