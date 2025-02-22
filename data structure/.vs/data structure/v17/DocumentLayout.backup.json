@@ -5,10 +5,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{25A1D8AA-E4BA-4A82-9F44-7CA432F84FF6}|data structure\\data structure.vcxproj|D:\\vs\\data structure\\data structure\\practice.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{25A1D8AA-E4BA-4A82-9F44-7CA432F84FF6}|data structure\\data structure.vcxproj|solutionrelative:data structure\\practice.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25A1D8AA-E4BA-4A82-9F44-7CA432F84FF6}|data structure\\data structure.vcxproj|D:\\vs\\data structure\\data structure\\tree.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{25A1D8AA-E4BA-4A82-9F44-7CA432F84FF6}|data structure\\data structure.vcxproj|solutionrelative:data structure\\tree.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,25 +22,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "tree.c",
-              "DocumentMoniker": "D:\\vs\\data structure\\data structure\\tree.c",
-              "RelativeDocumentMoniker": "data structure\\tree.c",
-              "ToolTip": "D:\\vs\\data structure\\data structure\\tree.c",
-              "RelativeToolTip": "data structure\\tree.c",
-              "ViewState": "AgIAANAEAAAAAAAAAAAhwNkEAAACAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2025-01-08T01:55:35.211Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "practice.c",
               "DocumentMoniker": "D:\\vs\\data structure\\data structure\\practice.c",
               "RelativeDocumentMoniker": "data structure\\practice.c",
-              "ToolTip": "D:\\vs\\data structure\\data structure\\practice.c",
-              "RelativeToolTip": "data structure\\practice.c",
-              "ViewState": "AgIAAEYEAAAAAAAAAAAAAEwEAAAZAAAAAAAAAA==",
+              "ToolTip": "D:\\vs\\data structure\\data structure\\practice.c*",
+              "RelativeToolTip": "data structure\\practice.c*",
+              "ViewState": "AgIAAPwDAAAAAAAAAAAswEwEAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2025-01-05T05:55:07.054Z",
               "EditorCaption": ""

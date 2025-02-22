@@ -1011,83 +1011,104 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#include<limits.h>
 typedef struct TNode
 {
 	int weight;
 	struct TNode* lch, * rch;
 }TNode,*Tree;
 
-void BuildNode(Tree T, char ch, char road[], int weight)
+int BuildNode(Tree T, char road[], int weight)
 {
 	Tree Tr = T;
 	int i;
-	for (i = 0; road[i + 1] != '\0'; i++)
+	for (i = 0; road[i] != '\0'; i++)
 	{
-		if (road[i] == 0)
+		//ai修正：0与'0'是不一样的
+		if (road[i] == '0')
 		{
 			if (Tr->lch == NULL)
 			{
 				Tr->lch = (Tree)malloc(sizeof(TNode));
 				Tr->lch->lch = Tr->lch->rch = NULL;
+				Tr->lch->weight = 0;
+				if (road[i + 1] == '\0')
+				{
+					Tr->lch->weight = weight;
+				}
 			}
 			Tr = Tr->lch;
-			Tr->index = '*';
+			if (Tr->weight != 0)
+			{
+				return 0;
+			}
+			//ai修正：&&的优先级高于||
+			if ((Tr->lch != NULL || Tr->rch != NULL )&& road[i + 1] == '\0')
+			{
+				return 0;
+			}
 		}
+
 		else
 		{
 			if (Tr->rch == NULL)
 			{
 				Tr->rch = (Tree)malloc(sizeof(TNode));
 				Tr->rch->lch = Tr->rch->rch = NULL;
+				Tr->rch->weight = 0;
+				if (road[i + 1] == '\0')
+				{
+					Tr->rch->weight = weight;
+				}
 			}
 			Tr = Tr->rch;
-			Tr->index = '*';
+			if (Tr->weight != 0)
+			{
+				return 0;
+			}
+			if ((Tr->lch != NULL || Tr->rch != NULL) && road[i + 1] == '\0')
+			{
+				return 0;
+			}
 		}
 	}
-	if (road[i] == 0)
-	{
-		if (Tr->lch == NULL)
-		{
-			Tr->lch = (Tree)malloc(sizeof(TNode));
-			Tr->lch->lch = Tr->lch->rch = NULL;
-		}
-		Tr = Tr->lch;
-		Tr->index = ch;
-		Tr->weight = weight;
-	}
-	else
-	{
-		if (Tr->rch == NULL)
-		{
-			Tr->rch = (Tree)malloc(sizeof(TNode));
-			Tr->rch->lch = Tr->rch->rch = NULL;
-		}
-		Tr = Tr->rch;
-		Tr->index = ch;
-		Tr->weight = weight;
-	}
+	return 1;
 }
 
-Tree BuildTree(int arr[], int n)
+int IsRightCode(int arr[], int count, int n)
 {
+	int result = 1;
 	Tree T = (Tree)malloc(sizeof(TNode));
 	T->lch = T->rch = NULL;
+	T->weight = 0;
 	char road[63];
 	char ch;
 	int i;
+	int sum = 0;
 	for (i = 0; i < n; i++)
 	{
 		getchar();
 		scanf("%c %s", &ch, road);
-		BuildNode(T, ch, road, arr[i]);
+		sum += (int)strlen(road) * arr[i];
+		if (!BuildNode(T, road, arr[i]))
+		{
+			result = 0;
+		}
 	}
-
-	return T;
+	if (sum != count)
+	{
+		result = 0;
+	}
+	return result;
 }
+
 
 typedef struct Heap
 {
-	TNode* TH;
+	//ai修正：
+	TNode** TH;
+
 	int size;
 	int capcity;
 }Heap, * PtrHeap;
@@ -1095,20 +1116,24 @@ typedef struct Heap
 PtrHeap BuildHeap(int n, int arr[])
 {
 	PtrHeap H = (PtrHeap)malloc(sizeof(Heap));
-	H->TH = (TNode*)malloc((n + 1) * sizeof(TNode));
-	H->TH[0].weight = INT_MIN;
+	H->TH = (TNode**)malloc((n + 1) * sizeof(TNode*));
+	H->TH[0] = (TNode*)malloc(sizeof(TNode));
+	H->TH[0]->weight = INT_MIN;
 	H->size = n;
 	H->capcity = n;
 
 	int i;
 	for (i = 0; i < n; i++)
 	{
-		H->TH[i + 1].weight = arr[i];
+		H->TH[i + 1] = (TNode*)malloc(sizeof(TNode));
+		H->TH[i + 1]->weight = arr[i];
+		//ai修正：*****树的lch,rch要初始化，不然MinCode中会发生位置冲突
+		H->TH[i + 1]->lch = H->TH[i + 1]->rch = NULL;
 	}
 	return H;
 }
 
-void Insert(PtrHeap H, TNode T)
+void Insert(PtrHeap H, TNode* T)
 {
 	if (H->capcity == H->size)
 	{
@@ -1116,7 +1141,7 @@ void Insert(PtrHeap H, TNode T)
 		exit(1);
 	}
 	int i = ++H->size;
-	for (; H->TH[i / 2].weight > T.weight; i= i/2)
+	for (; H->TH[i / 2]->weight > T->weight; i= i/2)
 	{
 		H->TH[i] = H->TH[i / 2];
 	}
@@ -1130,30 +1155,29 @@ TNode* Delete(PtrHeap H)
 		printf("heap is empty");
 		exit(1);
 	}
-	TNode* T = &(H->TH[1]);
-	TNode W = H->TH[H->size--];
-	int w = W.weight;
-	int i = 1;
-	int child;
-	for (; i * 2 <= H->size; i=child)
+	TNode* T = H->TH[1];
+	TNode* W = H->TH[H->size--];
+	int w = W->weight;
+	int parent, child;
+	//ai修正：赋值运算符=的优先级低于比较运算符<=
+	for (parent=1; (child= parent * 2) <= H->size; parent=child)
 	{
 		//找出左右孩子中的较小的那一个
-		child = i * 2;
-		if (i * 2 < H->size && H->TH[i * 2 + 1].weight < H->TH[i * 2].weight)
+		if (child!= H->size && H->TH[child + 1]->weight < H->TH[child]->weight)
 		{
-			child = i * 2 + 1;
+			child ++;
 		}
 		
-		if (H->TH[child].weight < w)
+		if (H->TH[child]->weight < w)
 		{
-			H->TH[i] = H->TH[child];
+			H->TH[parent] = H->TH[child];
 		}
 		else
 		{
 			break;
 		}
 	}
-	H->TH[child] = W;
+	H->TH[parent] = W;
 	return T;
 }
 
@@ -1165,10 +1189,15 @@ Tree BuildHuffmanTree(int n, int arr[])
 	for (int i = 0; i < n - 1; i++)
 	{
 		T = (TNode*)malloc(sizeof(TNode));
+		//ai修正：原代码中的堆结构是一个结构体数组，每个元素是一个TNode
+		// 当执行Delete操作时，返回的是该数组中的元素的指针
+		// 但后续堆操作（如Insert）可能修改数组中的其他元素，导致原来的指针指向的数据被覆盖
+		// 例如，假设我们取出两个节点，合并后插入新的节点，这时候堆数组可能被修改，
+		// 导致原来取出的节点的位置的数据被覆盖，从而破坏树的结构
 		T->lch = Delete(H);
 		T->rch = Delete(H);
 		T->weight = T->lch->weight + T->rch->weight;
-		Insert(H, *T);
+		Insert(H, T);
 	}
 	T = Delete(H);
 	return T;
@@ -1204,8 +1233,7 @@ int main()
 	scanf("%d", &m);
 	for (i = 0; i < m; i++)
 	{
-		Tree T = BuildTree(arr, n);
-		int k = IsHuffmanTree(T, n);
+		int k = IsRightCode(arr,count,n);
 		tmp[j++] = k;
 	}
 	for (i = 0; i < m; i++)
@@ -1221,3 +1249,4 @@ int main()
 	}
 	return 0;
 }
+
