@@ -132,6 +132,7 @@
     <ClCompile Include="graph.c" />
     <ClCompile Include="heap.c" />
     <ClCompile Include="LinkList.c" />
+    <ClCompile Include="order.c" />
     <ClCompile Include="practice.c" />
     <ClCompile Include="queue.c" />
     <ClCompile Include="SL.c" />
