@@ -538,8 +538,9 @@
 
 // 2>单源的（有向）无向【网（有权）】： 
 // Dijkstra 算法--》适用于非负权值图
+// 路径必须按照递增（非递减）的顺序生成
 
-//（1）邻接矩阵：
+//（1）邻接矩阵+遍历找最小dist ：T(|v|~2) --》适用于稠密图（v~2==e）
 //#include <limits.h>  //定义整数最大/小值 INT_MAX
 //#define MAX 100
 //#define INF INT_MAX
@@ -565,6 +566,7 @@
 //    int i;
 //    for (i = 0; i < n; i++)
 //    {
+//        //只能存正无穷，后面要判断dist[v] + graph[v][i] < dist[i]
 //        dist[i] = INF;
 //        path[i] = -1;
 //    }
@@ -596,7 +598,7 @@
 //}
 
 
-//（2）邻接表+最小堆：
+//（2）邻接表+最小堆：T(|v|log|v|)-->适用于稀疏图（v==e）
 //#include <stdio.h>
 //#include <stdlib.h>
 //#include <limits.h>
