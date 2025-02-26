@@ -602,162 +602,234 @@
 //#include <stdio.h>
 //#include <stdlib.h>
 //#include <limits.h>
-//#include <stdbool.h>
 //
-//#define MAX 100 // 最大顶点数
-//#define INF INT_MAX // 用于表示无穷大
+//#define MAX_VERTICES 100
+//#define INF INT_MAX
 //
-//// 定义堆节点
-//typedef struct {
-//    int vertex;
-//    int distance;
+//// 邻接表中的节点
+//typedef struct AdjListNode {
+//    int dest;
+//    int weight;
+//    struct AdjListNode* next;
+//} AdjListNode;
+//
+//// 邻接表
+//typedef struct AdjList {
+//    AdjListNode* head;
+//} AdjList;
+//
+//// 图的结构
+//typedef struct Graph {
+//    int V;
+//    AdjList* array;
+//} Graph;
+//
+//// 最小堆中的节点
+//typedef struct MinHeapNode {
+//    int v;
+//    int dist;
 //} MinHeapNode;
 //
-//// 定义最小堆
-//typedef struct {
+//// 最小堆的结构
+//typedef struct MinHeap {
 //    int size;
 //    int capacity;
-//    int* position;
+//    int* pos; // pos[i]表示顶点i在堆中的位置
 //    MinHeapNode** array;
 //} MinHeap;
 //
-//// 创建一个新的堆节点
-//MinHeapNode* createMinHeapNode(int vertex, int distance) {
-//    MinHeapNode* node = (MinHeapNode*)malloc(sizeof(MinHeapNode));
-//    node->vertex = vertex;
-//    node->distance = distance;
-//    return node;
+//// 创建一个新的邻接表节点
+//AdjListNode* newAdjListNode(int dest, int weight) {
+//    AdjListNode* newNode = (AdjListNode*)malloc(sizeof(AdjListNode));
+//    newNode->dest = dest;
+//    newNode->weight = weight;
+//    newNode->next = NULL;
+//    return newNode;
 //}
 //
-//// 创建最小堆
+//// 创建一个图
+//Graph* createGraph(int V) {
+//    Graph* graph = (Graph*)malloc(sizeof(Graph));
+//    graph->V = V;
+//    graph->array = (AdjList*)malloc(V * sizeof(AdjList));
+//    for (int i = 0; i < V; ++i)
+//        graph->array[i].head = NULL;
+//    return graph;
+//}
+//
+//// 添加边到图中
+//void addEdge(Graph* graph, int src, int dest, int weight) {
+//    AdjListNode* newNode = newAdjListNode(dest, weight);
+//    newNode->next = graph->array[src].head;
+//    graph->array[src].head = newNode;
+//
+//    // 无向图需要添加反向边
+//    newNode = newAdjListNode(src, weight);
+//    newNode->next = graph->array[dest].head;
+//    graph->array[dest].head = newNode;
+//}
+//
+//// 创建一个最小堆节点
+//MinHeapNode* newMinHeapNode(int v, int dist) {
+//    MinHeapNode* minHeapNode = (MinHeapNode*)malloc(sizeof(MinHeapNode));
+//    minHeapNode->v = v;
+//    minHeapNode->dist = dist;
+//    return minHeapNode;
+//}
+//
+//// 创建一个最小堆
 //MinHeap* createMinHeap(int capacity) {
-//    MinHeap* heap = (MinHeap*)malloc(sizeof(MinHeap));
-//    heap->size = 0;
-//    heap->capacity = capacity;
-//    heap->position = (int*)malloc(capacity * sizeof(int));
-//    heap->array = (MinHeapNode**)malloc(capacity * sizeof(MinHeapNode*));
-//    return heap;
+//    MinHeap* minHeap = (MinHeap*)malloc(sizeof(MinHeap));
+//    minHeap->pos = (int*)malloc(capacity * sizeof(int));
+//    minHeap->size = 0;
+//    minHeap->capacity = capacity;
+//    minHeap->array = (MinHeapNode**)malloc(capacity * sizeof(MinHeapNode*));
+//    return minHeap;
 //}
 //
-//// 堆的交换操作
+//// 交换两个最小堆节点
 //void swapMinHeapNode(MinHeapNode** a, MinHeapNode** b) {
-//    MinHeapNode* temp = *a;
+//    MinHeapNode* t = *a;
 //    *a = *b;
-//    *b = temp;
+//    *b = t;
 //}
 //
-//// 堆化操作
-//void minHeapify(MinHeap* heap, int idx) {
-//    int smallest = idx;
-//    int left = 2 * idx + 1;
-//    int right = 2 * idx + 2;
+//// 最小堆的堆化函数
+//void minHeapify(MinHeap* minHeap, int idx) {
+//    int smallest, left, right;
+//    smallest = idx;
+//    left = 2 * idx + 1;
+//    right = 2 * idx + 2;
 //
-//    if (left < heap->size && heap->array[left]->distance < heap->array[smallest]->distance)
+//    if (left < minHeap->size && minHeap->array[left]->dist < minHeap->array[smallest]->dist)
 //        smallest = left;
 //
-//    if (right < heap->size && heap->array[right]->distance < heap->array[smallest]->distance)
+//    if (right < minHeap->size && minHeap->array[right]->dist < minHeap->array[smallest]->dist)
 //        smallest = right;
 //
 //    if (smallest != idx) {
-//        MinHeapNode* smallestNode = heap->array[smallest];
-//        MinHeapNode* idxNode = heap->array[idx];
+//        MinHeapNode* smallestNode = minHeap->array[smallest];
+//        MinHeapNode* idxNode = minHeap->array[idx];
 //
-//        // 更新位置
-//        heap->position[smallestNode->vertex] = idx;
-//        heap->position[idxNode->vertex] = smallest;
+//        minHeap->pos[smallestNode->v] = idx;
+//        minHeap->pos[idxNode->v] = smallest;
 //
-//        // 交换节点
-//        swapMinHeapNode(&heap->array[smallest], &heap->array[idx]);
+//        swapMinHeapNode(&minHeap->array[smallest], &minHeap->array[idx]);
 //
-//        minHeapify(heap, smallest);
+//        minHeapify(minHeap, smallest);
 //    }
 //}
 //
-//// 检查堆是否为空
-//int isEmpty(MinHeap* heap) {
-//    return heap->size == 0;
+//// 检查最小堆是否为空
+//int isEmpty(MinHeap* minHeap) {
+//    return minHeap->size == 0;
 //}
 //
-//// 从堆中提取最小值
-//MinHeapNode* extractMin(MinHeap* heap) {
-//    if (isEmpty(heap))
+//// 提取最小堆中的最小节点
+//MinHeapNode* extractMin(MinHeap* minHeap) {
+//    if (isEmpty(minHeap))
 //        return NULL;
 //
-//    MinHeapNode* root = heap->array[0];
-//    MinHeapNode* lastNode = heap->array[heap->size - 1];
-//    heap->array[0] = lastNode;
+//    MinHeapNode* root = minHeap->array[0];
+//    MinHeapNode* lastNode = minHeap->array[minHeap->size - 1];
+//    minHeap->array[0] = lastNode;
 //
-//    heap->position[root->vertex] = heap->size - 1;
-//    heap->position[lastNode->vertex] = 0;
+//    minHeap->pos[root->v] = minHeap->size - 1;
+//    minHeap->pos[lastNode->v] = 0;
 //
-//    --heap->size;
-//    minHeapify(heap, 0);
+//    --minHeap->size;
+//    minHeapify(minHeap, 0);
 //
 //    return root;
 //}
 //
-//// 减小顶点的距离值
-//void decreaseKey(MinHeap* heap, int vertex, int distance) {
-//    int i = heap->position[vertex];
-//    heap->array[i]->distance = distance;
+//// 减少最小堆中某个节点的距离值
+//void decreaseKey(MinHeap* minHeap, int v, int dist) {
+//    int i = minHeap->pos[v];
+//    minHeap->array[i]->dist = dist;
 //
-//    while (i && heap->array[i]->distance < heap->array[(i - 1) / 2]->distance) {
-//        heap->position[heap->array[i]->vertex] = (i - 1) / 2;
-//        heap->position[heap->array[(i - 1) / 2]->vertex] = i;
-//        swapMinHeapNode(&heap->array[i], &heap->array[(i - 1) / 2]);
+//    while (i && minHeap->array[i]->dist < minHeap->array[(i - 1) / 2]->dist) {
+//        minHeap->pos[minHeap->array[i]->v] = (i - 1) / 2;
+//        minHeap->pos[minHeap->array[(i - 1) / 2]->v] = i;
+//        swapMinHeapNode(&minHeap->array[i], &minHeap->array[(i - 1) / 2]);
+//
 //        i = (i - 1) / 2;
 //    }
 //}
 //
-//// 检查顶点是否在堆中
-//int isInMinHeap(MinHeap* heap, int vertex) {
-//    return heap->position[vertex] < heap->size;
+//// 检查顶点是否在最小堆中
+//int isInMinHeap(MinHeap* minHeap, int v) {
+//    return minHeap->pos[v] < minHeap->size;
 //}
 //
-//// 打印结果
-//void printSolution(int dist[], int V) {
-//    printf("Vertex \t Distance from Source\n");
-//    for (int i = 0; i < V; i++) {
-//        printf("%d \t %d\n", i, dist[i]);
-//    }
-//}
+//// Dijkstra算法的实现
+//void dijkstra(Graph* graph, int src) {
+//    int V = graph->V;
+//    int dist[MAX_VERTICES];
 //
-//// Dijkstra算法实现（基于堆）
-//void dijkstra(int graph[MAX][MAX], int src, int V) {
-//    int dist[V];
+//    MinHeap* minHeap = createMinHeap(V);
 //
-//    MinHeap* heap = createMinHeap(V);
-//
-//    for (int v = 0; v < V; v++) {
+//    for (int v = 0; v < V; ++v) {
 //        dist[v] = INF;
-//        heap->array[v] = createMinHeapNode(v, dist[v]);
-//        heap->position[v] = v;
+//        minHeap->array[v] = newMinHeapNode(v, dist[v]);
+//        minHeap->pos[v] = v;
 //    }
 //
-//    heap->array[src] = createMinHeapNode(src, dist[src]);
-//    heap->position[src] = src;
+//    minHeap->array[src] = newMinHeapNode(src, dist[src]);
+//    minHeap->pos[src] = src;
 //    dist[src] = 0;
-//    decreaseKey(heap, src, dist[src]);
+//    decreaseKey(minHeap, src, dist[src]);
 //
-//    heap->size = V;
+//    minHeap->size = V;
 //
-//    while (!isEmpty(heap)) {
-//        MinHeapNode* minNode = extractMin(heap);
-//        int u = minNode->vertex;
+//    while (!isEmpty(minHeap)) {
+//        MinHeapNode* minHeapNode = extractMin(minHeap);
+//        int u = minHeapNode->v;
 //
-//        for (int v = 0; v < V; v++) {
-//            if (graph[u][v] && isInMinHeap(heap, v) && dist[u] != INF && dist[u] + graph[u][v] < dist[v]) {
-//                dist[v] = dist[u] + graph[u][v];
-//                decreaseKey(heap, v, dist[v]);
+//        AdjListNode* pCrawl = graph->array[u].head;
+//        while (pCrawl != NULL) {
+//            int v = pCrawl->dest;
+//
+//            if (isInMinHeap(minHeap, v) && dist[u] != INF && pCrawl->weight + dist[u] < dist[v]) {
+//                dist[v] = dist[u] + pCrawl->weight;
+//                decreaseKey(minHeap, v, dist[v]);
 //            }
+//            pCrawl = pCrawl->next;
 //        }
 //    }
 //
-//    printSolution(dist, V);
+//    printf("Vertex   Distance from Source\n");
+//    for (int i = 0; i < V; ++i)
+//        printf("%d \t\t %d\n", i, dist[i]);
 //}
 //
+//int main() {
+//    int V = 9;
+//    Graph* graph = createGraph(V);
+//    addEdge(graph, 0, 1, 4);
+//    addEdge(graph, 0, 7, 8);
+//    addEdge(graph, 1, 2, 8);
+//    addEdge(graph, 1, 7, 11);
+//    addEdge(graph, 2, 3, 7);
+//    addEdge(graph, 2, 8, 2);
+//    addEdge(graph, 2, 5, 4);
+//    addEdge(graph, 3, 4, 9);
+//    addEdge(graph, 3, 5, 14);
+//    addEdge(graph, 4, 5, 10);
+//    addEdge(graph, 5, 6, 2);
+//    addEdge(graph, 6, 7, 1);
+//    addEdge(graph, 6, 8, 6);
+//    addEdge(graph, 7, 8, 7);
+//
+//    dijkstra(graph, 0);
+//
+//    return 0;
+//}
 
-// 3>多源最短路：
+
+
+// 3>多源最短路：求所有定点对之间的最短路径  -->Floyd算法(适用稠密图)
+
 
 
 
