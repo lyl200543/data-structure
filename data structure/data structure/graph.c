@@ -828,9 +828,72 @@
 
 
 
-// 3>多源最短路：求所有定点对之间的最短路径  -->Floyd算法(适用稠密图)
+// 3>多源最短路：求所有定点对之间的最短路径  -->Floyd算法(适用稠密图)(|v~3|)
+#include<stdio.h>
+#include<limits.h>
+#define INF INT_MAX
+#define V 4
+void PrintPath(int path[][V], int i, int j)
+{
+    
+}
 
+void Floyd(int G[][V])
+{
+    int dist[V][V];
+    int path[V][V];
+    int i, j, k;
+    for (i = 0; i < V; i++)
+    {
+        for (j = 0; j < V; j++)
+        {
+            dist[i][j] = G[i][j];
+            path[i][j] = -1;
+        }
+    }
+    //核心
+    for (k = 0; k < V; k++)
+    {
+        for (i = 0; i < V; i++)
+        {
+            for (j = 0; j < V; j++)
+            {
+                if (dist[i][k] + dist[k][j] < dist[i][j])
+                {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                    path[i][j] = k;
+                }
+            }
+        }
+    }
+    //打印
+    for (i = 0; i < V; i++)
+    {
+        for (j = 0; j < V; j++)
+        {
+            if (i != j && dist[i][j] != INF)
+            {
+                PrintPath(path, i, j);
+                printf("\n");
+            }
+        }
+    }
+}
 
+int main() {
+    // 定义图的邻接矩阵
+    int graph[V][V] = {
+        {0, 5, INF, 10},  // 0 到其他顶点的距离
+        {INF, 0, 3, INF}, // 1 到其他顶点的距离
+        {INF, INF, 0, 1},  // 2 到其他顶点的距离
+        {INF, INF, INF, 0} // 3 到其他顶点的距离
+    };
+
+    // 调用 Floyd-Warshall 算法
+    Floyd(graph);
+
+    return 0;
+}
 
 
 
