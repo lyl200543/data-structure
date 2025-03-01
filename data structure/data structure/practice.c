@@ -1260,3 +1260,107 @@
 //	return 0;
 //}
 
+
+
+//7.¹þÀû²¨ÌØµÄ¿¼ÊÔ£º
+//#include<stdio.h>
+//#include<limits.h>
+//#define MAX 101
+//#define INF INT_MAX
+//
+//void Init(int dist[][MAX], int n, int m)
+//{
+//	int i, j;
+//	for (i = 1; i <= n; i++)
+//	{
+//		for (j = 1; j <= n; j++)
+//		{
+//			if (i == j)
+//				dist[i][j] = 0;
+//			else
+//				dist[i][j] = INF;
+//		}
+//	}
+//	for (i = 0; i < m; i++)
+//	{
+//		int start, end, weight;
+//		scanf("%d %d %d", &start, &end, &weight);
+//		dist[start][end] = weight;
+//		dist[end][start] = weight;
+//	}
+//}
+//
+//void Floyd(int dist[][MAX], int n)
+//{
+//	int i, j, k;
+//	for (k = 1; k <= n; k++)
+//	{
+//		for (i = 1; i <= n; i++)
+//		{
+//			for (j = 1; j <= n; j++)
+//			{
+//				if (dist[i][k] != INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j])
+//				{
+//					dist[i][j] = dist[i][k] + dist[k][j];
+//				}
+//			}
+//		}
+//	}
+//}
+//
+//int judge[MAX];
+//int Judge(int dist[][MAX], int n)
+//{
+//	int i, j;
+//	for (i = 1; i <= n; i++)
+//	{
+//		int max = 0;
+//		int flag = 1;
+//		for (j = 1; j <= n; j++)
+//		{
+//			if (dist[i][j] == INF)
+//			{
+//				flag = 0;
+//				break;
+//			}
+//			if (dist[i][j] > max)
+//				max = dist[i][j];
+//		}
+//		if (!flag)
+//			judge[i] = -1;
+//		else
+//		{
+//			judge[i] = max;
+//		}
+//	}
+//	//ÅÐ¶Ï
+//	int min = INF;
+//	int w = 0;
+//	for (i = 1; i <= n; i++)
+//	{
+//		if (judge[i] != -1 && judge[i] < min)
+//		{
+//			min = judge[i];
+//			w = i;
+//		}
+//	}
+//	if (min == INF)
+//		return 0;
+//	return w;
+//}
+//
+//int main()
+//{
+//	int n, m;
+//	int dist[MAX][MAX];
+//	scanf("%d %d", &n, &m);
+//	Init(dist, n, m);
+//	Floyd(dist, n);
+//	int ret = Judge(dist, n);
+//	if (ret)
+//		printf("%d %d", ret, judge[ret]);
+//	else
+//		printf("%d", ret);
+//	return 0;
+//}
+
