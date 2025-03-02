@@ -918,19 +918,141 @@
 
 
 //*********2.最小生成树：
-//生成树: 包含无向图（网）G所有顶点的极小连通子图(由DFS遍历或DFS遍历得到)
+//生成树: 包含无向图（网）G所有顶点的极小连通子图，且是一棵树（无回路）
 //有n个顶点和n-1条边
 //最小生成树：无向网中各个边的权值之和最小的生成树
 
 //构造最小生成树：
 //MST(Minimum Spanning Tree)性质：
 // 
-//1>切分性质： --》普利姆（Prim）算法
-    //设N = (V, E)是一个连通网, U是顶点集V的一个非空子集，
-    //若边(u, v)是一条具有最小权值的边, 其中u属于U, V属于V - U, 
-    //则必存在一棵包含边(u, v)的最小生成树
+//1>Prim（普利姆）算法:-->适用与稠密图（O(|V|~2)或O(Elog|E|)）
+//Prim算法本身保证了没有回路，不需要额外判断
+//#include<stdio.h>
+//#include<stdlib.h>
+//#include<limits.h>
+//#define INF INT_MAX
+//#define MAX 100
+//typedef struct MGraph
+//{
+//    int vernum;
+//    int Graph[MAX][MAX];
+//}*MGraph;
+//
+//typedef struct LNode
+//{
+//    int ver;
+//    int weight;
+//    struct LNode* next;
+//} *AdjList;
+//
+//typedef struct LGraph
+//{
+//    int vernum;
+//    AdjList G[MAX];
+//}*LGraph;
+//
+//typedef struct Edge
+//{
+//    int v1, v2;
+//    int weight;
+//}*Edge;
+//
+//LGraph CreatLGraph(int vernum)
+//{
+//    LGraph LG = (LGraph)malloc(sizeof(struct LGraph));
+//    LG->vernum = vernum;
+//    for (int i = 0; i < vernum; i++)
+//    {
+//        LG->G[i] = NULL;
+//    }
+//    return LG;
+//}
+//
+//void InsertEdge(LGraph MST, Edge E)
+//{
+//    AdjList newnode;
+//    newnode = (AdjList)malloc(sizeof(struct LNode));
+//    newnode->ver = E->v2;
+//    newnode->weight = E->weight;
+//    newnode->next = MST->G[E->v1]->next;
+//    MST->G[E->v1]->next = newnode;
+//
+//    //无向
+//    newnode = (AdjList)malloc(sizeof(struct LNode));
+//    newnode->ver = E->v1;
+//    newnode->weight = E->weight;
+//    newnode->next = MST->G[E->v2]->next;
+//    MST->G[E->v2]->next = newnode;
+//}
+//
+//int FindMinDist(MGraph graph, int dist[])
+//{
+//    int minv = -1;
+//    int min = INF;
+//    for (int i = 0; i < graph->vernum; i++)
+//    {
+//        if (dist[i] != 0 && dist[i] < min)
+//        {
+//            min = dist[i];
+//            minv = i;
+//        }
+//    }
+//    return minv;
+//}
+//
+////以下标为0的点作为根结点
+////dist[]表示生成树与其他顶点之间的距离，为0表示已经在生成树内
+//int Prim(MGraph graph, LGraph MST)
+//{
+//    int dist[MAX];
+//    int parent[MAX];
+//    int n = graph->vernum;
+//    MST = CreatLGraph(n);
+//    Edge E = (Edge)malloc(sizeof(struct Edge));
+//    int vcout = 0, totalweight = 0;
+//    int i;
+//    for (i = 0; i < n; i++)
+//    {
+//        dist[i] = graph->Graph[0][i];
+//        parent[i] = 0;
+//    }
+//    parent[0] = -1;
+//    vcout++;
+//    while (1)
+//    {
+//        int v = FindMinDist(graph, dist);
+//        if (v == -1)
+//        {
+//            break;
+//        }
+//        E->v1 = parent[v];
+//        E->v2 = v;
+//        E->weight = dist[v];
+//        InsertEdge(MST, E);
+//        totalweight += dist[v];
+//        dist[v] = 0;
+//        vcout++;
+//        for (i = 0; i < n; i++)
+//        {
+//            if (dist[i] != 0 && graph->Graph[v][i] < dist[i])
+//            {
+//                dist[i] = graph->Graph[v][i];
+//                parent[i] = v;
+//            }
+//        }
+//    }
+//    if (vcout < n)
+//        totalweight = -1;
+//    return totalweight;
+//}
+//
+//int main()
+//{
+//    return 0;
+//}
 
-//2>
+
+//2>Kruskal算法（克鲁斯卡尔算法）：-->适用于稀疏图（O(Elog|E|)）
 
 
 
