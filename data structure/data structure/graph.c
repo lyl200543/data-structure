@@ -922,10 +922,10 @@
 //有n个顶点和n-1条边
 //最小生成树：无向网中各个边的权值之和最小的生成树
 
-//构造最小生成树：
-//MST(Minimum Spanning Tree)性质：
+//构造最小生成树：-->贪心算法
 // 
 //1>Prim（普利姆）算法:-->适用与稠密图（O(|V|~2)或O(Elog|E|)）
+//收集顶点
 //Prim算法本身保证了没有回路，不需要额外判断
 //#include<stdio.h>
 //#include<stdlib.h>
@@ -1053,6 +1053,230 @@
 
 
 //2>Kruskal算法（克鲁斯卡尔算法）：-->适用于稀疏图（O(Elog|E|)）
+//收集边
+//将顶点都看作一棵树，每次收集权重最小的边（满足不构成回路），将两棵树合并成一棵树
+
+//#include<stdio.h>
+//#include<stdlib.h>
+//#include<limits.h>
+//#define MAX 100
+
+//********并查集：-->通常通过数组实现
+//作用：判断两个集合（元素）是否属于同一个集合
+//并查集是一种用于管理元素分组的数据结构，支持以下两种主要操作：
+//查找（Find）：确定某个元素属于哪个集合（通常通过根节点表示）
+//合并（Union）：将两个集合合并为一个集合
+//数组int parent[]:存放该结点的父结点，根结点用-1表示
+
+//并查集定义：
+//void InitParent(int parent[], int n)
+//{
+//    for (int i = 0; i < n; i++)
+//    {
+//        parent[i] = -1;
+//    }
+//}
+//
+//int find(int v, int parent[])
+//{
+//    if (parent[v] < 0)
+//        return v;
+//    return parent[v] = find(parent[v], parent);  
+//    //*******路径压缩，提高下次查找的效率
+//}
+//
+//void Union(struct Enode E, int parent[])
+//{
+//    //将小的合并进大的
+//    //|parent[n]|表示以n为根结点的树的结点个数
+//    if (parent[E.v1] < parent[E.v2])
+//    {
+//        parent[E.v1] += parent[E.v2];
+//        parent[E.v2] = E.v1;
+//    }
+//    else
+//    {
+//        parent[E.v2] += parent[E.v1];
+//        parent[E.v1] = E.v2;
+//    }
+//}
+//
+//int has_circle(struct Enode E, int parent[])
+//{
+//    int root1 = find(E.v1, parent);
+//    int root2 = find(E.v2, parent);
+//    if (root1 == root2)
+//        return 1;
+//    return 0;
+//}
+//
+//
+////最小堆定义：
+//void Percdown(struct Enode* Eset, int i, int n)  //使以i为根结点的子树变为最小堆
+//{
+//    int parent, child;
+//    struct Enode tmp = Eset[parent];
+//    for (parent = i; parent * 2 + 1 <= n - 1; parent = child)
+//    {
+//        child = parent * 2 + 1;
+//        if (child != n - 1 && Eset[child].weight > Eset[child + 1].weight)
+//        {
+//            child++;
+//        }
+//        if (Eset[parent].weight <= Eset[child].weight)
+//        {
+//            break;
+//        }
+//        Eset[parent] = Eset[child];
+//    }
+//    Eset[parent] = tmp;
+//}
+//
+//void MinHeap(struct Enode* Eset, int n)
+//{
+//    //堆化：
+//    //i =n/2-1 ; n是边数，即完全二叉树的结点个数（最后一个结点的编号）
+//    //保证了i（最后一个结点的父母）是最后一个非叶子结点（从i往前都是非叶子结点->构成不同子树）
+//    //通过循环将每个子树变成最小堆-->最后一整棵树都是最小堆
+//    for (int i = n / 2 - 1; i >= 0; i--)
+//    {
+//        Percdown(Eset, i, n);
+//    }
+//}
+//
+////*********函数设计巧妙***********
+//int GetEdge(struct Enode* Eset, int currentsize)
+//{
+//    struct Enode tmp = Eset[0];
+//    Eset[0] = Eset[currentsize - 1];
+//    Eset[currentsize - 1] = tmp;
+//    Percdown(Eset, 0, currentsize - 1);
+//    return currentsize - 1;  //既是最小边的编号，也是边的个数
+//}
+//
+////图结构定义：
+//struct AdjVNode
+//{
+//    int adjv;
+//    int weight;
+//    struct AdjVNode* next;
+//};
+//
+//struct Vnode
+//{
+//    struct AdjVNode* firstedge;
+//};
+//
+//struct LGraph
+//{
+//    int Nv;
+//    int Ne;
+//    struct Vnode G[MAX];
+//};
+//
+//struct LGraph* InitGraph(int n)
+//{
+//    struct LGraph* LG = (struct LGraph*)malloc(sizeof(struct LGraph));
+//    LG->Nv = n;
+//    LG->Ne = 0;
+//    for (int i = 0; i < n; i++)
+//    {
+//        LG->G[i].firstedge = NULL;
+//    }
+//    return LG;
+//}
+//
+//void InsertEdge(struct LGraph* MST, struct Enode E)
+//{
+//    struct AdjVNode* newnode;
+//    //v1->v2
+//    struct AdjVNode* newnode = (struct AdjVNode*)malloc(sizeof(struct AdjVNode));
+//    newnode->adjv = E.v2;
+//    newnode->weight = E.weight;
+//    newnode->next = MST->G[E.v1].firstedge;
+//    MST->G[E.v1].firstedge = newnode;
+//
+//    struct AdjVNode* newnode = (struct AdjVNode*)malloc(sizeof(struct AdjVNode));
+//    newnode->adjv = E.v1;
+//    newnode->weight = E.weight;
+//    newnode->next = MST->G[E.v2].firstedge;
+//    MST->G[E.v2].firstedge = newnode;
+//}
+//
+//struct Enode
+//{
+//    int v1, v2;
+//    int weight;
+//};
+//
+//struct Enode* InitEset(struct LGraph* graph)
+//{
+//    struct Enode* Eset = (struct Enode*)malloc(sizeof(struct Enode) * graph->Ne);
+//    int j = 0;
+//    for (int i = 0; i < graph->Nv; i++)
+//    {
+//        struct AdjVNode* w = graph->G[i].firstedge;
+//        while (w)
+//        {
+//            if (i < w->adjv)  //避免重复放入相同的边（无向）
+//            {
+//                Eset[j].v1 = i;
+//                Eset[j].v2 = w->adjv;
+//                Eset[j].weight = w->weight;
+//                j++;
+//                //w = w->next;  //位置错了，造成死循环
+//            }
+//            w = w->next;
+//        }
+//
+//    }
+//    return Eset;
+//}
+//
+////kruskal算法：
+//int Kruskal(struct LGraph* graph, struct LGraph* MST)
+//{
+//    int totalweight = 0;
+//    int Ecount = 0;
+//    int nextedge;   /* 当前最小边的位置 */
+//    int parent[MAX];  /* 顶点并查集 */
+//    struct Enode* Eset;  /* 边数组 */
+//
+//    InitParent(parent, graph->Nv);
+//    Eset = InitEset(graph);
+//    MinHeap(Eset, graph->Ne);
+//    MST = InitGraph(graph->Nv);
+//
+//    nextedge = graph->Ne;
+//    while (Ecount < graph->Nv - 1)
+//    {
+//        nextedge = GetEdge(Eset, nextedge);
+//        if (nextedge < 0)
+//        {
+//            break;
+//        }
+//        //用并查集判断是否有回路
+//        if (!has_circle(Eset[nextedge], parent))
+//        {
+//            Union(Eset[nextedge], parent);
+//            Ecount++;
+//            totalweight += Eset[nextedge].weight;
+//            InsertEdge(MST, Eset[nextedge]);
+//        }
+//    }
+//
+//    if (Ecount < graph->Nv - 1)
+//        totalweight = -1;
+//    return totalweight;
+//}
+//
+//
+////主函数：
+//int main()
+//{
+//    //测试代码
+//    return 0;
+//}
 
 
 
