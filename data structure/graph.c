@@ -1,68 +1,68 @@
-#define  _CRT_SECURE_NO_WARNINGS
+ï»¿#define  _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<stdlib.h>
 #define OK 1
 #define ERROR 0
 
-//Í¼£¨graph£©:Âß¼­½á¹¹Îª¶à¶Ô¶à
+//å›¾ï¼ˆgraphï¼‰:é€»è¾‘ç»“æ„ä¸ºå¤šå¯¹å¤š
 
-//Ò».Í¼µÄÓĞ¹Ø¸ÅÄî£º
-//   1.Í¼£ºÓÉÓĞÏŞ¸ö¶¥µãºÍ±ß¹¹³É
-//   2.ÎŞÏòÍ¼£ºÃ¿Ìõ±ß¶¼Ã»ÓĞ·½Ïò
-//     ÓĞÏòÍ¼£ºÃ¿Ìõ±ß¶¼ÓĞ·½Ïò£¬ÆäÖĞµÄ±ßÒ²½Ğ×ö¡¾»¡¡¿
-//   3.ÍêÈ«Í¼£ºÈÎÒâÁ½¸ö¶¥µã¶¼ÓĞ±ßÏàÁ¬
-//       --¡·ÎŞÏòÍêÈ«Í¼£ºn¸ö¶¥µã£¬¾ÍÓĞn*(n-1)/2Ìõ±ß
-//       --¡·ÓĞÏòÍêÈ«Í¼£ºn¸ö¶¥µã£¬¾ÍÓĞn*(n-1)Ìõ±ß
-//   4.ÁÚ½Ó£ºÓĞ±ß/»¡ÏàÁ¬µÄÁ½¸ö¶¥µãÖ®¼äµÄ¹ØÏµ
-//   5.¹ØÁª£¨ÒÀ¸½£©£º±ß/»¡ºÍ¶¥µãÖ®¼äµÄ¹ØÏµ
-//   6.¶¥µãµÄ¶È£ºÓë¶¥µã¹ØÁªµÄ±ßµÄ¸öÊı
-//       --¡·ÓĞÏòÍ¼ÖĞ£¬¶ÈµÄ¸öÊıµÈÓÚÈë¶ÈºÍ³ö¶È¸öÊıÖ®ºÍ
-//   7.Â·¾¶£º³ÖĞøµÄ±ß¹¹³ÉµÄ¶¥µ×ĞòÁĞ
-//   8.Â·¾¶³¤¶È£ºÂ·¾¶ÉÏµÄ±ß/»¡µÄÊıÄ¿»òÈ¨ÖµÖ®ºÍ
-//   9.»ØÂ·£¨»·£©£ºµÚÒ»¸ö¶¥µãºÍ×îºóÒ»¸ö¶¥µãÏàÍ¬µÄÂ·¾¶
-//   10.¼òµ¥Â·¾¶£º³ıÁËµÚÒ»¸ö¶¥µãºÍ×îºóÒ»¸ö¶¥µã¿ÉÒÔÏàÍ¬Íâ£¬ÆäÓà¶¥µã¶¼²»ÏàÍ¬µÄÂ·¾¶
-//   11.Á¬Í¨Í¼£¨¶ÔÓĞÏòÍ¼£ºÇ¿Á¬Í¨Í¼£©£º¶ÔÈÎÒâÁ½¸ö¶¥µãu£¬v,¶¼ÓĞ´Óuµ½vµÄÂ·¾¶
-//   12.Íø£ºÍ¼ÖĞ±ß/»¡¾ßÓĞÏà¹ØÊı³ÆÎªÈ¨£¬´øÓĞÈ¨µÄÍ¼ÎªÍø
-//   13.×ÓÍ¼£º¶¥µãºÍ±ß/»¡ÊôÓÚÄ³¸öÍ¼µÄ¶¥µãºÍ±ß/»¡
-//   14.Á¬Í¨·ÖÁ¿£¨Ç¿Á¬Í¨·ÖÁ¿£©£ºÍ¼GµÄ¼«´óÁ¬Í¨×ÓÍ¼³ÆÎªGµÄÁ¬Í¨·ÖÁ¿
-//       --¡·¡¾¼«´óÁ¬Í¨×ÓÍ¼¡¿£º¸Ã×ÓÍ¼ÊÇGÁ¬Í¨×ÓÍ¼,½«GµÄÈÎºÎ²»ÔÚ¸Ã×ÓÍ¼ÖĞµÄ¶¥µã¼ÓÈë, ×ÓÍ¼²»ÔÙÁ¬Í¨
-//   15.¡¾¼«Ğ¡Á¬Í¨×ÓÍ¼¡¿:¸Ã×ÓÍ¼ÊÇGµÄÁ¬Í¨×ÓÍ¼,ÔÚ¸Ã×ÓÍ¼ÖĞÉ¾³ıÈÎºÎÒ»Ìõ±ß£¬×ÓÍ¼²»ÔÙÁ¬Í¨¡£
-//   16.Éú³ÉÊ÷ : °üº¬ÎŞÏòÍ¼GËùÓĞ¶¥µãµÄ¼«Ğ¡Á¬Í¨×ÓÍ¼¡£
-//   17.Éú³ÉÉ­ÁÖ : ¶Ô·ÇÁ¬Í¨Í¼, ÓÉ¸÷¸öÁ¬Í¨·ÖÁ¿µÄÉú³ÉÊ÷µÄ¼¯ºÏ¡£
+//ä¸€.å›¾çš„æœ‰å…³æ¦‚å¿µï¼š
+//   1.å›¾ï¼šç”±æœ‰é™ä¸ªé¡¶ç‚¹å’Œè¾¹æ„æˆ
+//   2.æ— å‘å›¾ï¼šæ¯æ¡è¾¹éƒ½æ²¡æœ‰æ–¹å‘
+//     æœ‰å‘å›¾ï¼šæ¯æ¡è¾¹éƒ½æœ‰æ–¹å‘ï¼Œå…¶ä¸­çš„è¾¹ä¹Ÿå«åšã€å¼§ã€‘
+//   3.å®Œå…¨å›¾ï¼šä»»æ„ä¸¤ä¸ªé¡¶ç‚¹éƒ½æœ‰è¾¹ç›¸è¿
+//       --ã€‹æ— å‘å®Œå…¨å›¾ï¼šnä¸ªé¡¶ç‚¹ï¼Œå°±æœ‰n*(n-1)/2æ¡è¾¹
+//       --ã€‹æœ‰å‘å®Œå…¨å›¾ï¼šnä¸ªé¡¶ç‚¹ï¼Œå°±æœ‰n*(n-1)æ¡è¾¹
+//   4.é‚»æ¥ï¼šæœ‰è¾¹/å¼§ç›¸è¿çš„ä¸¤ä¸ªé¡¶ç‚¹ä¹‹é—´çš„å…³ç³»
+//   5.å…³è”ï¼ˆä¾é™„ï¼‰ï¼šè¾¹/å¼§å’Œé¡¶ç‚¹ä¹‹é—´çš„å…³ç³»
+//   6.é¡¶ç‚¹çš„åº¦ï¼šä¸é¡¶ç‚¹å…³è”çš„è¾¹çš„ä¸ªæ•°
+//       --ã€‹æœ‰å‘å›¾ä¸­ï¼Œåº¦çš„ä¸ªæ•°ç­‰äºå…¥åº¦å’Œå‡ºåº¦ä¸ªæ•°ä¹‹å’Œ
+//   7.è·¯å¾„ï¼šæŒç»­çš„è¾¹æ„æˆçš„é¡¶åº•åºåˆ—
+//   8.è·¯å¾„é•¿åº¦ï¼šè·¯å¾„ä¸Šçš„è¾¹/å¼§çš„æ•°ç›®æˆ–æƒå€¼ä¹‹å’Œ
+//   9.å›è·¯ï¼ˆç¯ï¼‰ï¼šç¬¬ä¸€ä¸ªé¡¶ç‚¹å’Œæœ€åä¸€ä¸ªé¡¶ç‚¹ç›¸åŒçš„è·¯å¾„
+//   10.ç®€å•è·¯å¾„ï¼šé™¤äº†ç¬¬ä¸€ä¸ªé¡¶ç‚¹å’Œæœ€åä¸€ä¸ªé¡¶ç‚¹å¯ä»¥ç›¸åŒå¤–ï¼Œå…¶ä½™é¡¶ç‚¹éƒ½ä¸ç›¸åŒçš„è·¯å¾„
+//   11.è¿é€šå›¾ï¼ˆå¯¹æœ‰å‘å›¾ï¼šå¼ºè¿é€šå›¾ï¼‰ï¼šå¯¹ä»»æ„ä¸¤ä¸ªé¡¶ç‚¹uï¼Œv,éƒ½æœ‰ä»uåˆ°vçš„è·¯å¾„
+//   12.ç½‘ï¼šå›¾ä¸­è¾¹/å¼§å…·æœ‰ç›¸å…³æ•°ç§°ä¸ºæƒï¼Œå¸¦æœ‰æƒçš„å›¾ä¸ºç½‘
+//   13.å­å›¾ï¼šé¡¶ç‚¹å’Œè¾¹/å¼§å±äºæŸä¸ªå›¾çš„é¡¶ç‚¹å’Œè¾¹/å¼§
+//   14.è¿é€šåˆ†é‡ï¼ˆå¼ºè¿é€šåˆ†é‡ï¼‰ï¼šå›¾Gçš„æå¤§è¿é€šå­å›¾ç§°ä¸ºGçš„è¿é€šåˆ†é‡
+//       --ã€‹ã€æå¤§è¿é€šå­å›¾ã€‘ï¼šè¯¥å­å›¾æ˜¯Gè¿é€šå­å›¾,å°†Gçš„ä»»ä½•ä¸åœ¨è¯¥å­å›¾ä¸­çš„é¡¶ç‚¹åŠ å…¥, å­å›¾ä¸å†è¿é€š
+//   15.ã€æå°è¿é€šå­å›¾ã€‘:è¯¥å­å›¾æ˜¯Gçš„è¿é€šå­å›¾,åœ¨è¯¥å­å›¾ä¸­åˆ é™¤ä»»ä½•ä¸€æ¡è¾¹ï¼Œå­å›¾ä¸å†è¿é€šã€‚
+//   16.ç”Ÿæˆæ ‘ : åŒ…å«æ— å‘å›¾Gæ‰€æœ‰é¡¶ç‚¹çš„æå°è¿é€šå­å›¾ã€‚
+//   17.ç”Ÿæˆæ£®æ— : å¯¹éè¿é€šå›¾, ç”±å„ä¸ªè¿é€šåˆ†é‡çš„ç”Ÿæˆæ ‘çš„é›†åˆã€‚
 //
 
 
-//¶ş.Í¼µÄ´æ´¢½á¹¹£º
-//   1.Ë³Ğò´æ´¢½á¹¹£¨Êı×é/ÁÚ½Ó¾ØÕó±íÊ¾·¨£©£º
-//     ½¨Á¢Ò»¸ö¶¥µã±í(¼ÇÂ¼¶¥µãĞÅÏ¢)ºÍÒ»¸öÁÚ½Ó¾ØÕó£¨±íÊ¾¸÷¸ö¶¥µãÖ®¼äµÄ¹ØÏµ£©£¬
-//     ÁÚ½Ó¾ØÕóÊÇÒ»¸ö¶şÎ¬Êı×é(arcs[n][n]),arcs[i][j]±íÊ¾¶¥µãViµ½¶¥µãVjÊÇ·ñ¹ØÁª£¬1±íÊ¾¹ØÁª¡£0±íÊ¾²»¹ØÁª
+//äºŒ.å›¾çš„å­˜å‚¨ç»“æ„ï¼š
+//   1.é¡ºåºå­˜å‚¨ç»“æ„ï¼ˆæ•°ç»„/é‚»æ¥çŸ©é˜µè¡¨ç¤ºæ³•ï¼‰ï¼š
+//     å»ºç«‹ä¸€ä¸ªé¡¶ç‚¹è¡¨(è®°å½•é¡¶ç‚¹ä¿¡æ¯)å’Œä¸€ä¸ªé‚»æ¥çŸ©é˜µï¼ˆè¡¨ç¤ºå„ä¸ªé¡¶ç‚¹ä¹‹é—´çš„å…³ç³»ï¼‰ï¼Œ
+//     é‚»æ¥çŸ©é˜µæ˜¯ä¸€ä¸ªäºŒç»´æ•°ç»„(arcs[n][n]),arcs[i][j]è¡¨ç¤ºé¡¶ç‚¹Viåˆ°é¡¶ç‚¹Vjæ˜¯å¦å…³è”ï¼Œ1è¡¨ç¤ºå…³è”ã€‚0è¡¨ç¤ºä¸å…³è”
 //
-        //1>ÎŞÏòÍ¼£º
-		//ÎŞÏòÍ¼µÄÁÚ½Ó¾ØÕóÊÇ¶Ô³ÆµÄ;
-		//¶¥µãiµÄ¶È=µÚiĞĞ(ÁĞ)ÖĞ1µÄ¸öÊı;
-		//ÌØ±ğ:ÍêÈ«Í¼µÄÁÚ½Ó¾ØÕóÖĞ,¶Ô½ÇÔªËØÎª0,ÆäÓà1
+        //1>æ— å‘å›¾ï¼š
+		//æ— å‘å›¾çš„é‚»æ¥çŸ©é˜µæ˜¯å¯¹ç§°çš„;
+		//é¡¶ç‚¹içš„åº¦=ç¬¬iè¡Œ(åˆ—)ä¸­1çš„ä¸ªæ•°;
+		//ç‰¹åˆ«:å®Œå…¨å›¾çš„é‚»æ¥çŸ©é˜µä¸­,å¯¹è§’å…ƒç´ ä¸º0,å…¶ä½™1
  
-        //2>ÓĞÏòÍ¼£º
-        //·ÖÎö1:ÓĞÏòÍ¼µÄÁÚ½Ó¾ØÕó¿ÉÄÜÊÇ²»¶Ô³ÆµÄ¡£
-        //·ÖÎö2:¶¥µãµÄ³ö¶È = µÚiĞĞÔªËØÖ®ºÍ
-        //      ¶¥µãµÄÈë¶È = µÚiÁĞÔªËØÖ®ºÍ
-        //      ¶¥µãµÄ¶È = µÚiĞĞÔªËØÖ®ºÍ + µÚiÁĞÔªËØÖ®ºÍ
+        //2>æœ‰å‘å›¾ï¼š
+        //åˆ†æ1:æœ‰å‘å›¾çš„é‚»æ¥çŸ©é˜µå¯èƒ½æ˜¯ä¸å¯¹ç§°çš„ã€‚
+        //åˆ†æ2:é¡¶ç‚¹çš„å‡ºåº¦ = ç¬¬iè¡Œå…ƒç´ ä¹‹å’Œ
+        //      é¡¶ç‚¹çš„å…¥åº¦ = ç¬¬iåˆ—å…ƒç´ ä¹‹å’Œ
+        //      é¡¶ç‚¹çš„åº¦ = ç¬¬iè¡Œå…ƒç´ ä¹‹å’Œ + ç¬¬iåˆ—å…ƒç´ ä¹‹å’Œ
         
-        //3>ÓĞÏòÍø£º
-        //arcs[i][j]´æ·Å¶¥µãViµ½¶¥µãVjµÄ±ß/»¡ÉÏµÄÈ¨£¬ÓĞ±ßÔò´æ·ÅÈ¨Öµ£¬ÎŞ±ßÔò´æ·ÅÎŞÇî
+        //3>æœ‰å‘ç½‘ï¼š
+        //arcs[i][j]å­˜æ”¾é¡¶ç‚¹Viåˆ°é¡¶ç‚¹Vjçš„è¾¹/å¼§ä¸Šçš„æƒï¼Œæœ‰è¾¹åˆ™å­˜æ”¾æƒå€¼ï¼Œæ— è¾¹åˆ™å­˜æ”¾æ— ç©·
        
 
-//ÒÔÎŞÏòÍøÎªÀı£º
+//ä»¥æ— å‘ç½‘ä¸ºä¾‹ï¼š
 //#define VerTexType char
 //#define ArcsType int
-//#define MVNum 100  //×î´ó¶¥µãÊı
+//#define MVNum 100  //æœ€å¤§é¡¶ç‚¹æ•°
 //
 //typedef struct
 //{
-//    VerTexType vexs[MVNum];  //¶¥µã±í
-//    ArcsType arcs[MVNum][MVNum];  //ÁÚ½Ó¾ØÕó
-//    int vexnum, arcnum;  //¶¥µãÊıºÍ±ßÊı
-//}AMGraph;  //ÎŞÏòÍø
+//    VerTexType vexs[MVNum];  //é¡¶ç‚¹è¡¨
+//    ArcsType arcs[MVNum][MVNum];  //é‚»æ¥çŸ©é˜µ
+//    int vexnum, arcnum;  //é¡¶ç‚¹æ•°å’Œè¾¹æ•°
+//}AMGraph;  //æ— å‘ç½‘
 //
 //int LocateVer(AMGraph G, VerTexType V)
 //{
@@ -82,12 +82,12 @@
 //{
 //    scanf("%d%d", &(G->vexnum), &(G->arcnum));
 //    int i, j;
-//    //ÊäÈë¶¥µãĞÅÏ¢
+//    //è¾“å…¥é¡¶ç‚¹ä¿¡æ¯
 //    for (i = 0; i < G->vexnum; i++)
 //    {
 //        scanf(" %c", &(G->vexs[i]));
 //    }
-//    //³õÊ¼»¯ÁÚ½Ó¾ØÕóÎªÎŞÇî
+//    //åˆå§‹åŒ–é‚»æ¥çŸ©é˜µä¸ºæ— ç©·
 //    for (i = 0; i < G->vexnum; i++)
 //    {
 //        for (j = 0; j < G->vexnum; j++)
@@ -95,7 +95,7 @@
 //            G->arcs[i][j] = INT_MAX;
 //        }
 //    }
-//    //ÊäÈëÁÚ½Ó¾ØÕó£¨±ß£©µÄĞÅÏ¢
+//    //è¾“å…¥é‚»æ¥çŸ©é˜µï¼ˆè¾¹ï¼‰çš„ä¿¡æ¯
 //    for (i = 0; i < G->arcnum; i++)
 //    {
 //        VerTexType V1, V2;
@@ -108,28 +108,28 @@
 //    }
 //}
 //
-////   2.Á´Ê½´æ´¢½á¹¹£¨ÁÚ½Ó±í£¬ÁÚ½Ó¶àÖØ±í£¬Ê®×ÖÁ´±í£©£º
-////     ÁÚ½Ó±í£ºÓÃÒ»Î»Êı×é´æ´¢¶¥µãĞÅÏ¢£¨°üÀ¨Êı¾İÓòºÍÖ¸ÕëÓò£¨Ö¸ÏòÁÚ½ÓµÄ¶¥µã£©£©£¬
-////             ÓÃÁ´±í´æ´¢±ßµÄĞÅÏ¢£¨°üÀ¨¹ØÁªµÄ¶¥µã£¬È¨ÖµºÍÖ¸ÏòÏÂÒ»·İÁÚ½ÓµÄ¶¥µãµÄÖ¸ÕëÓò£©
+////   2.é“¾å¼å­˜å‚¨ç»“æ„ï¼ˆé‚»æ¥è¡¨ï¼Œé‚»æ¥å¤šé‡è¡¨ï¼Œåå­—é“¾è¡¨ï¼‰ï¼š
+////     é‚»æ¥è¡¨ï¼šç”¨ä¸€ä½æ•°ç»„å­˜å‚¨é¡¶ç‚¹ä¿¡æ¯ï¼ˆåŒ…æ‹¬æ•°æ®åŸŸå’ŒæŒ‡é’ˆåŸŸï¼ˆæŒ‡å‘é‚»æ¥çš„é¡¶ç‚¹ï¼‰ï¼‰ï¼Œ
+////             ç”¨é“¾è¡¨å­˜å‚¨è¾¹çš„ä¿¡æ¯ï¼ˆåŒ…æ‹¬å…³è”çš„é¡¶ç‚¹ï¼Œæƒå€¼å’ŒæŒ‡å‘ä¸‹ä¸€ä»½é‚»æ¥çš„é¡¶ç‚¹çš„æŒ‡é’ˆåŸŸï¼‰
 //
 //
-////ÒÔÎŞÏòÍ¼ÎªÀı£º
-////¶¥µãµÄ½áµã½á¹¹£º
+////ä»¥æ— å‘å›¾ä¸ºä¾‹ï¼š
+////é¡¶ç‚¹çš„ç»“ç‚¹ç»“æ„ï¼š
 //typedef struct
 //{
 //    VerTexType data;
 //    ArcNode* firstarc;
-//}VNode, AdjList[MVNum];   //AdjList v Ïàµ±ÓÚ VNode v[MVNum]
+//}VNode, AdjList[MVNum];   //AdjList v ç›¸å½“äº VNode v[MVNum]
 //
-////±ßµÄ½áµã½á¹¹£º
+////è¾¹çš„ç»“ç‚¹ç»“æ„ï¼š
 //typedef struct ArcNode
 //{
-//    int adjvex;  //¸Ã±ßËùÖ¸ÏòµÄ¶¥µãµÄÊı×éÏÂ±ê
+//    int adjvex;  //è¯¥è¾¹æ‰€æŒ‡å‘çš„é¡¶ç‚¹çš„æ•°ç»„ä¸‹æ ‡
 //    /*int weight;*/ 
-//    struct ArcNode* nextarc;  //Ö¸ÏòÏÂÒ»Ìõ±ß
+//    struct ArcNode* nextarc;  //æŒ‡å‘ä¸‹ä¸€æ¡è¾¹
 //}ArcNode;
 //
-////Í¼µÄ½á¹¹£º
+////å›¾çš„ç»“æ„ï¼š
 //typedef struct
 //{
 //    AdjList vertices;
@@ -152,70 +152,70 @@
 //{
 //    scanf("%d%d", &(G->vexnum), &(G->arcnum));
 //    int i;
-//    //½¨Á¢¶¥µã±í£¨Êı×é£©
+//    //å»ºç«‹é¡¶ç‚¹è¡¨ï¼ˆæ•°ç»„ï¼‰
 //    for (i = 0; i < G->vexnum; i++)
 //    {
 //        scanf("%c", &(G->vertices[i].data));
 //        G->vertices[i].firstarc = NULL;
 //    }
-//    //½¨Á¢±ßµÄÁ´±í
+//    //å»ºç«‹è¾¹çš„é“¾è¡¨
 //    for (i = 0; i < G->arcnum; i++)
 //    {
 //        VerTexType V1, V2;
 //        scanf(" %c %c", &V1, &V2);
 //        int x = LocateVex(*G, V1);
 //        int y = LocateVex(*G, V2);
-//        //½¨Á¢±ß½áµã
-//        //V1µ½V2
+//        //å»ºç«‹è¾¹ç»“ç‚¹
+//        //V1åˆ°V2
 //        ArcNode* p1 = (ArcNode*)malloc(sizeof(ArcNode));
 //        p1->adjvex = y;
-//        p1->nextarc = G->vertices[x].firstarc;  //Ç°²å·¨£¨ºó²å·¨ĞèÒª±éÀúÁ´±í£©
+//        p1->nextarc = G->vertices[x].firstarc;  //å‰æ’æ³•ï¼ˆåæ’æ³•éœ€è¦éå†é“¾è¡¨ï¼‰
 //        G->vertices[x].firstarc = p1;
-//        //V2µ½V1
+//        //V2åˆ°V1
 //        ArcNode* p2 = (ArcNode*)malloc(sizeof(ArcNode));
 //        p2->adjvex = x;
 //        p2->nextarc = G->vertices[y].firstarc;
 //        G->vertices[y].firstarc = p2;
 //    }
 //}
-//×¢Òâ£ºÃ¿´ÎÑ­»·»ò×Ô¶¨Òåº¯Êı½áÊøÊ±£¬¾Ö²¿±äÁ¿µÈÔÚÕ»¿Õ¼äµÄÄÚ´æ»á±»ÊÍ·Å
-//      µ«mallocµÈ¶¯Ì¬¿ª±ÙµÄÔÚ¶ÑÉÏµÄ¿Õ¼ä²»»á±»ÊÍ·Å£¬
-//      Ö»ÓĞµ±Ê¹ÓÃfreeº¯Êı»ò³ÌĞò½áÊø£¨mainº¯Êı½áÊø£©Ê±ÄÚ´æ²Å»á±»ÊÍ·Å
+//æ³¨æ„ï¼šæ¯æ¬¡å¾ªç¯æˆ–è‡ªå®šä¹‰å‡½æ•°ç»“æŸæ—¶ï¼Œå±€éƒ¨å˜é‡ç­‰åœ¨æ ˆç©ºé—´çš„å†…å­˜ä¼šè¢«é‡Šæ”¾
+//      ä½†mallocç­‰åŠ¨æ€å¼€è¾Ÿçš„åœ¨å †ä¸Šçš„ç©ºé—´ä¸ä¼šè¢«é‡Šæ”¾ï¼Œ
+//      åªæœ‰å½“ä½¿ç”¨freeå‡½æ•°æˆ–ç¨‹åºç»“æŸï¼ˆmainå‡½æ•°ç»“æŸï¼‰æ—¶å†…å­˜æ‰ä¼šè¢«é‡Šæ”¾
  
-//p1ÊÇ¾Ö²¿±äÁ¿£ºËüÔÚÃ¿´ÎÑ­»·µü´úÖĞÊÇĞÂµÄ£¬Ö¸Ïò¶¯Ì¬·ÖÅäµÄ²»Í¬ÄÚ´æ
-//Ã¿´Îµ÷ÓÃ malloc Ê±£¬p1¶¼»á»ñµÃÒ»¸ö²»Í¬µÄµØÖ·
-//Äã½« p1 ¹Ò½Óµ½Á´±íµÄÄ³¸ö½ÚµãÉÏ£¬Òò´Ë¼´Ê¹Ñ­»·µü´ú½áÊø£¬Á´±íÈÔÈ»±£´æÁË¶Ô¶¯Ì¬·ÖÅäÄÚ´æµÄÒıÓÃ
+//p1æ˜¯å±€éƒ¨å˜é‡ï¼šå®ƒåœ¨æ¯æ¬¡å¾ªç¯è¿­ä»£ä¸­æ˜¯æ–°çš„ï¼ŒæŒ‡å‘åŠ¨æ€åˆ†é…çš„ä¸åŒå†…å­˜
+//æ¯æ¬¡è°ƒç”¨ malloc æ—¶ï¼Œp1éƒ½ä¼šè·å¾—ä¸€ä¸ªä¸åŒçš„åœ°å€
+//ä½ å°† p1 æŒ‚æ¥åˆ°é“¾è¡¨çš„æŸä¸ªèŠ‚ç‚¹ä¸Šï¼Œå› æ­¤å³ä½¿å¾ªç¯è¿­ä»£ç»“æŸï¼Œé“¾è¡¨ä»ç„¶ä¿å­˜äº†å¯¹åŠ¨æ€åˆ†é…å†…å­˜çš„å¼•ç”¨
 
 
-//ÁÚ½Ó±í£º
-//1>ÓĞÏòÍ¼->È±µã : Çó½áµãµÄ¶ÈÀ§ÄÑ-->Ê®×ÖÁ´±í
-//2>ÎŞÏòÍ¼->È±µã : Ã¿Ìõ±ß¶¼Òª´æ´¢Á½±é-->ÁÚ½Ó¶àÖØ±í
+//é‚»æ¥è¡¨ï¼š
+//1>æœ‰å‘å›¾->ç¼ºç‚¹ : æ±‚ç»“ç‚¹çš„åº¦å›°éš¾-->åå­—é“¾è¡¨
+//2>æ— å‘å›¾->ç¼ºç‚¹ : æ¯æ¡è¾¹éƒ½è¦å­˜å‚¨ä¸¤é-->é‚»æ¥å¤šé‡è¡¨
 
 
-//**********Èı.Í¼µÄ±éÀú£ºÉî¶ÈÓÅÏÈËÑË÷±éÀú£¨DFS£©ºÍ¹ã¶ÈÓÅÏÈËÑË÷±éÀú£¨BFS£©
-// DFS:Ê¹ÓÃÕ»£¨µİ¹éºÍ·Çµİ¹é£¨ÏÔÊ½Ê¹ÓÃÕ»£©£©
-// BFS:Ê¹ÓÃ¶ÓÁĞ£¨·Çµİ¹é£©
+//**********ä¸‰.å›¾çš„éå†ï¼šæ·±åº¦ä¼˜å…ˆæœç´¢éå†ï¼ˆDFSï¼‰å’Œå¹¿åº¦ä¼˜å…ˆæœç´¢éå†ï¼ˆBFSï¼‰
+// DFS:ä½¿ç”¨æ ˆï¼ˆé€’å½’å’Œéé€’å½’ï¼ˆæ˜¾å¼ä½¿ç”¨æ ˆï¼‰ï¼‰
+// BFS:ä½¿ç”¨é˜Ÿåˆ—ï¼ˆéé€’å½’ï¼‰
 
-//¸¨ÖúÊı×é£ºvisited[i],±íÊ¾µÚi¸ö¶¥µã±»·ÃÎÊ¹ı
-//1.DFS:£¨µİ¹é£©
+//è¾…åŠ©æ•°ç»„ï¼švisited[i],è¡¨ç¤ºç¬¬iä¸ªé¡¶ç‚¹è¢«è®¿é—®è¿‡
+//1.DFS:ï¼ˆé€’å½’ï¼‰
 
-// 1>ÒÔÎŞÏòÍ¼µÄÁÚ½Ó¾ØÕóÎªÀı:(Ê±¼ä¸´ÔÓ¶ÈÎªn~2)
+// 1>ä»¥æ— å‘å›¾çš„é‚»æ¥çŸ©é˜µä¸ºä¾‹:(æ—¶é—´å¤æ‚åº¦ä¸ºn~2)
 //int visited[MVNum] = { 0 };
-//void DFS(AMGraph G, int v)  //v±íÊ¾´ÓµÚ¼¸¸ö¶¥µã¿ªÊ¼
+//void DFS(AMGraph G, int v)  //vè¡¨ç¤ºä»ç¬¬å‡ ä¸ªé¡¶ç‚¹å¼€å§‹
 //{
 //    printf("%c ", G.vexs[v]);
-//    visited[v] = 1; //±íÊ¾¸Ã¶¥µãÒÑ¾­·ÃÎÊ¹ı
+//    visited[v] = 1; //è¡¨ç¤ºè¯¥é¡¶ç‚¹å·²ç»è®¿é—®è¿‡
 //    int i;
-//    for (i = 0; i < G.vexnum; i++)  //±éÀú¶¥µãËùÔÚ¾ØÕóµÄÄÇÒ»ĞĞ
+//    for (i = 0; i < G.vexnum; i++)  //éå†é¡¶ç‚¹æ‰€åœ¨çŸ©é˜µçš„é‚£ä¸€è¡Œ
 //    {
 //        if (visited[i] == 0 && G.arcs[v][i] == 1)
 //        {
-//            DFS(G, i);  //ÊµÏÖ±éÀúºÍ»ØËİ
+//            DFS(G, i);  //å®ç°éå†å’Œå›æº¯
 //        }
 //    }
 //}
 
-// 2>ÒÔÎŞÏòÍ¼µÄÁÚ½Ó±íÎªÀı:(Ê±¼ä¸´ÔÓ¶ÈÎªn+e)
+// 2>ä»¥æ— å‘å›¾çš„é‚»æ¥è¡¨ä¸ºä¾‹:(æ—¶é—´å¤æ‚åº¦ä¸ºn+e)
 //int visited[MVNum] = { 0 };
 //void DFS(ALGraph G, int v)
 //{
@@ -232,11 +232,12 @@
 //    }
 //}
 
-//×Ü½á£º1¡·ÊÊÓÃÓÚµ¥¸öÁ¬Í¨·ÖÁ¿£¬Òª±éÀú·ÇÁªÍ¨·ÖÁ¿Ê±ÒªÊ¹ÓÃforÑ­»·
-//      2¡·µİ¹éÉî¶ÈÓĞÏŞ£ºµ±¶¥µãÊı¹ı¶àÊ±£¬¿ÉÄÜµ¼ÖÂÕ»Òç³ö
+//ç¼ºç‚¹ï¼š1ã€‹é€‚ç”¨äºå•ä¸ªè¿é€šåˆ†é‡ï¼Œè¦éå†éè”é€šåˆ†é‡æ—¶è¦ä½¿ç”¨forå¾ªç¯
+//      2ã€‹é€’å½’æ·±åº¦æœ‰é™ï¼šå½“é¡¶ç‚¹æ•°è¿‡å¤šæ—¶ï¼Œå¯èƒ½å¯¼è‡´æ ˆæº¢å‡º
 
 
-//2.DFS(·Çµİ¹é)£ºÏÔÊ½Ê¹ÓÃÕ»
+
+//2.DFS(éé€’å½’)ï¼šæ˜¾å¼ä½¿ç”¨æ ˆï¼ˆä»¥é‚»æ¥çŸ©é˜µä¸ºä¾‹ï¼‰
 //#define SElemType int
 //typedef struct StackNode
 //{
@@ -244,14 +245,14 @@
 //    struct StackNode* next;
 //}StackNode,*LinkStack;
 //
-////Á´Õ»µÄ³õÊ¼»¯
+////é“¾æ ˆçš„åˆå§‹åŒ–
 //int InitStack(LinkStack* s)
 //{
 //    *s = NULL;
 //    return OK;
 //}
 //
-////ÅĞ¶ÏÁ´Õ»ÊÇ·ñÎª¿Õ
+////åˆ¤æ–­é“¾æ ˆæ˜¯å¦ä¸ºç©º
 //int StackEmpty(LinkStack s)
 //{
 //    if (s == NULL)
@@ -264,7 +265,7 @@
 //    }
 //}
 //
-////ÈëÕ»
+////å…¥æ ˆ
 //int Push(LinkStack* s, SElemType e)
 //{
 //    StackNode* p = (StackNode*)malloc(sizeof(StackNode));
@@ -279,12 +280,12 @@
 //    return 1;
 //}
 //
-////³öÕ»
+////å‡ºæ ˆ
 //int Pop(LinkStack* s, SElemType* e)
 //{
 //    if (*s == NULL)
 //    {
-//        printf("¿ÕÕ»ÎŞ·¨³öÕ»");
+//        printf("ç©ºæ ˆæ— æ³•å‡ºæ ˆ");
 //        return ERROR;
 //    }
 //    StackNode* p = *s;
@@ -305,16 +306,16 @@
 //    return OK;
 //}
 //
-//´æÔÚ²»ÁªÍ¨·ÖÁ¿
+//å­˜åœ¨ä¸è”é€šåˆ†é‡
 //void DFSTraverse(AMGraph* G)
 //{
 //    int i;
-//    //³õÊ¼»¯visited
+//    //åˆå§‹åŒ–visited
 //    for (i = 0; i < G->vexnum; i++)
 //    {
 //        visited[i] = 0;
 //    }
-//    //±éÀúÃ¿¸ö¶¥µã
+//    //éå†æ¯ä¸ªé¡¶ç‚¹
 //    for (i = 0; i < G->vexnum; i++)
 //    {
 //        if (!visited[i])
@@ -324,7 +325,7 @@
 //    }
 //}
 //
-//µ¥¸öÁªÍ¨·ÖÁ¿
+//å•ä¸ªè”é€šåˆ†é‡
 //void DFS(AMGraph* G, int v)
 //{
 //    LinkStack s;
@@ -357,14 +358,14 @@
 //}
 
 
-//3.BFS£¨·Çµİ¹é£©£»
+//3.BFSï¼š
 //int visited[MVNum];
 //typedef struct
 //{
-//    VerTexType vexs[MVNum];  //¶¥µã±í
-//    ArcsType arcs[MVNum][MVNum];  //ÁÚ½Ó¾ØÕó
-//    int vexnum, arcnum;  //¶¥µãÊıºÍ±ßÊı
-//}AMGraph;  //ÎŞÏòÍø
+//    VerTexType vexs[MVNum];  //é¡¶ç‚¹è¡¨
+//    ArcsType arcs[MVNum][MVNum];  //é‚»æ¥çŸ©é˜µ
+//    int vexnum, arcnum;  //é¡¶ç‚¹æ•°å’Œè¾¹æ•°
+//}AMGraph;  //æ— å‘ç½‘
 //#define QElemType int 
 //typedef struct Qnode
 //{
@@ -374,8 +375,8 @@
 //
 //typedef struct
 //{
-//    QueuePtr front;//Í·Ö¸Õë
-//    QueuePtr rear;//Î²Ö¸Õë
+//    QueuePtr front;//å¤´æŒ‡é’ˆ
+//    QueuePtr rear;//å°¾æŒ‡é’ˆ
 //}LinkQueue;
 //
 //int FirstNeighbor(AMGraph G, int r)
@@ -404,7 +405,7 @@
 //    return -1;
 //}
 //
-////ËùÓĞÁ¬Í¨·ÖÁ¿
+////æ‰€æœ‰è¿é€šåˆ†é‡
 //void BFSTraverse(AMGraph G)
 //{
 //    int i;
@@ -421,7 +422,7 @@
 //    }
 //}
 //
-////µ¥¸öÁ¬Í¨·ÖÁ¿
+////å•ä¸ªè¿é€šåˆ†é‡
 //void BFS(AMGraph* G, int v)
 //{
 //    LinkQueue q;
@@ -446,13 +447,13 @@
 //}
 
 
-//ËÄ.Í¼µÄÓ¦ÓÃ£º
-//*********1.×î¶ÌÂ·¾¶£º(ÇóÔ´µãSµ½ÆäËû¶¥µãµÄ×î¶ÌÂ·¾¶)
-// 1>µ¥Ô´µÄ£¨ÓĞÏò£©ÎŞÏò¡¾Í¼¡¿:(ÁÚ½Ó¾ØÕó£¬BFS)
+//å››.å›¾çš„åº”ç”¨ï¼š
+//*********1.æœ€çŸ­è·¯å¾„ï¼š(æ±‚æºç‚¹Såˆ°å…¶ä»–é¡¶ç‚¹çš„æœ€çŸ­è·¯å¾„)
+// 1>å•æºçš„ï¼ˆæœ‰å‘ï¼‰æ— å‘ã€å›¾ã€‘:(é‚»æ¥çŸ©é˜µï¼ŒBFS)
 //#define MAX 100
 //#define INF -1
 //
-////¶ÓÁĞµÄ³õÊ¼»¯
+////é˜Ÿåˆ—çš„åˆå§‹åŒ–
 //int InitQueue(LinkQueue* q)
 //{
 //    q->front = (QueuePtr)malloc(sizeof(Qnode));
@@ -466,13 +467,13 @@
 //    return OK;
 //}
 //
-////Èë¶Ó
+////å…¥é˜Ÿ
 //int EnQueue(LinkQueue* q, QElemType e)
 //{
 //    QueuePtr p = (QueuePtr)malloc(sizeof(Qnode));
 //    if (p == NULL)
 //    {
-//        printf("EnQueue:¿ª±ÙÄÚ´æÊ§°Ü");
+//        printf("EnQueue:å¼€è¾Ÿå†…å­˜å¤±è´¥");
 //        exit(1);
 //    }
 //    p->data = e;
@@ -482,12 +483,12 @@
 //    return OK;
 //}
 //
-////³ö¶Ó
+////å‡ºé˜Ÿ
 //int DeQueue(LinkQueue* q, QElemType* e)
 //{
 //    if (q->front == q->rear)
 //    {
-//        printf("Îª¿Õ¶Ô£¬ÎŞ·¨É¾³ıÔªËØ");
+//        printf("ä¸ºç©ºå¯¹ï¼Œæ— æ³•åˆ é™¤å…ƒç´ ");
 //        return ERROR;
 //    }
 //    QueuePtr p = q->front->next;
@@ -504,8 +505,8 @@
 //
 //void Unweighted(int graph[MAX][MAX], int n, int s)
 //{
-//    int dist[MAX]; //Ô´µãµ½¶¥µãµÄ¾àÀë
-//    int path[MAX]; //µ½Ä³¸ö¶¥µãµÄÉÏÒ»¸ö¶¥µã
+//    int dist[MAX]; //æºç‚¹åˆ°é¡¶ç‚¹çš„è·ç¦»
+//    int path[MAX]; //åˆ°æŸä¸ªé¡¶ç‚¹çš„ä¸Šä¸€ä¸ªé¡¶ç‚¹
 //    int i;
 //    for (i = 0; i < n; i++)
 //    {
@@ -516,7 +517,7 @@
 //    LinkQueue Q;
 //    InitQueue(&Q);
 //    EnQueue(&Q, s);
-//    //BFS±éÀú
+//    //BFSéå†
 //    while (!IsEmpty(Q))
 //    {
 //        int w;
@@ -535,11 +536,12 @@
 //}
 
 
-// 2>µ¥Ô´µÄ£¨ÓĞÏò£©ÎŞÏò¡¾Íø£¨ÓĞÈ¨£©¡¿£º 
-// Dijkstra Ëã·¨--¡·ÊÊÓÃÓÚ·Ç¸ºÈ¨ÖµÍ¼
+// 2>å•æºçš„ï¼ˆæœ‰å‘ï¼‰æ— å‘ã€ç½‘ï¼ˆæœ‰æƒï¼‰ã€‘ï¼š 
+// Dijkstra ç®—æ³•--ã€‹é€‚ç”¨äºéè´Ÿæƒå€¼å›¾
+// è·¯å¾„å¿…é¡»æŒ‰ç…§é€’å¢ï¼ˆéé€’å‡ï¼‰çš„é¡ºåºç”Ÿæˆ
 
-//£¨1£©ÁÚ½Ó¾ØÕó£º
-//#include <limits.h>  //¶¨ÒåÕûÊı×î´ó/Ğ¡Öµ INT_MAX
+//ï¼ˆ1ï¼‰é‚»æ¥çŸ©é˜µ+éå†æ‰¾æœ€å°dist ï¼šT(|v|~2) --ã€‹é€‚ç”¨äºç¨ å¯†å›¾ï¼ˆv~2==eï¼‰
+//#include <limits.h>  //å®šä¹‰æ•´æ•°æœ€å¤§/å°å€¼ INT_MAX
 //#define MAX 100
 //#define INF INT_MAX
 //
@@ -559,26 +561,27 @@
 //
 //void Dijkstra(int graph[MAX][MAX], int n, int s)
 //{
-//    //³õÊ¼»¯
+//    //åˆå§‹åŒ–
 //    int dist[MAX], path[MAX], visited[MAX] = { 0 };
 //    int i;
 //    for (i = 0; i < n; i++)
 //    {
+//        //åªèƒ½å­˜æ­£æ— ç©·ï¼Œåé¢è¦åˆ¤æ–­dist[v] + graph[v][i] < dist[i]
 //        dist[i] = INF;
 //        path[i] = -1;
 //    }
 //    dist[s] = 0;
-//    //Çó×î¶ÌÂ·¾¶
+//    //æ±‚æœ€çŸ­è·¯å¾„
 //    while (1)
 //    {
-//        //ÇóÎ´ÊÕÂ¼µÄ¶¥µãÖĞdist×îĞ¡µÄµã
+//        //æ±‚æœªæ”¶å½•çš„é¡¶ç‚¹ä¸­distæœ€å°çš„ç‚¹
 //        int v = mindist(dist, visited, n);
 //        if (v == -1)
 //        {
 //            break;
 //        }
 //        visited[v] = 1;
-//        //¸üĞÂÁÚ½ÓµãµÄdistÖµ
+//        //æ›´æ–°é‚»æ¥ç‚¹çš„distå€¼
 //        for (i = 0; i < n; i++)
 //        {
 //            if (!visited[i])
@@ -595,178 +598,968 @@
 //}
 
 
-//£¨2£©ÁÚ½Ó±í+×îĞ¡¶Ñ£º
+//ï¼ˆ2ï¼‰é‚»æ¥è¡¨+æœ€å°å †ï¼šT(|v|log|v|)-->é€‚ç”¨äºç¨€ç–å›¾ï¼ˆv==eï¼‰
 //#include <stdio.h>
 //#include <stdlib.h>
 //#include <limits.h>
-//#include <stdbool.h>
 //
-//#define MAX 100 // ×î´ó¶¥µãÊı
-//#define INF INT_MAX // ÓÃÓÚ±íÊ¾ÎŞÇî´ó
+//#define MAX_VERTICES 100
+//#define INF INT_MAX
 //
-//// ¶¨Òå¶Ñ½Úµã
-//typedef struct {
-//    int vertex;
-//    int distance;
+//// é‚»æ¥è¡¨ä¸­çš„èŠ‚ç‚¹
+//typedef struct AdjListNode {
+//    int dest;
+//    int weight;
+//    struct AdjListNode* next;
+//} AdjListNode;
+//
+//// é‚»æ¥è¡¨
+//typedef struct AdjList {
+//    AdjListNode* head;
+//} AdjList;
+//
+//// å›¾çš„ç»“æ„
+//typedef struct Graph {
+//    int V;
+//    AdjList* array;
+//} Graph;
+//
+//// æœ€å°å †ä¸­çš„èŠ‚ç‚¹
+//typedef struct MinHeapNode {
+//    int v;
+//    int dist;
 //} MinHeapNode;
 //
-//// ¶¨Òå×îĞ¡¶Ñ
-//typedef struct {
+//// æœ€å°å †çš„ç»“æ„
+//typedef struct MinHeap {
 //    int size;
 //    int capacity;
-//    int* position;
+//    int* pos; // pos[i]è¡¨ç¤ºé¡¶ç‚¹iåœ¨å †ä¸­çš„ä½ç½®
 //    MinHeapNode** array;
 //} MinHeap;
 //
-//// ´´½¨Ò»¸öĞÂµÄ¶Ñ½Úµã
-//MinHeapNode* createMinHeapNode(int vertex, int distance) {
-//    MinHeapNode* node = (MinHeapNode*)malloc(sizeof(MinHeapNode));
-//    node->vertex = vertex;
-//    node->distance = distance;
-//    return node;
+//// åˆ›å»ºä¸€ä¸ªæ–°çš„é‚»æ¥è¡¨èŠ‚ç‚¹
+//AdjListNode* newAdjListNode(int dest, int weight) {
+//    AdjListNode* newNode = (AdjListNode*)malloc(sizeof(AdjListNode));
+//    newNode->dest = dest;
+//    newNode->weight = weight;
+//    newNode->next = NULL;
+//    return newNode;
 //}
 //
-//// ´´½¨×îĞ¡¶Ñ
+//// åˆ›å»ºä¸€ä¸ªå›¾
+//Graph* createGraph(int V) {
+//    Graph* graph = (Graph*)malloc(sizeof(Graph));
+//    graph->V = V;
+//    graph->array = (AdjList*)malloc(V * sizeof(AdjList));
+//    for (int i = 0; i < V; ++i)
+//        graph->array[i].head = NULL;
+//    return graph;
+//}
+//
+//// æ·»åŠ è¾¹åˆ°å›¾ä¸­
+//void addEdge(Graph* graph, int src, int dest, int weight) {
+//    AdjListNode* newNode = newAdjListNode(dest, weight);
+//    newNode->next = graph->array[src].head;
+//    graph->array[src].head = newNode;
+//
+//    // æ— å‘å›¾éœ€è¦æ·»åŠ åå‘è¾¹
+//    newNode = newAdjListNode(src, weight);
+//    newNode->next = graph->array[dest].head;
+//    graph->array[dest].head = newNode;
+//}
+//
+//// åˆ›å»ºä¸€ä¸ªæœ€å°å †èŠ‚ç‚¹
+//MinHeapNode* newMinHeapNode(int v, int dist) {
+//    MinHeapNode* minHeapNode = (MinHeapNode*)malloc(sizeof(MinHeapNode));
+//    minHeapNode->v = v;
+//    minHeapNode->dist = dist;
+//    return minHeapNode;
+//}
+//
+//// åˆ›å»ºä¸€ä¸ªæœ€å°å †
 //MinHeap* createMinHeap(int capacity) {
-//    MinHeap* heap = (MinHeap*)malloc(sizeof(MinHeap));
-//    heap->size = 0;
-//    heap->capacity = capacity;
-//    heap->position = (int*)malloc(capacity * sizeof(int));
-//    heap->array = (MinHeapNode**)malloc(capacity * sizeof(MinHeapNode*));
-//    return heap;
+//    MinHeap* minHeap = (MinHeap*)malloc(sizeof(MinHeap));
+//    minHeap->pos = (int*)malloc(capacity * sizeof(int));
+//    minHeap->size = 0;
+//    minHeap->capacity = capacity;
+//    minHeap->array = (MinHeapNode**)malloc(capacity * sizeof(MinHeapNode*));
+//    return minHeap;
 //}
 //
-//// ¶ÑµÄ½»»»²Ù×÷
+//// äº¤æ¢ä¸¤ä¸ªæœ€å°å †èŠ‚ç‚¹
 //void swapMinHeapNode(MinHeapNode** a, MinHeapNode** b) {
-//    MinHeapNode* temp = *a;
+//    MinHeapNode* t = *a;
 //    *a = *b;
-//    *b = temp;
+//    *b = t;
 //}
 //
-//// ¶Ñ»¯²Ù×÷
-//void minHeapify(MinHeap* heap, int idx) {
-//    int smallest = idx;
-//    int left = 2 * idx + 1;
-//    int right = 2 * idx + 2;
+//// æœ€å°å †çš„å †åŒ–å‡½æ•°
+//void minHeapify(MinHeap* minHeap, int idx) {
+//    int smallest, left, right;
+//    smallest = idx;
+//    left = 2 * idx + 1;
+//    right = 2 * idx + 2;
 //
-//    if (left < heap->size && heap->array[left]->distance < heap->array[smallest]->distance)
+//    if (left < minHeap->size && minHeap->array[left]->dist < minHeap->array[smallest]->dist)
 //        smallest = left;
 //
-//    if (right < heap->size && heap->array[right]->distance < heap->array[smallest]->distance)
+//    if (right < minHeap->size && minHeap->array[right]->dist < minHeap->array[smallest]->dist)
 //        smallest = right;
 //
 //    if (smallest != idx) {
-//        MinHeapNode* smallestNode = heap->array[smallest];
-//        MinHeapNode* idxNode = heap->array[idx];
+//        MinHeapNode* smallestNode = minHeap->array[smallest];
+//        MinHeapNode* idxNode = minHeap->array[idx];
 //
-//        // ¸üĞÂÎ»ÖÃ
-//        heap->position[smallestNode->vertex] = idx;
-//        heap->position[idxNode->vertex] = smallest;
+//        minHeap->pos[smallestNode->v] = idx;
+//        minHeap->pos[idxNode->v] = smallest;
 //
-//        // ½»»»½Úµã
-//        swapMinHeapNode(&heap->array[smallest], &heap->array[idx]);
+//        swapMinHeapNode(&minHeap->array[smallest], &minHeap->array[idx]);
 //
-//        minHeapify(heap, smallest);
+//        minHeapify(minHeap, smallest);
 //    }
 //}
 //
-//// ¼ì²é¶ÑÊÇ·ñÎª¿Õ
-//int isEmpty(MinHeap* heap) {
-//    return heap->size == 0;
+//// æ£€æŸ¥æœ€å°å †æ˜¯å¦ä¸ºç©º
+//int isEmpty(MinHeap* minHeap) {
+//    return minHeap->size == 0;
 //}
 //
-//// ´Ó¶ÑÖĞÌáÈ¡×îĞ¡Öµ
-//MinHeapNode* extractMin(MinHeap* heap) {
-//    if (isEmpty(heap))
+//// æå–æœ€å°å †ä¸­çš„æœ€å°èŠ‚ç‚¹
+//MinHeapNode* extractMin(MinHeap* minHeap) {
+//    if (isEmpty(minHeap))
 //        return NULL;
 //
-//    MinHeapNode* root = heap->array[0];
-//    MinHeapNode* lastNode = heap->array[heap->size - 1];
-//    heap->array[0] = lastNode;
+//    MinHeapNode* root = minHeap->array[0];
+//    MinHeapNode* lastNode = minHeap->array[minHeap->size - 1];
+//    minHeap->array[0] = lastNode;
 //
-//    heap->position[root->vertex] = heap->size - 1;
-//    heap->position[lastNode->vertex] = 0;
+//    minHeap->pos[root->v] = minHeap->size - 1;
+//    minHeap->pos[lastNode->v] = 0;
 //
-//    --heap->size;
-//    minHeapify(heap, 0);
+//    --minHeap->size;
+//    minHeapify(minHeap, 0);
 //
 //    return root;
 //}
 //
-//// ¼õĞ¡¶¥µãµÄ¾àÀëÖµ
-//void decreaseKey(MinHeap* heap, int vertex, int distance) {
-//    int i = heap->position[vertex];
-//    heap->array[i]->distance = distance;
+//// å‡å°‘æœ€å°å †ä¸­æŸä¸ªèŠ‚ç‚¹çš„è·ç¦»å€¼
+//void decreaseKey(MinHeap* minHeap, int v, int dist) {
+//    int i = minHeap->pos[v];
+//    minHeap->array[i]->dist = dist;
 //
-//    while (i && heap->array[i]->distance < heap->array[(i - 1) / 2]->distance) {
-//        heap->position[heap->array[i]->vertex] = (i - 1) / 2;
-//        heap->position[heap->array[(i - 1) / 2]->vertex] = i;
-//        swapMinHeapNode(&heap->array[i], &heap->array[(i - 1) / 2]);
+//    while (i && minHeap->array[i]->dist < minHeap->array[(i - 1) / 2]->dist) {
+//        minHeap->pos[minHeap->array[i]->v] = (i - 1) / 2;
+//        minHeap->pos[minHeap->array[(i - 1) / 2]->v] = i;
+//        swapMinHeapNode(&minHeap->array[i], &minHeap->array[(i - 1) / 2]);
+//
 //        i = (i - 1) / 2;
 //    }
 //}
 //
-//// ¼ì²é¶¥µãÊÇ·ñÔÚ¶ÑÖĞ
-//int isInMinHeap(MinHeap* heap, int vertex) {
-//    return heap->position[vertex] < heap->size;
+//// æ£€æŸ¥é¡¶ç‚¹æ˜¯å¦åœ¨æœ€å°å †ä¸­
+//int isInMinHeap(MinHeap* minHeap, int v) {
+//    return minHeap->pos[v] < minHeap->size;
 //}
 //
-//// ´òÓ¡½á¹û
-//void printSolution(int dist[], int V) {
-//    printf("Vertex \t Distance from Source\n");
-//    for (int i = 0; i < V; i++) {
-//        printf("%d \t %d\n", i, dist[i]);
-//    }
-//}
+//// Dijkstraç®—æ³•çš„å®ç°
+//void dijkstra(Graph* graph, int src) {
+//    int V = graph->V;
+//    int dist[MAX_VERTICES];
 //
-//// DijkstraËã·¨ÊµÏÖ£¨»ùÓÚ¶Ñ£©
-//void dijkstra(int graph[MAX][MAX], int src, int V) {
-//    int dist[V];
+//    MinHeap* minHeap = createMinHeap(V);
 //
-//    MinHeap* heap = createMinHeap(V);
-//
-//    for (int v = 0; v < V; v++) {
+//    for (int v = 0; v < V; ++v) {
 //        dist[v] = INF;
-//        heap->array[v] = createMinHeapNode(v, dist[v]);
-//        heap->position[v] = v;
+//        minHeap->array[v] = newMinHeapNode(v, dist[v]);
+//        minHeap->pos[v] = v;
 //    }
 //
-//    heap->array[src] = createMinHeapNode(src, dist[src]);
-//    heap->position[src] = src;
+//    minHeap->array[src] = newMinHeapNode(src, dist[src]);
+//    minHeap->pos[src] = src;
 //    dist[src] = 0;
-//    decreaseKey(heap, src, dist[src]);
+//    decreaseKey(minHeap, src, dist[src]);
 //
-//    heap->size = V;
+//    minHeap->size = V;
 //
-//    while (!isEmpty(heap)) {
-//        MinHeapNode* minNode = extractMin(heap);
-//        int u = minNode->vertex;
+//    while (!isEmpty(minHeap)) {
+//        MinHeapNode* minHeapNode = extractMin(minHeap);
+//        int u = minHeapNode->v;
 //
-//        for (int v = 0; v < V; v++) {
-//            if (graph[u][v] && isInMinHeap(heap, v) && dist[u] != INF && dist[u] + graph[u][v] < dist[v]) {
-//                dist[v] = dist[u] + graph[u][v];
-//                decreaseKey(heap, v, dist[v]);
+//        AdjListNode* pCrawl = graph->array[u].head;
+//        while (pCrawl != NULL) {
+//            int v = pCrawl->dest;
+//
+//            if (isInMinHeap(minHeap, v) && dist[u] != INF && pCrawl->weight + dist[u] < dist[v]) {
+//                dist[v] = dist[u] + pCrawl->weight;
+//                decreaseKey(minHeap, v, dist[v]);
+//            }
+//            pCrawl = pCrawl->next;
+//        }
+//    }
+//
+//    printf("Vertex   Distance from Source\n");
+//    for (int i = 0; i < V; ++i)
+//        printf("%d \t\t %d\n", i, dist[i]);
+//}
+//
+//int main() {
+//    int V = 9;
+//    Graph* graph = createGraph(V);
+//    addEdge(graph, 0, 1, 4);
+//    addEdge(graph, 0, 7, 8);
+//    addEdge(graph, 1, 2, 8);
+//    addEdge(graph, 1, 7, 11);
+//    addEdge(graph, 2, 3, 7);
+//    addEdge(graph, 2, 8, 2);
+//    addEdge(graph, 2, 5, 4);
+//    addEdge(graph, 3, 4, 9);
+//    addEdge(graph, 3, 5, 14);
+//    addEdge(graph, 4, 5, 10);
+//    addEdge(graph, 5, 6, 2);
+//    addEdge(graph, 6, 7, 1);
+//    addEdge(graph, 6, 8, 6);
+//    addEdge(graph, 7, 8, 7);
+//
+//    dijkstra(graph, 0);
+//
+//    return 0;
+//}
+
+
+
+// 3>å¤šæºæœ€çŸ­è·¯ï¼šæ±‚æ‰€æœ‰å®šç‚¹å¯¹ä¹‹é—´çš„æœ€çŸ­è·¯å¾„  -->Floydç®—æ³•(é€‚ç”¨ç¨ å¯†å›¾)(|v~3|)
+//#include<stdio.h>
+//#include<limits.h>
+//#define INF INT_MAX
+//#define V 4
+//void PrintPath(int path[][V], int i, int j)
+//{
+//    if (i == path[i][j])
+//    {
+//        printf("%d -> %d", i, j);
+//        return;
+//    }
+//    PrintPath(path, i, path[i][j]);
+//    printf(" -> %d", j);
+//}
+//
+//int Floyd(int G[][V])
+//{
+//    int dist[V][V];
+//    int path[V][V];
+//    int i, j, k;
+//    for (i = 0; i < V; i++)
+//    {
+//        for (j = 0; j < V; j++)
+//        {
+//            dist[i][j] = G[i][j];
+//            //pathæ•°ç»„ï¼šå­˜æ”¾i->jçš„é è¿‘jçš„å‰ä¸€ä¸ªç»“ç‚¹-->æ–¹ä¾¿é€’å½’æ‰“å°
+//            //i->jæ—¶ï¼špath[i][j]=i
+//            if (i != j && dist[i][j] != INF)
+//                path[i][j] = i;
+//            else
+//                path[i][j] = INF;
+//        }
+//    }
+//    //æ ¸å¿ƒ
+//    for (k = 0; k < V; k++)
+//    {
+//        for (i = 0; i < V; i++)
+//        {
+//            for (j = 0; j < V; j++)
+//            {
+//                //ï¼ï¼ï¼å¿…é¡»åŠ ä¸Šï¼=INFçš„åˆ¤æ–­
+//                //INF+2(æ­£æ•´æ•°)-->æ•´æ•°æº¢å‡º-->å˜ä¸ºæå°å€¼ï¼ˆè´Ÿæ•°ï¼‰
+//                if (dist[i][k]!=INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j])
+//                {
+//                    dist[i][j] = dist[i][k] + dist[k][j];
+//                    path[i][j] = path[k][j];
+//                    //å¤„ç†è´Ÿå€¼åœˆï¼ˆFloydç®—æ³•ä¸é€‚ç”¨ä¸è´Ÿå€¼åœˆï¼Œä½†è·¯å¾„ä¹‹é—´å¯ä»¥æœ‰è´Ÿæ•°ï¼‰
+//                    /*if (i == j && dist[i][j] < 0)
+//                    {
+//                        return 0;
+//                    }*/
+//                }
+//            }
+//        }
+//    }
+//    //æ‰“å°
+//    for (i = 0; i < V; i++)
+//    {
+//        for (j = 0; j < V; j++)
+//        {
+//            if (i != j && dist[i][j] != INF)
+//            {
+//                PrintPath(path, i, j);
+//                printf("\n");
+//            }
+//        }
+//    }
+//    return 1;
+//}
+//
+//int main() {
+//    // å®šä¹‰å›¾çš„é‚»æ¥çŸ©é˜µ
+//    int graph[V][V] = {
+//        {0, 5, INF, 10},  // 0 åˆ°å…¶ä»–é¡¶ç‚¹çš„è·ç¦»
+//        {INF, 0, 3, INF}, // 1 åˆ°å…¶ä»–é¡¶ç‚¹çš„è·ç¦»
+//        {INF, INF, 0, 1},  // 2 åˆ°å…¶ä»–é¡¶ç‚¹çš„è·ç¦»
+//        {INF, INF, INF, 0} // 3 åˆ°å…¶ä»–é¡¶ç‚¹çš„è·ç¦»
+//    };
+//
+//    // è°ƒç”¨ Floyd-Warshall ç®—æ³•
+//    Floyd(graph);
+//
+//    return 0;
+//}
+
+
+
+
+//*********2.æœ€å°ç”Ÿæˆæ ‘ï¼š
+//ç”Ÿæˆæ ‘: åŒ…å«æ— å‘å›¾ï¼ˆç½‘ï¼‰Gæ‰€æœ‰é¡¶ç‚¹çš„æå°è¿é€šå­å›¾ï¼Œä¸”æ˜¯ä¸€æ£µæ ‘ï¼ˆæ— å›è·¯ï¼‰
+//æœ‰nä¸ªé¡¶ç‚¹å’Œn-1æ¡è¾¹
+//æœ€å°ç”Ÿæˆæ ‘ï¼šæ— å‘ç½‘ä¸­å„ä¸ªè¾¹çš„æƒå€¼ä¹‹å’Œæœ€å°çš„ç”Ÿæˆæ ‘
+
+//æ„é€ æœ€å°ç”Ÿæˆæ ‘ï¼š-->è´ªå¿ƒç®—æ³•
+// 
+//1>Primï¼ˆæ™®åˆ©å§†ï¼‰ç®—æ³•:-->é€‚ç”¨ä¸ç¨ å¯†å›¾ï¼ˆO(|V|~2)æˆ–O(Elog|E|)ï¼‰
+//æ”¶é›†é¡¶ç‚¹
+//Primç®—æ³•æœ¬èº«ä¿è¯äº†æ²¡æœ‰å›è·¯ï¼Œä¸éœ€è¦é¢å¤–åˆ¤æ–­
+//#include<stdio.h>
+//#include<stdlib.h>
+//#include<limits.h>
+//#define INF INT_MAX
+//#define MAX 100
+//typedef struct MGraph
+//{
+//    int vernum;
+//    int Graph[MAX][MAX];
+//}*MGraph;
+//
+//typedef struct LNode
+//{
+//    int ver;
+//    int weight;
+//    struct LNode* next;
+//} *AdjList;
+//
+//typedef struct LGraph
+//{
+//    int vernum;
+//    AdjList G[MAX];
+//}*LGraph;
+//
+//typedef struct Edge
+//{
+//    int v1, v2;
+//    int weight;
+//}*Edge;
+//
+//LGraph CreatLGraph(int vernum)
+//{
+//    LGraph LG = (LGraph)malloc(sizeof(struct LGraph));
+//    LG->vernum = vernum;
+//    for (int i = 0; i < vernum; i++)
+//    {
+//        LG->G[i] = NULL;
+//    }
+//    return LG;
+//}
+//
+//void InsertEdge(LGraph MST, Edge E)
+//{
+//    AdjList newnode;
+//    newnode = (AdjList)malloc(sizeof(struct LNode));
+//    newnode->ver = E->v2;
+//    newnode->weight = E->weight;
+//    newnode->next = MST->G[E->v1]->next;
+//    MST->G[E->v1]->next = newnode;
+//
+//    //æ— å‘
+//    newnode = (AdjList)malloc(sizeof(struct LNode));
+//    newnode->ver = E->v1;
+//    newnode->weight = E->weight;
+//    newnode->next = MST->G[E->v2]->next;
+//    MST->G[E->v2]->next = newnode;
+//}
+//
+//int FindMinDist(MGraph graph, int dist[])
+//{
+//    int minv = -1;
+//    int min = INF;
+//    for (int i = 0; i < graph->vernum; i++)
+//    {
+//        if (dist[i] != 0 && dist[i] < min)
+//        {
+//            min = dist[i];
+//            minv = i;
+//        }
+//    }
+//    return minv;
+//}
+//
+////ä»¥ä¸‹æ ‡ä¸º0çš„ç‚¹ä½œä¸ºæ ¹ç»“ç‚¹
+////dist[]è¡¨ç¤ºç”Ÿæˆæ ‘ä¸å…¶ä»–é¡¶ç‚¹ä¹‹é—´çš„è·ç¦»ï¼Œä¸º0è¡¨ç¤ºå·²ç»åœ¨ç”Ÿæˆæ ‘å†…
+//int Prim(MGraph graph, LGraph MST)
+//{
+//    int dist[MAX];
+//    int parent[MAX];
+//    int n = graph->vernum;
+//    MST = CreatLGraph(n);
+//    Edge E = (Edge)malloc(sizeof(struct Edge));
+//    int vcout = 0, totalweight = 0;
+//    int i;
+//    for (i = 0; i < n; i++)
+//    {
+//        dist[i] = graph->Graph[0][i];
+//        parent[i] = 0;
+//    }
+//    parent[0] = -1;
+//    vcout++;
+//    while (1)
+//    {
+//        int v = FindMinDist(graph, dist);
+//        if (v == -1)
+//        {
+//            break;
+//        }
+//        E->v1 = parent[v];
+//        E->v2 = v;
+//        E->weight = dist[v];
+//        InsertEdge(MST, E);
+//        totalweight += dist[v];
+//        dist[v] = 0;
+//        vcout++;
+//        for (i = 0; i < n; i++)
+//        {
+//            if (dist[i] != 0 && graph->Graph[v][i] < dist[i])
+//            {
+//                dist[i] = graph->Graph[v][i];
+//                parent[i] = v;
+//            }
+//        }
+//    }
+//    if (vcout < n)
+//        totalweight = -1;
+//    return totalweight;
+//}
+//
+//int main()
+//{
+//    return 0;
+//}
+
+
+//2>Kruskalç®—æ³•ï¼ˆå…‹é²æ–¯å¡å°”ç®—æ³•ï¼‰ï¼š-->é€‚ç”¨äºç¨€ç–å›¾ï¼ˆO(Elog|E|)ï¼‰
+//æ”¶é›†è¾¹
+//å°†é¡¶ç‚¹éƒ½çœ‹ä½œä¸€æ£µæ ‘ï¼Œæ¯æ¬¡æ”¶é›†æƒé‡æœ€å°çš„è¾¹ï¼ˆæ»¡è¶³ä¸æ„æˆå›è·¯ï¼‰ï¼Œå°†ä¸¤æ£µæ ‘åˆå¹¶æˆä¸€æ£µæ ‘
+
+//#include<stdio.h>
+//#include<stdlib.h>
+//#include<limits.h>
+//#define MAX 100
+
+//********å¹¶æŸ¥é›†ï¼š-->é€šå¸¸é€šè¿‡æ•°ç»„å®ç°
+//ä½œç”¨ï¼šåˆ¤æ–­ä¸¤ä¸ªé›†åˆï¼ˆå…ƒç´ ï¼‰æ˜¯å¦å±äºåŒä¸€ä¸ªé›†åˆ
+//å¹¶æŸ¥é›†æ˜¯ä¸€ç§ç”¨äºç®¡ç†å…ƒç´ åˆ†ç»„çš„æ•°æ®ç»“æ„ï¼Œæ”¯æŒä»¥ä¸‹ä¸¤ç§ä¸»è¦æ“ä½œï¼š
+//æŸ¥æ‰¾ï¼ˆFindï¼‰ï¼šç¡®å®šæŸä¸ªå…ƒç´ å±äºå“ªä¸ªé›†åˆï¼ˆé€šå¸¸é€šè¿‡æ ¹èŠ‚ç‚¹è¡¨ç¤ºï¼‰
+//åˆå¹¶ï¼ˆUnionï¼‰ï¼šå°†ä¸¤ä¸ªé›†åˆåˆå¹¶ä¸ºä¸€ä¸ªé›†åˆ
+//æ•°ç»„int parent[]:å­˜æ”¾è¯¥ç»“ç‚¹çš„çˆ¶ç»“ç‚¹ï¼Œæ ¹ç»“ç‚¹ç”¨-1è¡¨ç¤º
+
+//å¹¶æŸ¥é›†å®šä¹‰ï¼š
+//void InitParent(int parent[], int n)
+//{
+//    for (int i = 0; i < n; i++)
+//    {
+//        parent[i] = -1;
+//    }
+//}
+//
+//int find(int v, int parent[])
+//{
+//    if (parent[v] < 0)
+//        return v;
+//    return parent[v] = find(parent[v], parent);  
+//    //*******è·¯å¾„å‹ç¼©ï¼Œæé«˜ä¸‹æ¬¡æŸ¥æ‰¾çš„æ•ˆç‡
+//}
+//
+//void Union(struct Enode E, int parent[])
+//{
+//    //å°†å°çš„åˆå¹¶è¿›å¤§çš„
+//    //|parent[n]|è¡¨ç¤ºä»¥nä¸ºæ ¹ç»“ç‚¹çš„æ ‘çš„ç»“ç‚¹ä¸ªæ•°
+//    if (parent[E.v1] < parent[E.v2])
+//    {
+//        parent[E.v1] += parent[E.v2];
+//        parent[E.v2] = E.v1;
+//    }
+//    else
+//    {
+//        parent[E.v2] += parent[E.v1];
+//        parent[E.v1] = E.v2;
+//    }
+//}
+//
+//int has_circle(struct Enode E, int parent[])
+//{
+//    int root1 = find(E.v1, parent);
+//    int root2 = find(E.v2, parent);
+//    if (root1 == root2)
+//        return 1;
+//    return 0;
+//}
+//
+//
+////æœ€å°å †å®šä¹‰ï¼š
+//void Percdown(struct Enode* Eset, int i, int n)  //ä½¿ä»¥iä¸ºæ ¹ç»“ç‚¹çš„å­æ ‘å˜ä¸ºæœ€å°å †
+//{
+//    int parent, child;
+//    struct Enode tmp = Eset[parent];
+//    for (parent = i; parent * 2 + 1 <= n - 1; parent = child)
+//    {
+//        child = parent * 2 + 1;
+//        if (child != n - 1 && Eset[child].weight > Eset[child + 1].weight)
+//        {
+//            child++;
+//        }
+//        if (Eset[parent].weight <= Eset[child].weight)
+//        {
+//            break;
+//        }
+//        Eset[parent] = Eset[child];
+//    }
+//    Eset[parent] = tmp;
+//}
+//
+//void MinHeap(struct Enode* Eset, int n)
+//{
+//    //å †åŒ–ï¼š
+//    //i =n/2-1 ; næ˜¯è¾¹æ•°ï¼Œå³å®Œå…¨äºŒå‰æ ‘çš„ç»“ç‚¹ä¸ªæ•°ï¼ˆæœ€åä¸€ä¸ªç»“ç‚¹çš„ç¼–å·ï¼‰
+//    //ä¿è¯äº†iï¼ˆæœ€åä¸€ä¸ªç»“ç‚¹çš„çˆ¶æ¯ï¼‰æ˜¯æœ€åä¸€ä¸ªéå¶å­ç»“ç‚¹ï¼ˆä»iå¾€å‰éƒ½æ˜¯éå¶å­ç»“ç‚¹->æ„æˆä¸åŒå­æ ‘ï¼‰
+//    //é€šè¿‡å¾ªç¯å°†æ¯ä¸ªå­æ ‘å˜æˆæœ€å°å †-->æœ€åä¸€æ•´æ£µæ ‘éƒ½æ˜¯æœ€å°å †
+//    for (int i = n / 2 - 1; i >= 0; i--)
+//    {
+//        Percdown(Eset, i, n);
+//    }
+//}
+//
+////*********å‡½æ•°è®¾è®¡å·§å¦™***********
+//int GetEdge(struct Enode* Eset, int currentsize)
+//{
+//    struct Enode tmp = Eset[0];
+//    Eset[0] = Eset[currentsize - 1];
+//    Eset[currentsize - 1] = tmp;
+//    Percdown(Eset, 0, currentsize - 1);
+//    return currentsize - 1;  //æ—¢æ˜¯æœ€å°è¾¹çš„ç¼–å·ï¼Œä¹Ÿæ˜¯è¾¹çš„ä¸ªæ•°
+//}
+//
+////å›¾ç»“æ„å®šä¹‰ï¼š
+//struct AdjVNode
+//{
+//    int adjv;
+//    int weight;
+//    struct AdjVNode* next;
+//};
+//
+//struct Vnode
+//{
+//    struct AdjVNode* firstedge;
+//};
+//
+//struct LGraph
+//{
+//    int Nv;
+//    int Ne;
+//    struct Vnode G[MAX];
+//};
+//
+//struct LGraph* InitGraph(int n)
+//{
+//    struct LGraph* LG = (struct LGraph*)malloc(sizeof(struct LGraph));
+//    LG->Nv = n;
+//    LG->Ne = 0;
+//    for (int i = 0; i < n; i++)
+//    {
+//        LG->G[i].firstedge = NULL;
+//    }
+//    return LG;
+//}
+//
+//void InsertEdge(struct LGraph* MST, struct Enode E)
+//{
+//    struct AdjVNode* newnode;
+//    //v1->v2
+//    struct AdjVNode* newnode = (struct AdjVNode*)malloc(sizeof(struct AdjVNode));
+//    newnode->adjv = E.v2;
+//    newnode->weight = E.weight;
+//    newnode->next = MST->G[E.v1].firstedge;
+//    MST->G[E.v1].firstedge = newnode;
+//
+//    struct AdjVNode* newnode = (struct AdjVNode*)malloc(sizeof(struct AdjVNode));
+//    newnode->adjv = E.v1;
+//    newnode->weight = E.weight;
+//    newnode->next = MST->G[E.v2].firstedge;
+//    MST->G[E.v2].firstedge = newnode;
+//}
+//
+//struct Enode
+//{
+//    int v1, v2;
+//    int weight;
+//};
+//
+//struct Enode* InitEset(struct LGraph* graph)
+//{
+//    struct Enode* Eset = (struct Enode*)malloc(sizeof(struct Enode) * graph->Ne);
+//    int j = 0;
+//    for (int i = 0; i < graph->Nv; i++)
+//    {
+//        struct AdjVNode* w = graph->G[i].firstedge;
+//        while (w)
+//        {
+//            if (i < w->adjv)  //é¿å…é‡å¤æ”¾å…¥ç›¸åŒçš„è¾¹ï¼ˆæ— å‘ï¼‰
+//            {
+//                Eset[j].v1 = i;
+//                Eset[j].v2 = w->adjv;
+//                Eset[j].weight = w->weight;
+//                j++;
+//                //w = w->next;  //ä½ç½®é”™äº†ï¼Œé€ æˆæ­»å¾ªç¯
+//            }
+//            w = w->next;
+//        }
+//
+//    }
+//    return Eset;
+//}
+//
+////kruskalç®—æ³•ï¼š
+//int Kruskal(struct LGraph* graph, struct LGraph* MST)
+//{
+//    int totalweight = 0;
+//    int Ecount = 0;
+//    int nextedge;   /* å½“å‰æœ€å°è¾¹çš„ä½ç½® */
+//    int parent[MAX];  /* é¡¶ç‚¹å¹¶æŸ¥é›† */
+//    struct Enode* Eset;  /* è¾¹æ•°ç»„ */
+//
+//    InitParent(parent, graph->Nv);
+//    Eset = InitEset(graph);
+//    MinHeap(Eset, graph->Ne);
+//    MST = InitGraph(graph->Nv);
+//
+//    nextedge = graph->Ne;
+//    while (Ecount < graph->Nv - 1)
+//    {
+//        nextedge = GetEdge(Eset, nextedge);
+//        if (nextedge < 0)
+//        {
+//            break;
+//        }
+//        //ç”¨å¹¶æŸ¥é›†åˆ¤æ–­æ˜¯å¦æœ‰å›è·¯
+//        if (!has_circle(Eset[nextedge], parent))
+//        {
+//            Union(Eset[nextedge], parent);
+//            Ecount++;
+//            totalweight += Eset[nextedge].weight;
+//            InsertEdge(MST, Eset[nextedge]);
+//        }
+//    }
+//
+//    if (Ecount < graph->Nv - 1)
+//        totalweight = -1;
+//    return totalweight;
+//}
+//
+//
+////ä¸»å‡½æ•°ï¼š
+//int main()
+//{
+//    //æµ‹è¯•ä»£ç 
+//    return 0;
+//}
+
+
+
+
+//**********3.æ‹“æ‰‘æ’åºï¼š-->è§£å†³äº‹ä»¶æœ‰å…ˆåé¡ºåºçš„é—®é¢˜
+
+//æ‹“æ‰‘åºï¼šå¦‚æœå›¾ä¸­ä» V åˆ° W æœ‰ä¸€æ¡æœ‰å‘è·¯å¾„ï¼Œåˆ™ V ä¸€å®šæ’åœ¨ W å‰é¢
+//æ»¡è¶³æ­¤æ¡ä»¶çš„é¡¶ç‚¹åºåˆ—ç§°ä¸ºä¸€ä¸ªæ‹“æ‰‘åº
+//è·å¾—ä¸€ä¸ªæ‹“æ‰‘åºçš„è¿‡ç¨‹å°±æ˜¯æ‹“æ‰‘æ’åº
+
+//1> AOVï¼ˆActivity On Vertexï¼‰ç½‘ç»œï¼š
+// AOVå¦‚æœæœ‰åˆç†çš„æ‹“æ‰‘åºï¼Œåˆ™å¿…å®šæ—¶æœ‰å‘æ— ç¯å›¾
+// åº”ç”¨ï¼šä¸“ä¸šæ’è¯¾ï¼Œä¸åŒä¸“ä¸šè¯¾ä¹‹é—´æœ‰å…ˆä¿®ï¼ˆå…ˆä¿®ä¸“ä¸š1æ‰èƒ½ä¿®ä¸“ä¸š2ï¼‰çš„å…³ç³»
+
+//#include<stdio.h>
+//#define MAX 100
+//
+////å›¾çš„ç»“æ„
+//typedef struct LNode
+//{
+//    int adjv;
+//    struct LNode* next;
+//}LNode;
+//
+//typedef struct GNode
+//{
+//    LNode* firstedge;
+//}AdjList[MAX];
+//
+//typedef struct Graph
+//{
+//    int Nv, Ne;
+//    AdjList G;
+//}Graph;
+//
+////é¡ºåºé˜Ÿåˆ—
+//typedef struct Queue
+//{
+//    int QList[MAX];
+//    int front, rear;
+//    int maxsize;
+//}Queue;
+//
+//void InitQueue(Queue* Q, int maxsize)
+//{
+//    Q->front = Q->rear = 0;
+//    Q->maxsize = maxsize;
+//}
+//
+//int IsEmpty(Queue Q)
+//{
+//    return Q.front == Q.rear;
+//}
+//
+//int IsFull(Queue Q)
+//{
+//    return (Q.rear + 1) % Q.maxsize == Q.front;
+//}
+//
+//void EnQueue(Queue* Q, int index)
+//{
+//    if (IsFull(*Q))
+//    {
+//        printf("é˜Ÿåˆ—å·²æ»¡\n");
+//        return;
+//    }
+//    Q->QList[Q->rear] = index;
+//    Q->rear = (Q->rear + 1) % Q->maxsize;
+//}
+//
+//int DeQueue(Queue* Q)
+//{
+//    if (IsEmpty(*Q))
+//    {
+//        printf("é˜Ÿåˆ—å·²ç©º\n");
+//        exit(1);
+//    }
+//    int index = Q->QList[Q->front];
+//    Q->front = (Q->front + 1) % Q->maxsize;
+//    return index;
+//}
+//
+//int TopSort(Graph* graph, int toporder[])
+//{
+//    Queue Q;
+//    InitQueue(&Q, MAX);
+//    int Indegree[MAX] = { 0 };   //é¡¶ç‚¹çš„å…¥åº¦
+//    int count = 0;
+//    LNode* w = NULL;
+//    int i;
+//
+//    //ç¡®å®šå…¥åº¦æ•°ç»„
+//    for (i = 0; i < graph->Nv; i++)
+//    {
+//        w = graph->G[i].firstedge;
+//        while (w)
+//        {
+//            Indegree[w->adjv]++;
+//            w = w->next;
+//        }
+//    }
+//    for (i = 0; i < graph->Nv; i++)
+//    {
+//        if (Indegree[i] == 0)
+//            EnQueue(&Q, i);    //çŠ¯é”™ï¼šæŠŠiå†™æˆIndegree[i]
+//    }
+//
+//    //æ’åº
+//    while (!IsEmpty(Q))
+//    {
+//        int index = DeQueue(&Q);
+//        toporder[count++] = index;
+//        for (w = graph->G[index].firstedge; w != NULL; w = w->next)
+//        {
+//            if ((--Indegree[w->adjv]) == 0)
+//            {
+//                EnQueue(&Q, w->adjv);   //çŠ¯é”™ï¼šæŠŠw->adjvå†™æˆIndegree[w->adjv]
 //            }
 //        }
 //    }
 //
-//    printSolution(dist, V);
+//    //å›è·¯åˆ¤æ–­
+//    if (count != graph->Nv)
+//        return 0;
+//    return 1;
+//}
+//int main()
+//{
+//    Graph graph;
+//    graph.Nv = 6;
+//    graph.Ne = 6;
+//    int i;
+//    for (i = 0; i < graph.Nv; i++)
+//    {
+//        graph.G[i].firstedge = NULL;
+//    }
+//
+//    int toporder[MAX];
+//    if (TopSort(&graph, toporder))
+//    {
+//        for (i = 0; i < graph.Nv; i++)
+//        {
+//            printf("%d ", toporder[i]);
+//        }
+//    }
+//    else
+//        printf("å›¾ä¸­æœ‰å›è·¯\n");
+//    return 0;
+//}
+
+
+
+//2>å…³é”®è·¯å¾„ï¼šAOEï¼ˆActivity On Edgeï¼‰ç½‘ç»œ --åŸºäºæ‹“æ‰‘æ’åº
+//ç”¨äºåœ¨æœ‰å‘æ— ç¯å›¾ï¼ˆDAGï¼‰ä¸­ç¡®å®šé¡¹ç›®çš„å…³é”®è·¯å¾„
+//å…³é”®è·¯å¾„æ˜¯æŒ‡ä»èµ·ç‚¹åˆ°ç»ˆç‚¹çš„æœ€é•¿è·¯å¾„ï¼Œå†³å®šäº†é¡¹ç›®çš„æœ€çŸ­å®Œæˆæ—¶é—´
+
+//ä»¥ä¸‹æ˜¯å…³é”®è·¯å¾„ç®—æ³•çš„ä¸€èˆ¬æ­¥éª¤ï¼š
+//æ‹“æ‰‘æ’åºï¼šç¡®å®šé¡¶ç‚¹çš„æ‰§è¡Œé¡ºåº
+//è®¡ç®—æœ€æ—©å¼€å§‹æ—¶é—´ï¼ˆveï¼‰ï¼šä»èµ·ç‚¹å¼€å§‹ï¼ŒæŒ‰æ‹“æ‰‘é¡ºåºè®¡ç®—æ¯ä¸ªé¡¶ç‚¹çš„æœ€æ—©å¼€å§‹æ—¶é—´
+//è®¡ç®—æœ€æ™šå¼€å§‹æ—¶é—´ï¼ˆvlï¼‰ï¼šä»ç»ˆç‚¹å¼€å§‹ï¼ŒæŒ‰é€†æ‹“æ‰‘é¡ºåºè®¡ç®—æ¯ä¸ªé¡¶ç‚¹çš„æœ€æ™šå¼€å§‹æ—¶é—´
+//ç¡®å®šå…³é”®è·¯å¾„ï¼šæ ¹æ® ve å’Œ vl çš„å€¼ï¼Œæ‰¾åˆ°å…³é”®æ´»åŠ¨ï¼ˆve == vl çš„æ´»åŠ¨ï¼‰
+//å…³é”®è·¯å¾„æ˜¯ç”±æ‰€æœ‰å…³é”®æ´»åŠ¨ç»„æˆçš„è·¯å¾„
+
+//å¯¹äºæ¯ä¸ªæ´»åŠ¨ <u,v>ï¼š
+//e = ve[u]ï¼ˆæ´»åŠ¨çš„æœ€æ—©å¼€å§‹æ—¶é—´ç­‰äºèµ·ç‚¹äº‹ä»¶çš„æœ€æ—©å¼€å§‹æ—¶é—´ï¼‰
+//l = vl[v]âˆ’ w->weightï¼ˆæ´»åŠ¨çš„æœ€æ™šå¼€å§‹æ—¶é—´ç­‰äºç»ˆç‚¹äº‹ä»¶çš„æœ€æ™šå¼€å§‹æ—¶é—´å‡å»æ´»åŠ¨çš„æŒç»­æ—¶é—´ï¼‰
+
+//#include<stdio.h>
+//#define MAX 100
+//
+////å›¾çš„ç»“æ„
+//typedef struct LNode
+//{
+//    int adjv;
+//    int weight;    
+//    struct LNode* next;
+//}LNode;
+//
+//typedef struct GNode
+//{
+//    LNode* firstedge;
+//}AdjList[MAX];
+//
+//typedef struct Graph
+//{
+//    int Nv, Ne;
+//    AdjList G;
+//}Graph;
+//
+//int TopSort(Graph* graph, int toporder[])
+//{
+//    //åŒä¸Š
 //}
 //
+////u->v
+//void CriticalPath(Graph* graph)
+//{
+//    int toporder[MAX];
+//    if (!TopSort(graph, toporder))
+//    {
+//        printf("å›¾ä¸­æœ‰å›è·¯\n");
+//        return;
+//    }
+//
+//    int i;
+//    LNode* w;
+//    //ç¡®å®šæœ€æ—©å¼€å§‹æ—¶é—´
+//    int ve[MAX];
+//    for (i = 0; i < graph->Nv; i++)
+//    {
+//        ve[i] = 0;
+//    }
+//    for (i = 0; i < graph->Nv; i++)
+//    {
+//        int u = toporder[i];
+//        w = graph->G[u].firstedge;
+//        while (w)
+//        {
+//            int v = w->adjv;
+//            if (ve[u] + w->weight > ve[v])
+//                ve[v] = ve[u] + w->weight;
+//            w = w->next;
+//        }
+//    }
+//
+//    //ç¡®å®šæœ€æ™šå¼€å§‹æ—¶é—´
+//    int vl[MAX];
+//    int max = 0;
+//    for (i = 0; i < graph->Nv; i++)
+//    {
+//        if (ve[i] > max)   
+//            max = ve[i];
+//    }
+//    for (i = 0; i < graph->Nv; i++)
+//    {
+//        if (graph->G[i].firstedge == NULL)
+//            vl[i] = ve[i];
+//        else
+//            vl[i] = max;   //æœ€æ™šå¼€å§‹æ—¶é—´ä¸èƒ½è¶…è¿‡æœ€å¤§çš„æœ€æ—©å¼€å§‹æ—¶é—´
+//    }
+//    for (i = graph->Nv - 1; i >= 0; i--)
+//    {
+//        int u = toporder[i];
+//        w = graph->G[u].firstedge;
+//        while (w)
+//        {
+//            int v = w->adjv;
+//            if (vl[v] - w->weight < vl[u])
+//                vl[u] = vl[v] - w->weight;
+//            w = w->next;
+//        }
+//    }
+//
+//    //ç¡®å®šå…³é”®è·¯å¾„(i->j)
+//    for (i = 0; i < graph->Nv; i++)
+//    {
+//        w = graph->G[i].firstedge;
+//        while (w)
+//        {
+//            int j = w->adjv;
+//            int e = ve[i];
+//            int l = vl[j] - w->weight;
+//            if (e == l)
+//                printf("%d -> %d\n", i, j);
+//            w = w->next;
+//        }
+//    }
+//
+//}
+//
+//int main()
+//{
+//    Graph graph;
+//    graph.Nv = 6;
+//    graph.Ne = 6;
+//    int i;
+//    for (i = 0; i < graph.Nv; i++)
+//    {
+//        graph.G[i].firstedge = NULL;
+//    }
+//    CriticalPath(&graph);
+//    return 0;
+//}
 
-// 3>¶àÔ´×î¶ÌÂ·£º
-// 
-//*********2.×îĞ¡Éú³ÉÊ÷£º
-//Éú³ÉÊ÷: °üº¬ÎŞÏòÍ¼£¨Íø£©GËùÓĞ¶¥µãµÄ¼«Ğ¡Á¬Í¨×ÓÍ¼(ÓÉDFS±éÀú»òDFS±éÀúµÃµ½)
-//ÓĞn¸ö¶¥µãºÍn-1Ìõ±ß
-//×îĞ¡Éú³ÉÊ÷£ºÎŞÏòÍøÖĞ¸÷¸ö±ßµÄÈ¨ÖµÖ®ºÍ×îĞ¡µÄÉú³ÉÊ÷
 
-//¹¹Ôì×îĞ¡Éú³ÉÊ÷£º
-//MST(Minimum Spanning Tree)ĞÔÖÊ£º
-// 
-//1>ÇĞ·ÖĞÔÖÊ£º --¡·ÆÕÀûÄ·£¨Prim£©Ëã·¨
-    //ÉèN = (V, E)ÊÇÒ»¸öÁ¬Í¨Íø, UÊÇ¶¥µã¼¯VµÄÒ»¸ö·Ç¿Õ×Ó¼¯£¬
-    //Èô±ß(u, v)ÊÇÒ»Ìõ¾ßÓĞ×îĞ¡È¨ÖµµÄ±ß, ÆäÖĞuÊôÓÚU, VÊôÓÚV - U, 
-    //Ôò±Ø´æÔÚÒ»¿Ã°üº¬±ß(u, v)µÄ×îĞ¡Éú³ÉÊ÷
 
-//2>
