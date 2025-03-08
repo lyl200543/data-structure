@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="array.c" />
     <ClCompile Include="data structure.c" />
+    <ClCompile Include="find.c" />
     <ClCompile Include="graph.c" />
     <ClCompile Include="heap.c" />
     <ClCompile Include="LinkList.c" />

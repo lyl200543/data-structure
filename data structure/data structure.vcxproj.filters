@@ -54,5 +54,8 @@
     <ClCompile Include="order.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="find.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
