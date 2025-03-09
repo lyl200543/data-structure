@@ -1,5 +1,9 @@
 #define  _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<limits.h>
 #define ElemType int
+#define MAX 100
 //排序模板：
 //void X_sort(ElemType A[],int N)
 
@@ -118,4 +122,138 @@
 
 
 
-//4.********堆排序：
+//4.********选择排序：
+//void selection_sort(ElemType A[], int N)
+//{
+//	int i;
+//	for (i = 0; i < N; i++)
+//	{
+//		int MinPosition = FindMin(A, i, N - 1);
+//		Swap(A, i, MinPosition);
+//	}
+//}
+//
+//int FindMin(ElemType A[], int start, int end)
+//{
+//	int min = A[start];
+//	int index = start;
+//	for (int i = start + 1; i <= end; i++)
+//	{
+//		if (A[i] < min)
+//		{
+//			min = A[i];
+//			index = i;
+//		}
+//	}
+//	return index;
+//}
+
+//算法关键在FindMin()函数，选择排序使用遍历
+//堆排序选择最小堆
+
+//时间复杂度：O(N~2)
+
+
+
+//5.********堆排序：基于选择排序
+// 以要排序的数组本身作为堆
+
+//void Swap(ElemType A[], int a, int b)
+//{
+//	ElemType tmp = A[a];
+//	A[a] = A[b];
+//	A[b] = tmp;
+//}
+//
+//void Percdown(ElemType A[], int root, int n)
+//{
+//	int parent, child;
+//	ElemType tmp = A[root];
+//	for (parent = root; parent * 2 + 1 <= n - 1; parent = child)
+//	{
+//		child = parent * 2 + 1;
+//		if (child != n - 1 && A[child + 1] > A[child])
+//			child++;
+//		if (A[parent] < A[child])
+//			A[parent] = A[child];
+//		else
+//			break;
+//	}
+//	A[parent] = tmp;
+//}
+//
+//void heap_sort(ElemType A[], int N)
+//{
+//	int i;
+//	//将A[]初始化为最大堆：
+//	for (i = (N - 1) / 2; i >= 0; i--)
+//		Percdown(A, i, N);    //参数：堆数组，根结点，堆中元素个数
+//
+//	//堆排序：
+//	for (i = N - 1; i > 0; i--)
+//	{
+//		Swap(A, 0, i);     //A[0]总是堆中最大的元素
+//		Percdown(A, 0, i);    //交换到最后的元素被堆排除
+//	}
+//}
+
+//时间复杂度：小于O(NlogN)
+
+
+
+//6.**********归并排序：主要用于外排序
+//将两段（连续）分别有序的序列合并为一段有序的序列
+
+void Merge(ElemType A[], ElemType tmpA[], int L, int R, int Rightend)   //O(N)
+{
+	int Leftend = R - 1;
+	int len = Rightend - L + 1;
+	int i = L;
+	while (L <= Leftend && R <= Rightend)
+	{
+		if (A[L] <= A[R])
+			tmpA[i++] = A[L++];
+		
+		else
+			tmpA[i++] = A[R++];
+		
+	}
+	while (L <= Leftend)
+		tmpA[i++] = A[L++];
+	while (R <= Rightend)
+		tmpA[i++] = A[R++];
+	for (int j = 0; j < len; j++, Rightend--)
+		A[Rightend] = tmpA[Rightend];
+}
+
+//递归算法：分而治之
+void MSort(ElemType A[], ElemType tmpA[], int L, int Rightend)
+{
+	if (L < Rightend)
+	{
+		int center = (L + Rightend) / 2;
+		MSort(A, tmpA, L, center);
+		MSort(A, tmpA, center + 1, Rightend);
+		Merge(A, tmpA, L, center + 1, Rightend);
+	}
+}
+
+//时间复杂度：O(NlogN)   <-- T(N)=T(N/2)+T(N/2)+O(N)
+
+//排序函数统一接口：
+void Merge_Sort(ElemType A[], int N)
+{
+	//为什么函数要一直带着ElemType tmpA[]这个参数，明明可以在Merge()函数中再创建：
+	//在Merge_Sort()中创建只占用了一块空间
+	//在Merge()（多次调用）中要重复创建，浪费空间
+	ElemType* tmpA = (ElemType*)malloc(N * sizeof(ElemType));
+	if (tmpA != NULL)
+	{
+		MSort(A, tmpA, 0, N - 1);
+		free(tmpA);
+	}
+	else
+		return;
+}
+
+//非递归算法：
