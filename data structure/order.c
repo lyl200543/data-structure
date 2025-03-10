@@ -201,59 +201,123 @@
 
 
 
-//6.**********归并排序：主要用于外排序
+//6.**********归并排序：浪费空间，且频繁复制  -->主要用于外排序
 //将两段（连续）分别有序的序列合并为一段有序的序列
 
-void Merge(ElemType A[], ElemType tmpA[], int L, int R, int Rightend)   //O(N)
-{
-	int Leftend = R - 1;
-	int len = Rightend - L + 1;
-	int i = L;
-	while (L <= Leftend && R <= Rightend)
-	{
-		if (A[L] <= A[R])
-			tmpA[i++] = A[L++];
-		
-		else
-			tmpA[i++] = A[R++];
-		
-	}
-	while (L <= Leftend)
-		tmpA[i++] = A[L++];
-	while (R <= Rightend)
-		tmpA[i++] = A[R++];
-	for (int j = 0; j < len; j++, Rightend--)
-		A[Rightend] = tmpA[Rightend];
-}
+//void Merge(ElemType A[], ElemType tmpA[], int L, int R, int Rightend)   //O(N)
+//{
+//	int Leftend = R - 1;
+//	int len = Rightend - L + 1;
+//	int i = L;
+//	while (L <= Leftend && R <= Rightend)
+//	{
+//		if (A[L] <= A[R])
+//			tmpA[i++] = A[L++];
+//		
+//		else
+//			tmpA[i++] = A[R++];
+//		
+//	}
+//	while (L <= Leftend)
+//		tmpA[i++] = A[L++];
+//	while (R <= Rightend)
+//		tmpA[i++] = A[R++];
+//	for (int j = 0; j < len; j++, Rightend--)
+//		A[Rightend] = tmpA[Rightend];
+//}
+//
+////递归算法：分而治之
+//void MSort(ElemType A[], ElemType tmpA[], int L, int Rightend)
+//{
+//	if (L < Rightend)
+//	{
+//		int center = (L + Rightend) / 2;
+//		MSort(A, tmpA, L, center);
+//		MSort(A, tmpA, center + 1, Rightend);
+//		Merge(A, tmpA, L, center + 1, Rightend);
+//	}
+//}
+//
+////时间复杂度：O(NlogN)   <-- T(N)=T(N/2)+T(N/2)+O(N)
+//
+////排序函数统一接口：
+//void Merge_Sort(ElemType A[], int N)
+//{
+//	//为什么函数要一直带着ElemType tmpA[]这个参数，明明可以在Merge()函数中再创建：
+//	//在Merge_Sort()中创建只占用了一块空间
+//	//在Merge()（多次调用）中要重复创建，浪费空间
+//	ElemType* tmpA = (ElemType*)malloc(N * sizeof(ElemType));
+//	if (tmpA != NULL)
+//	{
+//		MSort(A, tmpA, 0, N - 1);
+//		free(tmpA);
+//	}
+//	else
+//		return;
+//}
 
-//递归算法：分而治之
-void MSort(ElemType A[], ElemType tmpA[], int L, int Rightend)
-{
-	if (L < Rightend)
-	{
-		int center = (L + Rightend) / 2;
-		MSort(A, tmpA, L, center);
-		MSort(A, tmpA, center + 1, Rightend);
-		Merge(A, tmpA, L, center + 1, Rightend);
-	}
-}
 
-//时间复杂度：O(NlogN)   <-- T(N)=T(N/2)+T(N/2)+O(N)
+//********非递归算法：
 
-//排序函数统一接口：
-void Merge_Sort(ElemType A[], int N)
-{
-	//为什么函数要一直带着ElemType tmpA[]这个参数，明明可以在Merge()函数中再创建：
-	//在Merge_Sort()中创建只占用了一块空间
-	//在Merge()（多次调用）中要重复创建，浪费空间
-	ElemType* tmpA = (ElemType*)malloc(N * sizeof(ElemType));
-	if (tmpA != NULL)
-	{
-		MSort(A, tmpA, 0, N - 1);
-		free(tmpA);
-	}
-	else
-		return;
-}
+//将排序好的子列直接放进tmpA中，不再拷贝回A中
+//void Merge1(ElemType A[], ElemType tmpA[], int L, int R, int Rightend)
+//{
+//	int Leftend = R - 1;
+//	int len = Rightend - L + 1;
+//	int i = 0;
+//	while (L <= Leftend && R <= Rightend)
+//	{
+//		if (A[L] <= A[R])
+//			tmpA[i++] = A[L++];
+//		else
+//			tmpA[i++] = A[R++];
+//	}
+//	while (L <= Leftend)
+//		tmpA[i++] = A[L++];
+//	while (R <= Rightend)
+//		tmpA[i++] = A[R++];
+//}
+//
+//void Merge_pass(ElemType A[], ElemType tmpA[], int N, int length)
+//{
+//	int i, j;
+//	//因为N可能是奇数，也可能是偶数
+//	//所以i <= N - 2*length 
+//	//如果是偶数 -->第一个for循环完成后直接结束
+//	//如果是奇数 -->留出最后一段序列，通过if/else判断几个子列后合并
+//	for (i = 0; i <= N - 2 * length; i += 2 * length)  
+//	{
+//		Merge1(A, tmpA, i, i + length, i + 2 * length - 1);
+//	}
+//
+//	if (i + length < N)  //还有两个子列
+//		Merge1(A, tmpA, i, i + length, N - 1);
+//	else   //只有一个子列
+//	{
+//		for (j = i; j < N; j++)
+//			tmpA[j] = A[j];
+//	}
+//
+//}
+//
+//void Merge_sort(ElemType A[], int N)
+//{
+//	int length;  //有序子列的长度
+//	ElemType* tmpA;
+//
+//	length = 1;
+//	tmpA = (ElemType*)malloc(N * sizeof(ElemType));
+//
+//	while (length < N)
+//	{
+//		//序列在A.tmpA之间临时存放，最终放在A中
+//		Merge_pass(A, tmpA, N, length);
+//		length *= 2;
+//		Merge_pass(tmpA, A, N, length);
+//		length *= 2;
+//	}
+//}
 
-//非递归算法：
+
+
+//7.************快速排序：
