@@ -320,4 +320,107 @@
 
 
 
-//7.************快速排序：
+//7.************快速排序：分而治之-->递归
+//1>先在待排序的数组中选出1个主元（通过找头，中，尾三个数据的中位数）
+//  *（最好情况：每次选的主元都中分整个集合（O(NlogN)），最坏情况：每次选的主元都在集合的一端(O(N~2))）
+//2>再划分子集（保证主元左边子集的数据都小于主元，右边相反）
+//3>最后对子集递归调用函数
+
+//ElemType Median3(ElemType A[], int Left, int Right)
+//{
+//	int Center = (Left + Right) / 2;
+//	//调整顺序为：A[Left]<A[Center]<A[Right]
+//	if (A[Left] > A[Center])
+//		Swap(&A[Left], &A[Center]);
+//	if (A[Left] > A[Right])
+//		Swap(&A[Left], &A[Right]);
+//	if (A[Center] > A[Right])
+//		Swap(&A[Center], &A[Right]);
+//
+//	//调整主元的位置，方便后序指针的操作
+//	Swap(&A[Center], &A[Right - 1]);
+//	return A[Right - 1];
+//
+//}
+//
+//
+////快速排序适合处理大规模数据，当数据规模较小时，使用简单排序效率更快
+////因此设置一个cutoff，当数据规模大于cutoff时才使用快速排序
+//int cutoff;
+//void QuickSort(ElemType A[], int Left, int Right)
+//{
+//	if (cutoff <= Right - Left)
+//	{
+//		//当数据规模小于cutoff时，会进行插入排序
+//		//递归其实有了结束的条件，不需要再设置条件
+//		/*if (Left > Right)
+//			return;*/
+//		ElemType privot = Median3(A, Left, Right);
+//		//指针操作：
+//		int i = Left;
+//		int j = Right - 1;
+//		//相等的情况也停下来做交换
+//		//极端情况考虑：但数据全都相等时：
+//		//如果停下来做交换，虽然有很多不必要的交换，但是每次主元都能中分数据
+//		//如果不停下来交换，主元总是会在数据的一端，时间复杂度大
+//		while (1)
+//		{
+//			while (A[++i] < privot) { ; }
+//			while (A[--j] > privot) { ; }
+//			if (i < j)
+//				Swap(&A[i], &A[j]);
+//			else
+//				break;
+//		}
+//		//此时i为privot的下标
+//		Swap(&A[i], &A[Right - 1]);
+//		QuickSort(A, Left, i - 1);
+//		QuickSort(A, i + 1, Right);
+//	}
+//	else
+//		Insertion_Sort(A, Right - Left + 1);
+//}
+//
+//void quick_sort(ElemType A[], int N)
+//{
+//	QuickSort(A, 0, N - 1);
+//}
+
+
+
+
+//***********8.表排序：
+//对于大规模的排序对象（如：结构体），之前的排序算法都要频繁交换，不适合大对象
+//表排序引入表索引(table[])，不移动对象，通过改变table[]中的对象下标来排序
+//表排序可以基于冒泡排序，插入排序等等
+
+
+//基于插入排序：不改变A[]
+//void table_sort(ElemType A[], int N)
+//{
+//	//初始化table[]
+//	int* table = (int*)malloc(sizeof(int) * N);
+//	int i, j;
+//	for (i = 0; i < N; i++)
+//	{
+//		table[i] = i;
+//	}
+//	//插入排序
+//	for (i = 1; i < N; i++)
+//	{
+//		int tmp = table[i];
+//		//纠正: A[i]<A[j] 应为--> A[table[i]] < A[table[j]]
+//		//table[]里存放的才是A[]的真正顺序,如果使用A[]顺序是不对的
+//		for (j = i - 1; j >= 0 && A[tmp] < A[table[j]]; j--)
+//			table[j + 1] = table[j];
+//		//纠正:table[j] --> table[j+1]
+//		table[j + 1] = tmp;
+//	}
+//	//打印
+//	for (i = 0; i < N; i++)
+//		printf("%d ", A[table[i]]);
+//	free(table);
+//}
+
+
+//改变A[]
