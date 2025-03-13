@@ -423,4 +423,38 @@
 //}
 
 
-//改变A[]
+//改变A[]--》物理排序（基于环）
+//数组的排列由若干个独立的环（Cycle）组成
+//如果 table[i] == i，说明当前位置已排序，无需调整
+
+//void SwapA(ElemType A[], int table[], int N)
+//{
+//	int i, j;
+//	ElemType tmp;
+//	for (i = 0; i < N; i++)
+//	{
+//		if (i != table[i])
+//		{
+//			tmp = A[i];
+//			for (j = i; j != table[j] && i != table[j]; j = table[j])
+//			{
+//				A[j] = A[table[j]];
+//			}
+//			A[j] = tmp;
+//		}
+//	}
+//	//打印
+//	for (i = 0; i < N; i++)
+//		printf("%d ", A[i]);
+//}
+
+
+
+//*9.***********桶排序：
+
+
+
+
+
+
+//*10.***********基数排序：
