@@ -131,6 +131,7 @@
     <ClCompile Include="data structure.c" />
     <ClCompile Include="find.c" />
     <ClCompile Include="graph.c" />
+    <ClCompile Include="Hashing.cpp" />
     <ClCompile Include="heap.c" />
     <ClCompile Include="LinkList.c" />
     <ClCompile Include="order.c" />
