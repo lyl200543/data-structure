@@ -88,24 +88,26 @@
 //                平方探测法就可以探查到整个散列表空间
 
 
-//创建开放地址法的散列表：
+//开放地址法:以整数为例
+
 #include<math.h>
 #define MAXTABLESIZE 10000
-//散列单元状态类型：
-//合法元素，空单元，已删除元素
-typedef enum { Legitimate, Empty, Deleted } EntryType;
-typedef struct HashEntry
-{
-	int data;
-	EntryType info;
-}Cell;
-typedef struct TblEntry
-{
-	int TableSize;
-	Cell* Cells;
-}*HashTable;
-
-//求大于N的最小素数
+//#define ElemType int
+////散列单元状态类型：
+////合法元素，空单元，已删除元素
+//typedef enum { Legitimate, Empty, Deleted } EntryType;
+//typedef struct HashEntry
+//{
+//	int data;
+//	EntryType info;
+//}Cell;
+//typedef struct TblEntry
+//{
+//	int TableSize;
+//	Cell* Cells;
+//}*HashTable;
+//
+////求大于N的最小素数
 int NextPrime(int N)
 {
 	//大于N的最小奇数
@@ -124,22 +126,148 @@ int NextPrime(int N)
 	}
 	return p;
 }
+//
+//HashTable CreatTable(int TableSize)
+//{
+//	HashTable H;
+//	H = (HashTable)malloc(sizeof(struct TblEntry));
+//	H->TableSize = NextPrime(TableSize);
+//	H->Cells = (Cell*)malloc(H->TableSize * sizeof(Cell));
+//	for (int i = 0; i < H->TableSize; i++)
+//		H->Cells[i].info = Empty;
+//	return H;
+//}
+//
+////平方探测法的查找和插入：
+//
+//int Hash(ElemType key, int TableSize);
+//
+//int Find(HashTable H, ElemType key)
+//{
+//	int curPos, newPos;
+//	int Cnum = 0;   //冲突次数
+//	curPos = newPos = Hash(key, H->TableSize);
+//	while (H->Cells[curPos].info != Empty && H->Cells[curPos].data != key)  //如果是字符串要使用strcmp
+//	{ 
+//		if (++Cnum % 2)   //奇数次冲突
+//		{
+//			newPos = curPos + ((Cnum + 1) / 2) * ((Cnum + 1) / 2);
+//			if (newPos >= H->TableSize)
+//			{
+//				newPos = newPos % H->TableSize;
+//			}
+//		}
+//		else    //偶数次冲突
+//		{
+//			newPos = curPos - (Cnum / 2) * (Cnum / 2);
+//			while (newPos < 0)
+//			{
+//				newPos += H->TableSize;
+//			}
+//		}
+//	}
+//	return newPos;
+//}
+//
+//bool Insert(HashTable H, ElemType key)
+//{
+//	int pos = Find(H, key);
+//	if (H->Cells[pos].info != Legitimate)
+//	{
+//		H->Cells[pos].data = key;
+//		H->Cells[pos].info = Legitimate;
+//        return true;
+//	}
+//	else
+//	{
+//		printf("该键值已存在\n");
+//		return false;
+//	}
+//}
 
-HashTable CreatTable(int TableSize)
-{
-	HashTable H;
-	H = (HashTable)malloc(sizeof(struct TblEntry));
-	H->TableSize = NextPrime(TableSize);
-	H->Cells = (Cell*)malloc(H->TableSize * sizeof(Cell));
-	for (int i = 0; i < H->TableSize; i++)
-		H->Cells[i].info = Empty;
-	return H;
-}
-
-//平方探测法的查找和插入：
+//删除：直接将关键词的状态变为Deleted, 直接删除会导致后序查找等问题
 
 
+//2>链地址法:以字符串为例
 
+//#include<string.h>
+//#define KEYLENGTH 15
+//typedef char ElemType[KEYLENGTH + 1];
+//typedef struct LNode
+//{
+//	ElemType data;
+//	struct LNode* next;
+//}*PtrLNode;
+//typedef struct HashTable
+//{
+//	int TableSize;
+//	PtrLNode heads;
+//}*HashTable;
+//
+//HashTable CreatTable(int TableSize)
+//{
+//	HashTable H = (HashTable)malloc(sizeof(struct HashTable));
+//	H->TableSize = NextPrime(TableSize);
+//	H->heads = (PtrLNode)malloc(sizeof(struct LNode) * H->TableSize);
+//	for (int i = 0; i < H->TableSize; i++)
+//	{
+//		H->heads[i].data[0] = '\0';   //头结点不存放数据
+//		H->heads[i].next = NULL;
+//	}
+//
+//}
+//
+//int Hash(ElemType key, int TableSize);
+//
+//PtrLNode Find(HashTable H, ElemType key)
+//{
+//	int pos = Hash(key, H->TableSize);
+//	PtrLNode p = H->heads[pos].next;
+//	while (p && strcmp(p->data, key))  //字符串如果相等则返回0
+//	{
+//		p = p->next;
+//	}
+//	return p;
+//}
+//
+//bool Insert(HashTable H, ElemType key)
+//{
+//	PtrLNode p = Find(H, key);
+//	if (NULL == p)
+//	{
+//		PtrLNode newnode = (PtrLNode)malloc(sizeof(struct LNode));
+//		strcpy(newnode->data, key);
+//		int pos = Hash(key, H->TableSize);
+//		newnode->next = H->heads[pos].next;
+//		H->heads[pos].next = newnode;
+//		return true;
+//	}
+//	else
+//	{
+//		printf("该键值已经存在\n");
+//		return false;
+//	}
+//}
+//
+//void Destroy(HashTable H)
+//{
+//	int i;
+//	for (i = 0; i < H->TableSize; i++)
+//	{
+//		PtrLNode p = H->heads[i].next;
+//		while (p)
+//		{
+//			PtrLNode tmp = p;
+//			p = p->next;
+//			free(tmp);
+//			tmp = NULL;
+//		}
+//
+//	}
+//	free(H->heads);
+//	H->heads = NULL;
+//}
 
-//2>链地址法
+//总结：散列表的效率与数据规模无关
+//适合于处理大规模数据和难比较的关键词（字符串）
 
